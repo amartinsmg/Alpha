@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Quadratic Function Calculator</title>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="Calculator.css"/>
+		<script src="QFCalculator.js"></script>
+	</head>
+	<body>
+		<main>
+			<h1>Quadratic Function Calculator</h1>
+			<p><span id="big">ax² + bx + c = 0</span><p>
+			<form action="">
+				<div class="values">
+					<label for="aValue">a Value:</label>
+					<input type="number" value="1" id="aValue"/>
+				</div>
+				<div class="values">
+					<label for="bValue">b Value:</label>
+					<input type="number" value="0" id="bValue"/>
+				</div>
+				<div class="values">
+					<label for="cValue">c Value:</label>
+					<input type="number" value="0" id="cValue"/>
+				</div>
+				<div class="values">
+					<input type="button" value="Calculate" onclick="calculator()"/>
+				</div>
+			</form>
+			<p id="functionPrinting"></p>
+			<p id="resultPrinting"></p>
+		</main>
+		<footer>Made by amartinsmg</footer>
+	</body>
+</html>
