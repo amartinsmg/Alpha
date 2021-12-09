@@ -20,36 +20,36 @@ function formF(a, b, c) {
 
     switch(a) {
         case 1:
-            printIt = "x² ";
+            printIt = `x² `;
             break;
         case -1:
-            printIt = "-x² ";
+            printIt = `-x² `;
             break;
         default:
-            printIt = a + "x² ";
+            printIt = `${a}x² `;
     };
 
     //impressão de bx
 
     if(b == 1){
-        printIt += "+x ";
+        printIt += `+x `;
     }else if(b == -1){
-        printIt += "-x ";
+        printIt += `-x `;
     }else if(b < 0){
-        printIt += b + "x ";
+        printIt += `${b}x `;
     }else if(b > 0){
-        printIt += "+" + b + "x ";
+        printIt += `+${b}x `;
     };
 
     //impressão de c
 
     if(c < 0){
-        printIt += c + " ";
+        printIt += `${c} `;
     }else if(c > 0){
-        printIt += "+" + c + " ";
+        printIt += `+${c} `;
     };
 
-    printIt += "= 0";
+    printIt += `= 0`;
     return printIt;
 };
 
@@ -64,22 +64,20 @@ function quadraticFunction(a, b, c) {
             return("This quadratic function don't have any real value.")
         }else if(delta == 0){
             x1 =  - b / aa;
-            return("x = " + x1);
+            return(`x = ${x1}`);
         }else{
             deltaRoot = Math.sqrt(delta);
             if(Number.isInteger(deltaRoot) === true){
                 x1 =  ( (-b) + deltaRoot)/ aa;
                 x2 = ( (-b) - deltaRoot)/ aa;
-               return("x' = " + x1 + ", x\" = " + x2);
             }else if(b == 0){
-                x1 = "(+√" + delta + ")/ " + aa;
-                x2 = "(-√" + delta + ")/ " + aa;
-                return("x' = " + x1 + ", x\" = " + x2);
+                x1 = `(-√${delta})/${aa}`;
+                x2 = `(√${delta})/${aa}`;
             }else{
-                x1 = "(" + (-b) + " +√" + delta + ")/ " + aa;
-                x2 = "(" + (-b) + " -√" + delta + ")/ " + aa;
-                return("x' = " + x1 + ", x\" = " + x2);
+                x1 = `(${-b} -√${delta})/ ${aa}`;
+                x2 = `(${-b} +√${delta})/ ${aa}`;
             };
+            return(`x' = ${x1}, x" = ${x2}`);
         };
     }else {
         return("This is NOT a quadratic function!");
@@ -111,4 +109,4 @@ function calculator() {
 function testCalculator(aValue, bValue, cValue) {
     return(formF(aValue, bValue, cValue) + "\n" + quadraticFunction(aValue, bValue, cValue));
 }
-//console.log(testCalculator(2, 4, -6)); /* to test */
+console.log(testCalculator(2, 5, 2)); /* to test */
