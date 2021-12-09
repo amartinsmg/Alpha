@@ -68,8 +68,8 @@ function quadraticFunction(a, b, c) {
         }else{
             deltaRoot = Math.sqrt(delta);
             if(Number.isInteger(deltaRoot) === true){
-                x1 =  ( (-b) + deltaRoot)/ aa;
-                x2 = ( (-b) - deltaRoot)/ aa;
+                x1 =  ( (-b) - deltaRoot)/ aa;
+                x2 = ( (-b) + deltaRoot)/ aa;
             }else if(b == 0){
                 x1 = `(-√${delta})/${aa}`;
                 x2 = `(√${delta})/${aa}`;
@@ -107,6 +107,6 @@ function calculator() {
 //Função de teste
 
 function testCalculator(aValue, bValue, cValue) {
-    return(formF(aValue, bValue, cValue) + "\n" + quadraticFunction(aValue, bValue, cValue));
+    return(`${formF(aValue, bValue, cValue)}\n${quadraticFunction(aValue, bValue, cValue)}`);
 }
-console.log(testCalculator(2, 5, 2)); /* to test */
+console.log(testCalculator(-2, 4, 6)); /* to test */
