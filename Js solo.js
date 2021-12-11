@@ -14,6 +14,10 @@ function quadraticFunction(a, b, c) {
                     b /= gcdx;
                     aa /= gcdx;
                 }
+                if (aa < 0){
+                    aa = -aa;
+                    b = -b;
+                }
                 return (`x = ${b}/${aa}`);
             }
         } else {
@@ -28,6 +32,10 @@ function quadraticFunction(a, b, c) {
                         numer1 /= gcd1;
                         aa /= gcd1;
                     }
+                    if (aa < 0){
+                        aa = -aa;
+                        numer1 = -numer1;
+                    }
                     x1 = `${numer1}/${aa}`;
                 }
                 if (numer2 % aa == 0) {
@@ -38,14 +46,30 @@ function quadraticFunction(a, b, c) {
                         numer2 /= gcd2;
                         aa /= gcd2;
                     }
+                    if (aa < 0){
+                        aa = -aa;
+                        numer2 = -numer2;
+                    }
                     x2 = `${numer2}/${aa}`;
                 }
             } else if (b == 0) {
-                x1 = `(-√${delta})/${aa}`;
-                x2 = `(√${delta})/${aa}`;
+                if(a<0){
+                    aa = -aa
+                    x1 = `(√${delta})/${aa}`;
+                    x2 = `-(√${delta})/${aa}`;
+                }else{
+                    x1 = `(-√${delta})/${aa}`;
+                    x2 = `(√${delta})/${aa}`;
+                }
             } else {
-                x1 = `(${-b} -√${delta})/${aa}`;
-                x2 = `(${-b} +√${delta})/${aa}`;
+                if(a<0){
+                    aa = -aa
+                    x1 = `-(${-b} -√${delta})/${aa}`;
+                    x2 = `-(${-b} +√${delta})/${aa}`;
+                }else{
+                    x1 = `(${-b} -√${delta})/${aa}`;
+                    x2 = `(${-b} +√${delta})/${aa}`;
+                }
             }
             return (`x' = ${x1}, x" = ${x2}`);
         }
@@ -66,4 +90,4 @@ function gcd(x, y) {
 
 //console.log(mdc(60,144));
 
-console.log(quadraticFunction(4, -4, 1)); /* to test */
+console.log(quadraticFunction(-4, 6, 2)); /* to test */
