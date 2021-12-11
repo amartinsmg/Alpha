@@ -1,6 +1,6 @@
 function quadraticFunction(a, b, c) {
     if ((!isNaN(a)) && (!isNaN(b)) && (!isNaN(c)) && (a != 0)) {
-        var delta, deltaRoot, x1, x2, aa = 2 * a;
+        let delta, deltaRoot, x1, x2, aa = 2 * a;
         delta = b ** 2 - 4 * a * c;
         if (delta < 0) {
             return ("This quadratic function don't have any real value.")
@@ -10,11 +10,11 @@ function quadraticFunction(a, b, c) {
                 return (`x = ${b / aa}`);
             } else {
                 let gcdx = gcd(b, aa);
-                if (gcdx != 0) {
+                if (gcdx != 1) {
                     b /= gcdx;
                     aa /= gcdx;
                 }
-                if (aa < 0){
+                if (aa < 0) {
                     aa = -aa;
                     b = -b;
                 }
@@ -28,11 +28,11 @@ function quadraticFunction(a, b, c) {
                     x1 = numer1 / aa;
                 } else {
                     let gcd1 = gcd(numer1, aa);
-                    if (gcd1 != 0) {
+                    if (gcd1 != 1) {
                         numer1 /= gcd1;
                         aa /= gcd1;
                     }
-                    if (aa < 0){
+                    if (aa < 0) {
                         aa = -aa;
                         numer1 = -numer1;
                     }
@@ -46,29 +46,30 @@ function quadraticFunction(a, b, c) {
                         numer2 /= gcd2;
                         aa /= gcd2;
                     }
-                    if (aa < 0){
+                    if (aa < 0) {
                         aa = -aa;
                         numer2 = -numer2;
                     }
                     x2 = `${numer2}/${aa}`;
                 }
             } else if (b == 0) {
-                if(a<0){
+                if (a < 0) {
                     aa = -aa
                     x1 = `(√${delta})/${aa}`;
                     x2 = `-(√${delta})/${aa}`;
-                }else{
+                } else {
                     x1 = `(-√${delta})/${aa}`;
                     x2 = `(√${delta})/${aa}`;
                 }
             } else {
-                if(a<0){
+                b = -b
+                if (a < 0) {
                     aa = -aa
-                    x1 = `-(${-b} -√${delta})/${aa}`;
-                    x2 = `-(${-b} +√${delta})/${aa}`;
-                }else{
-                    x1 = `(${-b} -√${delta})/${aa}`;
-                    x2 = `(${-b} +√${delta})/${aa}`;
+                    x1 = `-(${b} -√${delta})/${aa}`;
+                    x2 = `-(${b} +√${delta})/${aa}`;
+                } else {
+                    x1 = `(${b} -√${delta})/${aa}`;
+                    x2 = `(${b} +√${delta})/${aa}`;
                 }
             }
             return (`x' = ${x1}, x" = ${x2}`);
@@ -88,6 +89,7 @@ function gcd(x, y) {
     return (y);
 }
 
-//console.log(mdc(60,144));
+//console.log(gcd(60,144)); /* to test */
+//console.log(gcd(12, gcd(144, gcd (6, 32)))); /* to test */
 
-console.log(quadraticFunction(-4, 6, 2)); /* to test */
+//console.log(quadraticFunction(-4, 6, 2)); /* to test */
