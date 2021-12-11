@@ -159,8 +159,8 @@ function quadraticFunction(a, b, c) {
                                     x2 = `(√${deltaRootSimpl[1]})/${aa}`;
                                     break;
                                 case -1:
-                                    x1 = `(√${deltaRootSimpl[1]})/${aa}`;
-                                    x2 = `-(√${deltaRootSimpl[1]})/${aa}`;
+                                    x1 = `-(√${deltaRootSimpl[1]})/${aa}`;
+                                    x2 = `(√${deltaRootSimpl[1]})/${aa}`;
                                     break;
                                 default:
                                     x1 = `${-deltaRootSimpl[0]}√(${deltaRootSimpl[1]})/${aa}`;
@@ -191,14 +191,14 @@ function quadraticFunction(a, b, c) {
                                 x2 = `${b} +√${deltaRootSimpl[1]}`;
                                 break;
                             case -1:
-                                x1 = `${b} +√${deltaRootSimpl[1]}`;
-                                x2 = `${b} -√${deltaRootSimpl[1]}`;
+                                x1 = `${b} -√${deltaRootSimpl[1]}`;
+                                x2 = `${b} +√${deltaRootSimpl[1]}`;
                                 break;
                             default:
-                                if(deltaRootSimpl[0] > 0){
+                                if (deltaRootSimpl[0] > 0) {
                                     x1 = `${b} ${-deltaRootSimpl[0]}√${deltaRootSimpl[1]}`;
                                     x2 = `${b} + ${deltaRootSimpl[0]}√${deltaRootSimpl[1]}`;
-                                }else {
+                                } else {
                                     x1 = `${b} + ${-deltaRootSimpl[0]}√${deltaRootSimpl[1]}`;
                                     x2 = `${b} ${deltaRootSimpl[0]}√${deltaRootSimpl[1]}`;
                                 }
@@ -210,16 +210,16 @@ function quadraticFunction(a, b, c) {
                                 x2 = `(${b} +√${deltaRootSimpl[1]})/${aa}`;
                                 break;
                             case -1:
-                                x1 = `(${b} +√${deltaRootSimpl[1]})/${aa}`;
-                                x2 = `(${b} -√${deltaRootSimpl[1]})/${aa}`;
+                                x1 = `(${b} -√${deltaRootSimpl[1]})/${aa}`;
+                                x2 = `(${b} +√${deltaRootSimpl[1]})/${aa}`;
                                 break;
                             default:
-                                if(deltaRootSimpl[0] > 0){
+                                if (deltaRootSimpl[0] > 0) {
                                     x1 = `(${b} ${-deltaRootSimpl[0]}√${deltaRootSimpl[1]})/${aa}`;
-                                    x2 = `(${b} + ${deltaRootSimpl[0]}√${deltaRootSimpl[1]})/${aa}`;
-                                }else {
-                                    x1 = `(${b} + ${-deltaRootSimpl[0]}√${deltaRootSimpl[1]})/${aa}`;
-                                    x2 = `(${b} ${deltaRootSimpl[0]}√${deltaRootSimpl[1]})/${aa}`;
+                                    x2 = `(${b} +${deltaRootSimpl[0]}√${deltaRootSimpl[1]})/${aa}`;
+                                } else {
+                                    x1 = `(${b} ${deltaRootSimpl[0]}√${deltaRootSimpl[1]})/${aa}`;
+                                    x2 = `(${b} +${-deltaRootSimpl[0]}√${deltaRootSimpl[1]})/${aa}`;
                                 }
                         }
                     }
