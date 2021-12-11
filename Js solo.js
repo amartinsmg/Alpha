@@ -5,10 +5,16 @@ function quadraticFunction(a, b, c) {
         if (delta < 0) {
             return ("This quadratic function don't have any real value.")
         } else if (delta == 0) {
-            if (-b % aa == 0) {
-                return (`x = ${- b / aa}`);
+            b = -b
+            if (b % aa == 0) {
+                return (`x = ${b / aa}`);
             } else {
-                return (`x = ${-b}/${aa}`);
+                let gcdx = gcd(b, aa);
+                if (gcdx != 0) {
+                    b /= gcdx;
+                    aa /= gcdx;
+                }
+                return (`x = ${b}/${aa}`);
             }
         } else {
             deltaRoot = Math.sqrt(delta);
@@ -17,26 +23,47 @@ function quadraticFunction(a, b, c) {
                 if (numer1 % aa == 0) {
                     x1 = numer1 / aa;
                 } else {
-                    x2 = `${numer2}/ ${aa}`;
+                    let gcd1 = gcd(numer1, aa);
+                    if (gcd1 != 0) {
+                        numer1 /= gcd1;
+                        aa /= gcd1;
+                    }
+                    x1 = `${numer1}/${aa}`;
                 }
                 if (numer2 % aa == 0) {
                     x2 = numer2 / aa;
                 } else {
-                    x2 = `${numer2}/ ${aa}`;
+                    let gcd2 = gcd(numer2, aa);
+                    if (gcd2 != 0) {
+                        numer2 /= gcd2;
+                        aa /= gcd2;
+                    }
+                    x2 = `${numer2}/${aa}`;
                 }
             } else if (b == 0) {
-                x1 = `(-√${delta})/ ${aa}`;
-                x2 = `(√${delta})/ ${aa}`;
+                x1 = `(-√${delta})/${aa}`;
+                x2 = `(√${delta})/${aa}`;
             } else {
-                x1 = `(${-b} -√${delta})/ ${aa}`;
-                x2 = `(${-b} +√${delta})/ ${aa}`;
-            };
+                x1 = `(${-b} -√${delta})/${aa}`;
+                x2 = `(${-b} +√${delta})/${aa}`;
+            }
             return (`x' = ${x1}, x" = ${x2}`);
-        };
+        }
     } else {
         return ("This is NOT a quadratic function!");
-    };
-};
+    }
+}
 
+function gcd(x, y) {
+    let module = x % y;
+    while (module != 0) {
+        x = y;
+        y = module;
+        module = x % y;
+    }
+    return (y);
+}
 
-//console.log(quadraticFunction(4, -4, 1)); /* to test */
+//console.log(mdc(60,144));
+
+console.log(quadraticFunction(4, -4, 1)); /* to test */
