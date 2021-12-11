@@ -1,14 +1,14 @@
 //Função que transforma a string em número
 
 function decimal(num) {
-    num = num.replace(",",".");
+    num = num.replace(",", ".");
     num = Number(num);
-    if(isNaN(num) === true){
+    if (isNaN(num) === true) {
         return 0;
-    }else{
+    } else {
         return num;
     }
-};
+}
 
 
 //Função que imprime a fórmula da função quadrática
@@ -18,7 +18,7 @@ function formF(a, b, c) {
 
     //impressão de ax²
 
-    switch(a) {
+    switch (a) {
         case 1:
             printIt = `x² `;
             break;
@@ -31,21 +31,21 @@ function formF(a, b, c) {
 
     //impressão de bx
 
-    if(b == 1){
+    if (b == 1) {
         printIt += `+x `;
-    }else if(b == -1){
+    } else if (b == -1) {
         printIt += `-x `;
-    }else if(b < 0){
+    } else if (b < 0) {
         printIt += `${b}x `;
-    }else if(b > 0){
+    } else if (b > 0) {
         printIt += `+${b}x `;
     };
 
     //impressão de c
 
-    if(c < 0){
+    if (c < 0) {
         printIt += `${c} `;
-    }else if(c > 0){
+    } else if (c > 0) {
         printIt += `+${c} `;
     };
 
@@ -57,32 +57,32 @@ function formF(a, b, c) {
 //Função que calcula o resultado
 
 function quadraticFunction(a, b, c) {
-    if((!isNaN(a))&&(!isNaN(b))&&(!isNaN(c))&&(a != 0)) {
+    if ((!isNaN(a)) && (!isNaN(b)) && (!isNaN(c)) && (a != 0)) {
         var delta, deltaRoot, x1, x2, aa = 2 * a;
         delta = Math.pow(b, 2) - 4 * a * c;
-        if(delta < 0){
-            return("This quadratic function don't have any real value.")
-        }else if(delta == 0){
-            x1 =  - b / aa;
-            return(`x = ${x1}`);
-        }else{
+        if (delta < 0) {
+            return ("This quadratic function don't have any real value.")
+        } else if (delta == 0) {
+            x1 = - b / aa;
+            return (`x = ${x1}`);
+        } else {
             deltaRoot = Math.sqrt(delta);
-            if(Number.isInteger(deltaRoot) === true){
-                x1 =  ( (-b) - deltaRoot)/ aa;
-                x2 = ( (-b) + deltaRoot)/ aa;
-            }else if(b == 0){
+            if (Number.isInteger(deltaRoot) === true) {
+                x1 = ((-b) - deltaRoot) / aa;
+                x2 = ((-b) + deltaRoot) / aa;
+            } else if (b == 0) {
                 x1 = `(-√${delta})/${aa}`;
                 x2 = `(√${delta})/${aa}`;
-            }else{
+            } else {
                 x1 = `(${-b} -√${delta})/ ${aa}`;
                 x2 = `(${-b} +√${delta})/ ${aa}`;
-            };
-            return(`x' = ${x1}, x" = ${x2}`);
-        };
-    }else {
-        return("This is NOT a quadratic function!");
-    };
-};
+            }
+            return (`x' = ${x1}, x" = ${x2}`);
+        }
+    } else {
+        return ("This is NOT a quadratic function!");
+    }
+}
 
 
 //Função principal que pega as imputs e chama as demais funções
@@ -95,18 +95,19 @@ function calculator() {
     aValue = decimal(aValue);
     bValue = decimal(bValue);
     cValue = decimal(cValue);
-    if(aValue != 0){
+    if (aValue != 0) {
         document.getElementById("functionPrinting").innerHTML = formF(aValue, bValue, cValue);
         document.getElementById("resultPrinting").innerHTML = quadraticFunction(aValue, bValue, cValue);
-    }else{
+    } else {
         alert("In a quadratic function \"a\" must be NOT equal 0!");
-    };
-};
+    }
+}
 
 
 //Função de teste
 
-function testCalculator(aValue, bValue, cValue) {
+/* function testCalculator(aValue, bValue, cValue) {
     return(`${formF(aValue, bValue, cValue)}\n${quadraticFunction(aValue, bValue, cValue)}`);
-}
+} */
+
 console.log(testCalculator(-2, 4, 6)); /* to test */
