@@ -1,3 +1,5 @@
+//Function that calculates the great common divisor
+
 function gcd(m, n) {
     let module = m % n;
     while (module != 0) {
@@ -10,6 +12,9 @@ function gcd(m, n) {
 
 //console.log(gcd(60,144)); /* to test */
 //console.log(gcd(12, gcd(144, gcd (6, 32)))); /* to test */
+
+
+//Function that returns a number as a product of prime numbers
 
 function factorization(num) {
     let steps = [], factors = [];
@@ -37,6 +42,9 @@ function factorization(num) {
 }
 
 //console.log(factorization(242)); /* to test */
+
+
+//Function that simplify a square root
 
 function rootSimpl(Num) {
     let arr = factorization(Num);
@@ -68,6 +76,9 @@ function rootSimpl(Num) {
 }
 
 //console.log(rootSimpl(242)); /* to test */
+
+
+//Function that calculates x value(s)
 
 function quadraticFunction(a, b, c) {
     if ((!isNaN(a)) && (!isNaN(b)) && (!isNaN(c)) && (a != 0)) {
