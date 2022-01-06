@@ -26,13 +26,13 @@ function formQF(a, b, c) {
 
     switch (a) {
         case 1:
-            form = `x² `;
+            form = `x\u00B2 `;
             break;
         case -1:
-            form = `-x² `;
+            form = `-x\u00B2 `;
             break;
         default:
-            form = `${a}x² `;
+            form = `${a}x\u00B2 `;
     };
 
     //bx
@@ -296,11 +296,13 @@ function calculate() {
     const A = inputValue(AINPUT),
     B = inputValue(BINPUT),
     C = inputValue(CINPUT),
-    RESULTDIV = document.getElementById("resultPrinting");
+    FORMDIV = document.getElementById("form-div");
+    RESULTDIV = document.getElementById("result-div");
     if (A != 0) {
-        document.getElementById("functionPrinting").innerHTML = formQF(A, B, C);
+        FORMDIV.innerHTML = formQF(A, B, C);
         RESULTDIV.innerHTML = quadraticFunction(A, B, C);
     } else {
+        FORMDIV.innerHTML = null;
         RESULTDIV.innerHTML = "In a quadratic function \"a\" must be a number NOT equal 0!";
     }
 }

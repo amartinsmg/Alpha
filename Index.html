@@ -8,29 +8,31 @@
 		<script src="Script.js" defer></script>
 	</head>
 	<body>
-		<main>
-			<h1>Quadratic Function Calculator</h1>
-			<p><span id="big">ax² + bx + c = 0</span><p>
-			<form action="">
-				<div class="values">
-					<label for="aValue">a Value:</label>
-					<input type="number" value="1" id="aValue"/>
+		<main class="content">
+			<h1 class="page-title">Quadratic Function Calculator</h1>
+			<div class="example-form">ax&#178; + bx + c = 0</div>
+			<form class="input-form">
+				<div>
+					<label for="aValue">a value:</label>
+					<input class="values-input" type="number" value="1" id="aValue"/>
 				</div>
-				<div class="values">
-					<label for="bValue">b Value:</label>
-					<input type="number" value="0" id="bValue"/>
+				<div>
+					<label for="bValue">b value:</label>
+					<input class="values-input" type="number" value="0" id="bValue"/>
 				</div>
-				<div class="values">
-					<label for="cValue">c Value:</label>
-					<input type="number" value="0" id="cValue"/>
+				<div>
+					<label for="cValue">c value:</label>
+					<input class="values-input" type="number" value="0" id="cValue"/>
 				</div>
-				<div class="values">
-					<input id="calculate-Button" type="submit" value="Calculate"/>
+				<div>
+					<input class="values-input" id="calculate-Button" type="submit" value="Calculate"/>
 				</div>
 			</form>
-			<p id="functionPrinting"></p>
-			<p id="resultPrinting"></p>
+			<div class="result">
+				<div id="form-div"></div>
+				<div id="result-div"></div>
+			</div>
 		</main>
-		<footer>Made by amartinsmg</footer>
+		<footer>Powered by amartinsmg</footer>
 	</body>
 </html>
