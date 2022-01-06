@@ -1,57 +1,65 @@
+const AINPUT = document.getElementById("aValue"),
+BINPUT = document.getElementById("bValue"),
+CINPUT = document.getElementById("cValue"),
+CALCULATEBUTTON  = document.getElementById("calculate-Button");
+
 //Function that converts a string into a number
 
-function decimal(num) {
-    num = num.replace(",", ".");
-    num = Number(num);
-    if (isNaN(num) === true) {
+function inputValue(id) {
+    //console.log(id); //Ok
+
+    const NUM = parseInt(id.value);
+    if (isNaN(NUM) == true) {
         return 0;
     } else {
-        return num;
+        return NUM;
     }
 }
 
 
 //Function that prints initial quadratic function
 
-function formF(a, b, c) {
-    var printIt;
+function formQF(a, b, c) {
+    var form;
 
     //ax²
 
     switch (a) {
         case 1:
-            printIt = `x² `;
+            form = `x² `;
             break;
         case -1:
-            printIt = `-x² `;
+            form = `-x² `;
             break;
         default:
-            printIt = `${a}x² `;
+            form = `${a}x² `;
     };
 
     //bx
 
-    if (b == 1) {
-        printIt += `+x `;
-    } else if (b == -1) {
-        printIt += `-x `;
+    if (b == -1) {
+        form += `-x `;
+    } else if (b == 1) {
+        form += `+x `;
     } else if (b < 0) {
-        printIt += `${b}x `;
+        form += `${b}x `;
     } else if (b > 0) {
-        printIt += `+${b}x `;
+        form += `+${b}x `;
     };
 
     //c
 
     if (c < 0) {
-        printIt += `${c} `;
+        form += `${c} `;
     } else if (c > 0) {
-        printIt += `+${c} `;
+        form += `+${c} `;
     };
 
-    printIt += `= 0`;
-    return printIt;
+    form += `= 0`;
+    return form;
 };
+
+//console.log(formQF(2, 4 , -6)); //Ok
 
 
 //Function that calculates the great common divisor
@@ -63,8 +71,9 @@ function gcd(m, n) {
         n = module;
         module = m % n;
     }
-    return (n);
+    return n;
 }
+
 //console.log(gcd(60,144)); /* to test */
 //console.log(gcd(12, gcd(144, gcd (6, 32)))); /* to test */
 
@@ -72,254 +81,263 @@ function gcd(m, n) {
 //Function that returns a number as a product of prime numbers
 
 function factorization(num) {
-    let steps = [], factors = [];
+
+    //    console.log(num); //Ok
+
+    var factors = [], arr = [];
     while (num > 1) {
         for (let i = 2; i <= num; i++) {
             if (num % i == 0) {
-                steps.push([num, i]);
                 factors.push(i);
                 num /= i;
                 break;
             }
         }
     }
-    steps.push([num, '']);
-    //return(factors); /* to test */
-    //return steps; /* to test */
-    let arr = [], i = 0;
+
+    //    console.log(factors); //Ok
+
+    let i = 0;
     while (i < factors.length) {
-        let m = factors[i], occurrences;
-        occurrences = factors.lastIndexOf(m) - factors.indexOf(m) + 1;
-        arr.push([m, occurrences]);
-        i = factors.lastIndexOf(m) + 1
+        let j = factors[i], occurrences;
+        occurrences = factors.lastIndexOf(j) - factors.indexOf(j) + 1;
+        arr.push([j, occurrences]);
+        i = factors.lastIndexOf(j) + 1;
     }
-    return (arr);
+
+    //    console.log(arr); //Ok
+
+    return arr;
 }
-//console.log(factorization(242)); /* to test */
+
+//console.log(factorization(242)); //Ok
 
 
 // Function that simplifies a square root
 
-function rootSimpl(Num) {
-    let arr = factorization(Num);
+function rootSimplifier(num) {
+    let arr = factorization(num), intPart = 1, radicandPart = 1, finalNum;
 
-    //    console.log(arr); /* Ok */
+    //    console.log(arr); //Ok
 
-    let intPart = 1, radicandPart = 1, finalNum;
+    for (let i of arr) {
+        //        console.log(i); //Ok
+        //        console.log(i[0]); //Ok
 
-    for (let i = 0; i < arr.length; i++) {
+        let exponent = i[1];
 
-        //        console.log(arr[i][0]); /* Ok */
-
-        let exponent = arr[i][1];
-
-        //        console.log(exponent); /* Ok */
+        //        console.log(exponent); //Ok
 
         if (exponent >= 2) {
-            intPart *= (arr[i][0] * Math.floor(exponent / 2));
+            intPart *= (i[0] * Math.floor(exponent / 2));
             if (exponent % 2 != 0) {
-                radicandPart *= arr[i][0];
+                radicandPart *= i[0];
             }
         } else {
-            radicandPart *= arr[i][0];
+            radicandPart *= i[0];
         }
     }
-    //    finalNum = `${intPart}√${radicandPart}`;
+
+    //    console.log(`${intPart}\u221A${radicandPart}`); //Ok
+
     finalNum = [intPart, radicandPart];
-    return (finalNum);
+    return finalNum;
 }
 
-//console.log(rootSimpl(242)); /* to test */
+//console.log(rootSimplifier(124)); //Ok
 
 
 //Function that calculates x value(s)
 
 function quadraticFunction(a, b, c) {
-    if ((!isNaN(a)) && (!isNaN(b)) && (!isNaN(c)) && (a != 0)) {
-        let delta, deltaRoot, x1, x2, aa = 2 * a;
-        delta = b ** 2 - 4 * a * c;
-        if (delta < 0) {
-            return ("This quadratic function don't have any real value.")
-        } else if (delta == 0) {
-            b = -b
-            if (b % aa == 0) {
-                return (`x = ${b / aa}`);
+    if (isNaN(a) || isNaN(b) || isNaN(c) || a == 0) {
+        return "This is NOT a quadratic function!"
+    }
+    let aa = 2 * a;
+    const DELTA = b ** 2 - 4 * a * c,
+    DELTAROOT = Math.sqrt(DELTA);
+    b = -b
+    if (DELTA < 0) {
+        return ("This quadratic function don't have any real value.")
+    } else if (DELTA == 0) {
+        if (b % aa == 0) {
+            return `x = ${b / aa}`;
+        } else {
+            const GCD = gcd(b, aa);
+            if (GCD != 1) {
+                b /= GCD;
+                aa /= GCD;
+            }
+            if (aa < 0) {
+                aa = -aa;
+                b = -b;
+            }
+            return `x = ${b}/${aa}`;
+        }
+    } else {
+        let x1, x2;
+        if (Number.isInteger(DELTAROOT) === true) {
+            let numerator1 = b - DELTAROOT, numerator2 = b + DELTAROOT
+            if (numerator1 % aa == 0) {
+                x1 = `${numerator1 / aa}`;
             } else {
-                let gcdx = gcd(b, aa);
-                if (gcdx != 1) {
-                    b /= gcdx;
-                    aa /= gcdx;
+                const GCD1 = gcd(numerator1, aa);
+                if (aa < 0) {
+                    aa = -aa;
+                    numerator1 = -numerator1
+                    numerator2 = -numerator2;
                 }
+                if (GCD1 != 1) {
+                    numerator1 /= GCD1;
+                    aa /= GCD1;
+                }
+                x1 = `${numerator1}/${aa}`;
+            }
+            if (numerator2 % aa == 0) {
+                x2 = numerator2 / aa;
+            } else {
+                const GCD2 = gcd(numerator2, aa);
+                if (GCD2 != 0) {
+                    numerator2 /= GCD2;
+                    aa /= GCD2;
+                }
+                x2 = `${numerator2}/${aa}`;
+            }
+        } else {
+            const DELTAROOTSIMPLIFIED = rootSimplifier(DELTA);
+            let intDeltaPart = DELTAROOTSIMPLIFIED[0],
+            irrationalDeltaPart = DELTAROOTSIMPLIFIED[1];
+            const GCD = gcd(intDeltaPart, aa);
+
+//            console.log(DELTAROOTSIMPLIFIED); /*to test*/
+
+            if (b == 0) {
+                if ((intDeltaPart % aa) == 0) {
+                    intDeltaPart /= aa;
+                    if (intDeltaPart == 1 || intDeltaPart == -1) {
+                        x1 = `-\u221A${irrationalDeltaPart}`;
+                        x2 = `\u221A${irrationalDeltaPart}`;
+                    } else {
+                        x1 = `${-intDeltaPart}\u221A${irrationalDeltaPart}`;
+                        x2 = `${intDeltaPart}\u221A${irrationalDeltaPart}`;
+                    }
+                } else {
+                    if (GCD != 1) {
+                        intDeltaPart /= GCD;
+                        aa /= GCD;
+                        //PS: aa will be != 1 and != -1, because GCD will be != aa
+                    }
+                    if (aa < 0) {
+                        aa = -aa;
+                        intDeltaPart = -intDeltaPart;
+                    }
+                    if (intDeltaPart == 1 || intDeltaPart == -1) {
+                        x1 = `-(\u221A${irrationalDeltaPart})/${aa}`;
+                        x2 = `(\u221A${irrationalDeltaPart})/${aa}`;
+                    } else {
+                        x1 = `${-intDeltaPart}\u221A(${irrationalDeltaPart})/${aa}`;
+                        x2 = `${intDeltaPart}\u221A(${irrationalDeltaPart})/${aa}`;
+                    }
+                }
+            } else {
+                const GCDB = gcd(GCD, b);
+
+//                console.log(b, intDeltaPart, aa, GCDB); //Ok
+
+                if (GCDB != 1) {
+                    intDeltaPart /= GCDB;
+                    aa /= GCDB;
+                    b /= GCDB;
+                }
+
+//                console.log(b, intDeltaPart, aa); //Ok
+
                 if (aa < 0) {
                     aa = -aa;
                     b = -b;
+                    intDeltaPart = -intDeltaPart;
                 }
-                return (`x = ${b}/${aa}`);
-            }
-        } else {
-            deltaRoot = Math.sqrt(delta);
-            if (Number.isInteger(deltaRoot) === true) {
-                let numer1 = (-b) - deltaRoot, numer2 = (-b) + deltaRoot
-                if (numer1 % aa == 0) {
-                    x1 = numer1 / aa;
-                } else {
-                    let gcd1 = gcd(numer1, aa);
-                    if (gcd1 != 1) {
-                        numer1 /= gcd1;
-                        aa /= gcd1;
-                    }
-                    if (aa < 0) {
-                        aa = -aa;
-                        numer1 = -numer1;
-                    }
-                    x1 = `${numer1}/${aa}`;
-                }
-                if (numer2 % aa == 0) {
-                    x2 = numer2 / aa;
-                } else {
-                    let gcd2 = gcd(numer2, aa);
-                    if (gcd2 != 0) {
-                        numer2 /= gcd2;
-                        aa /= gcd2;
-                    }
-                    if (aa < 0) {
-                        aa = -aa;
-                        numer2 = -numer2;
-                    }
-                    x2 = `${numer2}/${aa}`;
-                }
-            } else {
-                deltaRootSimpl = rootSimpl(delta);
-                let gcd1 = gcd(deltaRootSimpl[0], aa)
 
-                //console.log(deltaRootSimpl); /*to test*/
+//                console.log(b, intDeltaPart, aa); //Ok
 
-                if (b == 0) {
-                    if ((deltaRootSimpl[0] % aa) == 0) {
-                        deltaRootSimpl[0] /= aa;
-                        switch (deltaRootSimpl[0]) {
-                            case 1:
-                                x1 = `-√${deltaRootSimpl[1]}`;
-                                x2 = `√${deltaRootSimpl[1]}`;
-                                break;
-                            case -1:
-                                x1 = `√${deltaRootSimpl[1]}`;
-                                x2 = `-√${deltaRootSimpl[1]}`;
-                                break;
-                            default:
-                                x1 = `${-deltaRootSimpl[0]}√${deltaRootSimpl[1]}`;
-                                x2 = `${deltaRootSimpl[0]}√${deltaRootSimpl[1]}`;
-                        }
+                if (aa == 1) {
+                    if (intDeltaPart == -1 || intDeltaPart == 1) {
+                        x1 = `${b} -\u221A${irrationalDeltaPart}`;
+                        x2 = `${b} +\u221A${irrationalDeltaPart}`;
                     } else {
-                        if (gcd1 != 1) {
-                            deltaRootSimpl[0] /= gcd1;
-                            aa /= gcd1;
+                        if (intDeltaPart < 0) {
+                            intDeltaPart = -intDeltaPart;
                         }
-                        if (aa < 0) {
-                            aa = -aa;
-                            deltaRootSimpl[0] = - deltaRootSimpl[0];
-                            switch (deltaRootSimpl[0]) {
-                                case 1:
-                                    x1 = `-(√${deltaRootSimpl[1]})/${aa}`;
-                                    x2 = `(√${deltaRootSimpl[1]})/${aa}`;
-                                    break;
-                                case -1:
-                                    x1 = `-(√${deltaRootSimpl[1]})/${aa}`;
-                                    x2 = `(√${deltaRootSimpl[1]})/${aa}`;
-                                    break;
-                                default:
-                                    x1 = `${-deltaRootSimpl[0]}√(${deltaRootSimpl[1]})/${aa}`;
-                                    x2 = `${deltaRootSimpl[0]}√(${deltaRootSimpl[1]})/${aa}`;
-                            }
-                        } else {
-                            x1 = `${-deltaRootSimpl[0]}√(${deltaRootSimpl[1]})/${aa}`;
-                            x2 = `${deltaRootSimpl[0]}√(${deltaRootSimpl[1]})/${aa}`;
-                        }
+                        x1 = `${b} ${-intDeltaPart}\u221A${irrationalDeltaPart}`;
+                        x2 = `${b} + ${intDeltaPart}\u221A${irrationalDeltaPart}`;
                     }
                 } else {
-                    b = -b
-                    let gcd2 = gcd(gcd1, b)
-                    if (gcd1 != 1) {
-                        deltaRootSimpl[0] /= gcd2;
-                        aa /= gcd2;
-                        b /= gcd2;
-                    }
-                    if (aa < 0) {
-                        aa = -aa
-                        b = -b
-                        deltaRootSimpl[0] = -deltaRootSimpl[0]
-                    }
-                    if (aa == 1) {
-                        switch (deltaRootSimpl[0]) {
-                            case 1:
-                                x1 = `${b} -√${deltaRootSimpl[1]}`;
-                                x2 = `${b} +√${deltaRootSimpl[1]}`;
-                                break;
-                            case -1:
-                                x1 = `${b} -√${deltaRootSimpl[1]}`;
-                                x2 = `${b} +√${deltaRootSimpl[1]}`;
-                                break;
-                            default:
-                                if (deltaRootSimpl[0] > 0) {
-                                    x1 = `${b} ${-deltaRootSimpl[0]}√${deltaRootSimpl[1]}`;
-                                    x2 = `${b} + ${deltaRootSimpl[0]}√${deltaRootSimpl[1]}`;
-                                } else {
-                                    x1 = `${b} + ${-deltaRootSimpl[0]}√${deltaRootSimpl[1]}`;
-                                    x2 = `${b} ${deltaRootSimpl[0]}√${deltaRootSimpl[1]}`;
-                                }
-                        }
+                    if (intDeltaPart == 1 || intDeltaPart == -1) {
+                        x1 = `(${b} -\u221A${irrationalDeltaPart})/${aa}`;
+                        x2 = `(${b} +\u221A${irrationalDeltaPart})/${aa}`;
                     } else {
-                        switch (deltaRootSimpl[0]) {
-                            case 1:
-                                x1 = `(${b} -√${deltaRootSimpl[1]})/${aa}`;
-                                x2 = `(${b} +√${deltaRootSimpl[1]})/${aa}`;
-                                break;
-                            case -1:
-                                x1 = `(${b} -√${deltaRootSimpl[1]})/${aa}`;
-                                x2 = `(${b} +√${deltaRootSimpl[1]})/${aa}`;
-                                break;
-                            default:
-                                if (deltaRootSimpl[0] > 0) {
-                                    x1 = `(${b} ${-deltaRootSimpl[0]}√${deltaRootSimpl[1]})/${aa}`;
-                                    x2 = `(${b} +${deltaRootSimpl[0]}√${deltaRootSimpl[1]})/${aa}`;
-                                } else {
-                                    x1 = `(${b} ${deltaRootSimpl[0]}√${deltaRootSimpl[1]})/${aa}`;
-                                    x2 = `(${b} +${-deltaRootSimpl[0]}√${deltaRootSimpl[1]})/${aa}`;
-                                }
+                        if (intDeltaPart > 0) {
+                            intDeltaPart = -intDeltaPart
                         }
+                        x1 = `(${b} ${-intDeltaPart}\u221A${irrationalDeltaPart})/${aa}`;
+                        x2 = `(${b} +${intDeltaPart}\u221A${irrationalDeltaPart})/${aa}`;
                     }
                 }
             }
-            return (`x' = ${x1}, x" = ${x2}`);
         }
-    } else {
-        return ("This is NOT a quadratic function!");
+        return `x' = ${x1}, x" = ${x2}`;
     }
 }
 
 
 //Function that calls the others
 
-function calculator() {
-    var aValue, bValue, cValue;
-    aValue = document.getElementById("aValue").value;
-    bValue = document.getElementById("bValue").value;
-    cValue = document.getElementById("cValue").value;
-    aValue = decimal(aValue);
-    bValue = decimal(bValue);
-    cValue = decimal(cValue);
-    if (aValue != 0) {
-        document.getElementById("functionPrinting").innerHTML = formF(aValue, bValue, cValue);
-        document.getElementById("resultPrinting").innerHTML = quadraticFunction(aValue, bValue, cValue);
+function calculate() {
+    const A = inputValue(AINPUT),
+    B = inputValue(BINPUT),
+    C = inputValue(CINPUT),
+    RESULTDIV = document.getElementById("resultPrinting");
+    if (A != 0) {
+        document.getElementById("functionPrinting").innerHTML = formQF(A, B, C);
+        RESULTDIV.innerHTML = quadraticFunction(A, B, C);
     } else {
-        alert("In a quadratic function \"a\" must be NOT equal 0!");
+        RESULTDIV.innerHTML = "In a quadratic function \"a\" must be a number NOT equal 0!";
     }
 }
 
 
 //Test function
 
-/* function testCalculator(aValue, bValue, cValue) {
-    return(`${formF(aValue, bValue, cValue)}\n${quadraticFunction(aValue, bValue, cValue)}`);
-} 
-console.log(testCalculator(-2, 4, 6)); */
+/* (function (a, b, c) {
+    console.log(`${formQF(a, b, c)}\n${quadraticFunction(a, b, c)}`);
+})(-2, 2, 18); //Ok */
+
+
+//Functions that change
+
+AINPUT.onkeydown = (e) => {
+    if (e.keyCode == 13) {
+        BINPUT.focus();
+        BINPUT.value = "";
+        return false;
+    }
+}
+
+BINPUT.onkeydown = (e) => {
+    if (e.keyCode == 13) {
+        CINPUT.focus();
+        CINPUT.value = "";
+        return false;
+    }
+}
+
+CINPUT.onkeydown = (e) => {
+    if (e.keyCode == 13) {
+        calculate();
+    }
+}
+
+CALCULATEBUTTON.onclick = () => {
+    calculate();
+    return false;
+}
