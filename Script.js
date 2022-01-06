@@ -1,7 +1,7 @@
 const AINPUT = document.getElementById("aValue"),
 BINPUT = document.getElementById("bValue"),
 CINPUT = document.getElementById("cValue"),
-CALCULATEBUTTON  = document.getElementById("calculate-Button");
+CALCULATEBUTTON  = document.getElementById("calculate-button");
 
 //Function that converts a string into a number
 
