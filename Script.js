@@ -311,6 +311,10 @@ function calculate() {
 //Test function
 
 /* (function (a, b, c) {
+    if (a == 0){
+        const MyError = new Error("In a quadratic function \"a\" must be a number NOT equal 0!");
+        throw MyError;
+    }
     console.log(`${formQF(a, b, c)}\n${quadraticFunction(a, b, c)}`);
 })(-2, 2, 18); //Ok */
 
