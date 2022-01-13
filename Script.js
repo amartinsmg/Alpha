@@ -66,12 +66,11 @@ function formQF(a, b, c) {
 
 function gcd(m, n) {
     let module = m % n;
-    while (module != 0) {
-        m = n;
-        n = module;
-        module = m % n;
+    if (module != 0) {
+        return gcd(n, module)
+    }else{
+        return n;
     }
-    return n;
 }
 
 //console.log(gcd(60,144)); /* to test */
@@ -84,30 +83,30 @@ function factorization(num) {
 
     //    console.log(num); //Ok
 
-    var factors = [], arr = [];
+    const FACTORS = [], ARR = [];
     while (num > 1) {
         for (let i = 2; i <= num; i++) {
             if (num % i == 0) {
-                factors.push(i);
+                FACTORS.push(i);
                 num /= i;
                 break;
             }
         }
     }
 
-    //    console.log(factors); //Ok
+    //    console.log(FACTORS); //Ok
 
     let i = 0;
-    while (i < factors.length) {
-        let j = factors[i], occurrences;
-        occurrences = factors.lastIndexOf(j) - factors.indexOf(j) + 1;
-        arr.push([j, occurrences]);
-        i = factors.lastIndexOf(j) + 1;
+    while (i < FACTORS.length) {
+        let j = FACTORS[i], occurrences;
+        occurrences = FACTORS.lastIndexOf(j) - FACTORS.indexOf(j) + 1;
+        ARR.push([j, occurrences]);
+        i = FACTORS.lastIndexOf(j) + 1;
     }
 
-    //    console.log(arr); //Ok
+    //    console.log(ARR); //Ok
 
-    return arr;
+    return ARR;
 }
 
 //console.log(factorization(242)); //Ok
@@ -116,11 +115,12 @@ function factorization(num) {
 // Function that simplifies a square root
 
 function rootSimplifier(num) {
-    let arr = factorization(num), intPart = 1, radicandPart = 1, finalNum;
+    const ARR = factorization(num);
+    let intPart = 1, radicandPart = 1;
 
-    //    console.log(arr); //Ok
+    //console.log(ARR); //Ok
 
-    for (let i of arr) {
+    for (let i of ARR) {
         //        console.log(i); //Ok
         //        console.log(i[0]); //Ok
 
@@ -129,7 +129,7 @@ function rootSimplifier(num) {
         //        console.log(exponent); //Ok
 
         if (exponent >= 2) {
-            intPart *= (i[0] * Math.floor(exponent / 2));
+            intPart *= (i[0] ** Math.floor(exponent / 2));
             if (exponent % 2 != 0) {
                 radicandPart *= i[0];
             }
@@ -140,8 +140,8 @@ function rootSimplifier(num) {
 
     //    console.log(`${intPart}\u221A${radicandPart}`); //Ok
 
-    finalNum = [intPart, radicandPart];
-    return finalNum;
+    const FINALNUM = [intPart, radicandPart];
+    return FINALNUM;
 }
 
 //console.log(rootSimplifier(124)); //Ok
@@ -205,11 +205,12 @@ function quadraticFunction(a, b, c) {
             }
         } else {
             const DELTAROOTSIMPLIFIED = rootSimplifier(DELTA);
+
+            //console.log(DELTAROOTSIMPLIFIED); //Ok
+
             let intDeltaPart = DELTAROOTSIMPLIFIED[0],
             irrationalDeltaPart = DELTAROOTSIMPLIFIED[1];
             const GCD = gcd(intDeltaPart, aa);
-
-//            console.log(DELTAROOTSIMPLIFIED); /*to test*/
 
             if (b == 0) {
                 if ((intDeltaPart % aa) == 0) {
@@ -242,7 +243,7 @@ function quadraticFunction(a, b, c) {
             } else {
                 const GCDB = gcd(GCD, b);
 
-//                console.log(b, intDeltaPart, aa, GCDB); //Ok
+                console.log(b, intDeltaPart, aa, GCDB); //Ok
 
                 if (GCDB != 1) {
                     intDeltaPart /= GCDB;
@@ -276,7 +277,7 @@ function quadraticFunction(a, b, c) {
                         x1 = `(${b} -\u221A${irrationalDeltaPart})/${aa}`;
                         x2 = `(${b} +\u221A${irrationalDeltaPart})/${aa}`;
                     } else {
-                        if (intDeltaPart > 0) {
+                        if (intDeltaPart < 0) {
                             intDeltaPart = -intDeltaPart
                         }
                         x1 = `(${b} ${-intDeltaPart}\u221A${irrationalDeltaPart})/${aa}`;
@@ -310,13 +311,13 @@ function calculate() {
 
 //Test function
 
-/* (function (a, b, c) {
+/* void function (a, b, c) {
     if (a == 0){
         const MyError = new Error("In a quadratic function \"a\" must be a number NOT equal 0!");
         throw MyError;
     }
     console.log(`${formQF(a, b, c)}\n${quadraticFunction(a, b, c)}`);
-})(-2, 2, 18); //Ok */
+}(1, -8, 16); //Ok */
 
 
 //Functions that change
