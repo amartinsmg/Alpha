@@ -243,7 +243,7 @@ function quadraticFunction(a, b, c) {
             } else {
                 const GCDB = gcd(GCD, b);
 
-                console.log(b, intDeltaPart, aa, GCDB); //Ok
+                //console.log(b, intDeltaPart, aa, GCDB); //Ok
 
                 if (GCDB != 1) {
                     intDeltaPart /= GCDB;
@@ -251,7 +251,7 @@ function quadraticFunction(a, b, c) {
                     b /= GCDB;
                 }
 
-//                console.log(b, intDeltaPart, aa); //Ok
+                //console.log(b, intDeltaPart, aa); //Ok
 
                 if (aa < 0) {
                     aa = -aa;
@@ -259,7 +259,7 @@ function quadraticFunction(a, b, c) {
                     intDeltaPart = -intDeltaPart;
                 }
 
-//                console.log(b, intDeltaPart, aa); //Ok
+                //console.log(b, intDeltaPart, aa); //Ok
 
                 if (aa == 1) {
                     if (intDeltaPart == -1 || intDeltaPart == 1) {
