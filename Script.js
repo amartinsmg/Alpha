@@ -340,7 +340,7 @@ BINPUT.onkeydown = (e) => {
 
 CINPUT.onkeydown = (e) => {
     if (e.keyCode == 13) {
-        calculate();
+        preventDefalut();
     }
 }
 
