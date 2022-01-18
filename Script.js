@@ -1,7 +1,7 @@
 const AINPUT = document.getElementById("aValue"),
-BINPUT = document.getElementById("bValue"),
-CINPUT = document.getElementById("cValue"),
-CALCULATEBUTTON  = document.getElementById("calculate-button");
+    BINPUT = document.getElementById("bValue"),
+    CINPUT = document.getElementById("cValue"),
+    CALCULATEBUTTON  = document.getElementById("calculate-button");
 
 //Function that converts a string into a number
 
@@ -20,7 +20,7 @@ function inputValue(id) {
 //Function that prints initial quadratic function
 
 function formQF(a, b, c) {
-    var form;
+    let form;
 
     //ax²
 
@@ -81,7 +81,7 @@ function gcd(m, n) {
 
 function factorization(num) {
 
-    //    console.log(num); //Ok
+    //console.log(num); //Ok
 
     const FACTORS = [], ARR = [];
     while (num > 1) {
@@ -94,7 +94,7 @@ function factorization(num) {
         }
     }
 
-    //    console.log(FACTORS); //Ok
+    //console.log(FACTORS); //Ok
 
     let i = 0;
     while (i < FACTORS.length) {
@@ -104,7 +104,7 @@ function factorization(num) {
         i = FACTORS.lastIndexOf(j) + 1;
     }
 
-    //    console.log(ARR); //Ok
+    //console.log(ARR); //Ok
 
     return ARR;
 }
@@ -155,7 +155,7 @@ function quadraticFunction(a, b, c) {
     }
     let aa = 2 * a;
     const DELTA = b ** 2 - 4 * a * c,
-    DELTAROOT = Math.sqrt(DELTA);
+        DELTAROOT = Math.sqrt(DELTA);
     b = -b
     if (DELTA < 0) {
         return ("This quadratic function don't have any real value.")
@@ -208,19 +208,19 @@ function quadraticFunction(a, b, c) {
 
             //console.log(DELTAROOTSIMPLIFIED); //Ok
 
-            let intDeltaPart = DELTAROOTSIMPLIFIED[0],
-            irrationalDeltaPart = DELTAROOTSIMPLIFIED[1];
-            const GCD = gcd(intDeltaPart, aa);
+            let intDeltaPart = DELTAROOTSIMPLIFIED[0];
+            const IRRATIONALDELTAPART = DELTAROOTSIMPLIFIED[1],
+                GCD = gcd(intDeltaPart, aa);
 
             if (b == 0) {
                 if ((intDeltaPart % aa) == 0) {
                     intDeltaPart /= aa;
                     if (intDeltaPart == 1 || intDeltaPart == -1) {
-                        x1 = `-\u221A${irrationalDeltaPart}`;
-                        x2 = `\u221A${irrationalDeltaPart}`;
+                        x1 = `-\u221A${IRRATIONALDELTAPART}`;
+                        x2 = `\u221A${IRRATIONALDELTAPART}`;
                     } else {
-                        x1 = `${-intDeltaPart}\u221A${irrationalDeltaPart}`;
-                        x2 = `${intDeltaPart}\u221A${irrationalDeltaPart}`;
+                        x1 = `${-intDeltaPart}\u221A${IRRATIONALDELTAPART}`;
+                        x2 = `${intDeltaPart}\u221A${IRRATIONALDELTAPART}`;
                     }
                 } else {
                     if (GCD != 1) {
@@ -233,11 +233,11 @@ function quadraticFunction(a, b, c) {
                         intDeltaPart = -intDeltaPart;
                     }
                     if (intDeltaPart == 1 || intDeltaPart == -1) {
-                        x1 = `-(\u221A${irrationalDeltaPart})/${aa}`;
-                        x2 = `(\u221A${irrationalDeltaPart})/${aa}`;
+                        x1 = `-(\u221A${IRRATIONALDELTAPART})/${aa}`;
+                        x2 = `(\u221A${IRRATIONALDELTAPART})/${aa}`;
                     } else {
-                        x1 = `${-intDeltaPart}\u221A(${irrationalDeltaPart})/${aa}`;
-                        x2 = `${intDeltaPart}\u221A(${irrationalDeltaPart})/${aa}`;
+                        x1 = `${-intDeltaPart}\u221A(${IRRATIONALDELTAPART})/${aa}`;
+                        x2 = `${intDeltaPart}\u221A(${IRRATIONALDELTAPART})/${aa}`;
                     }
                 }
             } else {
@@ -263,25 +263,25 @@ function quadraticFunction(a, b, c) {
 
                 if (aa == 1) {
                     if (intDeltaPart == -1 || intDeltaPart == 1) {
-                        x1 = `${b} -\u221A${irrationalDeltaPart}`;
-                        x2 = `${b} +\u221A${irrationalDeltaPart}`;
+                        x1 = `${b} -\u221A${IRRATIONALDELTAPART}`;
+                        x2 = `${b} +\u221A${IRRATIONALDELTAPART}`;
                     } else {
                         if (intDeltaPart < 0) {
                             intDeltaPart = -intDeltaPart;
                         }
-                        x1 = `${b} ${-intDeltaPart}\u221A${irrationalDeltaPart}`;
-                        x2 = `${b} + ${intDeltaPart}\u221A${irrationalDeltaPart}`;
+                        x1 = `${b} ${-intDeltaPart}\u221A${IRRATIONALDELTAPART}`;
+                        x2 = `${b} + ${intDeltaPart}\u221A${IRRATIONALDELTAPART}`;
                     }
                 } else {
                     if (intDeltaPart == 1 || intDeltaPart == -1) {
-                        x1 = `(${b} -\u221A${irrationalDeltaPart})/${aa}`;
-                        x2 = `(${b} +\u221A${irrationalDeltaPart})/${aa}`;
+                        x1 = `(${b} -\u221A${IRRATIONALDELTAPART})/${aa}`;
+                        x2 = `(${b} +\u221A${IRRATIONALDELTAPART})/${aa}`;
                     } else {
                         if (intDeltaPart < 0) {
                             intDeltaPart = -intDeltaPart
                         }
-                        x1 = `(${b} ${-intDeltaPart}\u221A${irrationalDeltaPart})/${aa}`;
-                        x2 = `(${b} +${intDeltaPart}\u221A${irrationalDeltaPart})/${aa}`;
+                        x1 = `(${b} ${-intDeltaPart}\u221A${IRRATIONALDELTAPART})/${aa}`;
+                        x2 = `(${b} +${intDeltaPart}\u221A${IRRATIONALDELTAPART})/${aa}`;
                     }
                 }
             }
@@ -295,10 +295,10 @@ function quadraticFunction(a, b, c) {
 
 function calculate() {
     const A = inputValue(AINPUT),
-    B = inputValue(BINPUT),
-    C = inputValue(CINPUT),
-    FORMDIV = document.getElementById("form-div");
-    RESULTDIV = document.getElementById("result-div");
+        B = inputValue(BINPUT),
+        C = inputValue(CINPUT),
+        FORMDIV = document.getElementById("form-div");
+        RESULTDIV = document.getElementById("result-div");
     if (A != 0) {
         FORMDIV.innerHTML = formQF(A, B, C);
         RESULTDIV.innerHTML = quadraticFunction(A, B, C);
