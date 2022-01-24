@@ -1,20 +1,7 @@
 const AINPUT = document.getElementById("aValue"),
     BINPUT = document.getElementById("bValue"),
     CINPUT = document.getElementById("cValue"),
-    CALCULATEBUTTON  = document.getElementById("calculate-button");
-
-//Function that converts a string into a number
-
-function inputValue(id) {
-    //console.log(id); //Ok
-
-    const NUM = parseInt(id.value);
-    if (isNaN(NUM) == true) {
-        return 0;
-    } else {
-        return NUM;
-    }
-}
+    FORM  = document.querySelector(".input-form");
 
 
 //Function that prints initial quadratic function
@@ -151,7 +138,7 @@ function rootSimplifier(num) {
 
 function quadraticFunction(a, b, c) {
     if (isNaN(a) || isNaN(b) || isNaN(c) || a == 0) {
-        return "This is NOT a quadratic function!"
+        throw "In a quadratic function \"a\", \"b\" and \"c\" must be numbers, and \"a\" must be NOT equal 0!"
     }
     let aa = 2 * a;
     const DELTA = b ** 2 - 4 * a * c,
@@ -294,17 +281,17 @@ function quadraticFunction(a, b, c) {
 //Function that calls the others
 
 function calculate() {
-    const A = inputValue(AINPUT),
-        B = inputValue(BINPUT),
-        C = inputValue(CINPUT),
+    const A = parseInt(AINPUT.value),
+        B = parseInt(BINPUT.value),
+        C = parseInt(CINPUT.value),
         FORMDIV = document.getElementById("form-div");
         RESULTDIV = document.getElementById("result-div");
-    if (A != 0) {
+    try {
         FORMDIV.innerHTML = formQF(A, B, C);
         RESULTDIV.innerHTML = quadraticFunction(A, B, C);
-    } else {
-        FORMDIV.innerHTML = null;
-        RESULTDIV.innerHTML = "In a quadratic function \"a\" must be a number NOT equal 0!";
+    } catch (e) {
+        FORMDIV.innerHTML = "This is NOT a Quadratic Function";
+        RESULTDIV.innerHTML = e;
     }
 }
 
@@ -312,20 +299,27 @@ function calculate() {
 //Test function
 
 /* void function (a, b, c) {
-    if (a == 0){
-        const MyError = new Error("In a quadratic function \"a\" must be a number NOT equal 0!");
-        throw MyError;
+    try{
+        console.log(`${formQF(a, b, c)}\n${quadraticFunction(a, b, c)}`);
+    } catch (e){
+        console.warn(e)
     }
-    console.log(`${formQF(a, b, c)}\n${quadraticFunction(a, b, c)}`);
-}(1, -8, 16); //Ok */
+}(-2, -8, 16); //Ok */
 
 
-//Functions that change
+//Functions that change the document
+
+FORM.onsubmit = () => {
+    calculate();
+    return false;
+}
 
 AINPUT.onkeydown = (e) => {
     if (e.keyCode == 13) {
         BINPUT.focus();
-        BINPUT.value = "";
+        if (BINPUT.value == "0"){
+            BINPUT.value = "";
+        }
         return false;
     }
 }
@@ -333,18 +327,15 @@ AINPUT.onkeydown = (e) => {
 BINPUT.onkeydown = (e) => {
     if (e.keyCode == 13) {
         CINPUT.focus();
-        CINPUT.value = "";
+        if (CINPUT.value == "0"){
+            CINPUT.value = "";
+        }
         return false;
     }
 }
 
 CINPUT.onkeydown = (e) => {
     if (e.keyCode == 13) {
-        void (true);
+        return true;
     }
-}
-
-CALCULATEBUTTON.onclick = () => {
-    calculate();
-    return false;
 }
