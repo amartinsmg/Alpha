@@ -1,25 +1,25 @@
-const AINPUT = document.getElementById("aValue"),
-    BINPUT = document.getElementById("bValue"),
-    CINPUT = document.getElementById("cValue"),
-    FORM  = document.querySelector(".input-form");
+const AINPUT = document.querySelector("#aValue"),
+    BINPUT = document.querySelector("#bValue"),
+    CINPUT = document.querySelector("#cValue"),
+    FORM = document.querySelector("form");
 
 
 //Function that prints initial quadratic function
 
 function formQF(a, b, c) {
-    let form;
+    let form = "y = ";
 
     //ax²
 
     switch (a) {
         case 1:
-            form = `x\u00B2 `;
+            form += `x\u00B2 `;
             break;
         case -1:
-            form = `-x\u00B2 `;
+            form += `-x\u00B2 `;
             break;
         default:
-            form = `${a}x\u00B2 `;
+            form += `${a}x\u00B2 `;
     };
 
     //bx
@@ -42,7 +42,6 @@ function formQF(a, b, c) {
         form += `+${c} `;
     };
 
-    form += `= 0`;
     return form;
 };
 
@@ -55,8 +54,8 @@ function gcd(m, n) {
     let module = m % n;
     if (module != 0) {
         return gcd(n, module)
-    }else{
-        return n;
+    } else {
+        return Math.abs(n);
     }
 }
 
@@ -127,8 +126,7 @@ function rootSimplifier(num) {
 
     //    console.log(`${intPart}\u221A${radicandPart}`); //Ok
 
-    const FINALNUM = [intPart, radicandPart];
-    return FINALNUM;
+    return [intPart, radicandPart];
 }
 
 //console.log(rootSimplifier(124)); //Ok
@@ -140,27 +138,26 @@ function quadraticFunction(a, b, c) {
     if (isNaN(a) || isNaN(b) || isNaN(c) || a == 0) {
         throw "In a quadratic function \"a\", \"b\" and \"c\" must be numbers, and \"a\" must be NOT equal 0!"
     }
-    let aa = 2 * a;
+    if (a < 0) {
+        a = -a;
+        b = -b;
+        c = -c;
+    }
+    let aa = 2 * a,
+        aaaa = 4 * a,
+        x;
     const DELTA = b ** 2 - 4 * a * c,
         DELTAROOT = Math.sqrt(DELTA);
     b = -b
+    const GCDX = gcd(b, aa),
+        GCDY = gcd(DELTA, aaaa),
+        VERTEXX = (b % aa == 0) ? `${b / aa}` : `${b / GCDX}/${aa / GCDX}`,
+        VERTEXY = (-DELTA % aaaa == 0) ? `${-DELTA / aaaa}` : `${-DELTA / GCDY}/${aaaa / GCDY}`,
+        VERTEX = `(${VERTEXX}, ${VERTEXY})`;
     if (DELTA < 0) {
-        return ("This quadratic function don't have any real value.")
+        x = "This quadratic function don't have any real value.";
     } else if (DELTA == 0) {
-        if (b % aa == 0) {
-            return `x = ${b / aa}`;
-        } else {
-            const GCD = gcd(b, aa);
-            if (GCD != 1) {
-                b /= GCD;
-                aa /= GCD;
-            }
-            if (aa < 0) {
-                aa = -aa;
-                b = -b;
-            }
-            return `x = ${b}/${aa}`;
-        }
+        x = `x = ${VERTEXX}`;
     } else {
         let x1, x2;
         if (Number.isInteger(DELTAROOT) === true) {
@@ -169,11 +166,6 @@ function quadraticFunction(a, b, c) {
                 x1 = `${numerator1 / aa}`;
             } else {
                 const GCD1 = gcd(numerator1, aa);
-                if (aa < 0) {
-                    aa = -aa;
-                    numerator1 = -numerator1
-                    numerator2 = -numerator2;
-                }
                 if (GCD1 != 1) {
                     numerator1 /= GCD1;
                     aa /= GCD1;
@@ -215,10 +207,6 @@ function quadraticFunction(a, b, c) {
                         aa /= GCD;
                         //PS: aa will be != 1 and != -1, because GCD will be != aa
                     }
-                    if (aa < 0) {
-                        aa = -aa;
-                        intDeltaPart = -intDeltaPart;
-                    }
                     if (intDeltaPart == 1 || intDeltaPart == -1) {
                         x1 = `-(\u221A${IRRATIONALDELTAPART})/${aa}`;
                         x2 = `(\u221A${IRRATIONALDELTAPART})/${aa}`;
@@ -240,14 +228,6 @@ function quadraticFunction(a, b, c) {
 
                 //console.log(b, intDeltaPart, aa); //Ok
 
-                if (aa < 0) {
-                    aa = -aa;
-                    b = -b;
-                    intDeltaPart = -intDeltaPart;
-                }
-
-                //console.log(b, intDeltaPart, aa); //Ok
-
                 if (aa == 1) {
                     if (intDeltaPart == -1 || intDeltaPart == 1) {
                         x1 = `${b} -\u221A${IRRATIONALDELTAPART}`;
@@ -264,17 +244,15 @@ function quadraticFunction(a, b, c) {
                         x1 = `(${b} -\u221A${IRRATIONALDELTAPART})/${aa}`;
                         x2 = `(${b} +\u221A${IRRATIONALDELTAPART})/${aa}`;
                     } else {
-                        if (intDeltaPart < 0) {
-                            intDeltaPart = -intDeltaPart
-                        }
                         x1 = `(${b} ${-intDeltaPart}\u221A${IRRATIONALDELTAPART})/${aa}`;
                         x2 = `(${b} +${intDeltaPart}\u221A${IRRATIONALDELTAPART})/${aa}`;
                     }
                 }
             }
         }
-        return `x' = ${x1}, x" = ${x2}`;
+        x = `x' = ${x1}, x" = ${x2}`;
     }
+    return [x, VERTEX];
 }
 
 
@@ -284,14 +262,25 @@ function calculate() {
     const A = parseInt(AINPUT.value),
         B = parseInt(BINPUT.value),
         C = parseInt(CINPUT.value),
-        FORMDIV = document.getElementById("form-div");
-        RESULTDIV = document.getElementById("result-div");
+        YZERO = document.querySelector("#y-zero"),
+        RESULTDIV = document.querySelector("#result-yzero"),
+        VERTEX = document.querySelector("#coordinates"),
+        RESULTCOORDINATES = document.querySelector("#result-coordinates"),
+        FORM = document.querySelector(".function-form");
+
     try {
-        FORMDIV.innerHTML = formQF(A, B, C);
-        RESULTDIV.innerHTML = quadraticFunction(A, B, C);
+        const [Y0, COORDINATES] = quadraticFunction(A, B, C);
+        FORM.innerHTML = formQF(A, B, C);
+        YZERO.innerHTML = "When y = 0:";
+        RESULTDIV.innerHTML = Y0;
+        VERTEX.innerHTML = "Vertex Coordinates:";
+        RESULTCOORDINATES.innerHTML = COORDINATES;
     } catch (e) {
-        FORMDIV.innerHTML = "This is NOT a Quadratic Function";
+        FORM.innerHTML = "y = ax\u00B2 + bx + c";
+        YZERO.innerHTML = "This is NOT a Quadratic Function";
         RESULTDIV.innerHTML = e;
+        VERTEX.innerHTML = null;
+        RESULTCOORDINATES.innerHTML = null;
     }
 }
 
@@ -299,9 +288,9 @@ function calculate() {
 //Test function
 
 /* void function (a, b, c) {
-    try{
-        console.log(`${formQF(a, b, c)}\n${quadraticFunction(a, b, c)}`);
-    } catch (e){
+    try {
+        console.log(`${formQF(a, b, c)}\n${quadraticFunction(a, b, c)[0]}`);
+    } catch (e) {
         console.warn(e)
     }
 }(-2, -8, 16); //Ok */
@@ -317,9 +306,7 @@ FORM.onsubmit = () => {
 AINPUT.onkeydown = (e) => {
     if (e.keyCode == 13) {
         BINPUT.focus();
-        if (BINPUT.value == "0"){
-            BINPUT.value = "";
-        }
+        BINPUT.value = "";
         return false;
     }
 }
@@ -327,9 +314,7 @@ AINPUT.onkeydown = (e) => {
 BINPUT.onkeydown = (e) => {
     if (e.keyCode == 13) {
         CINPUT.focus();
-        if (CINPUT.value == "0"){
-            CINPUT.value = "";
-        }
+        CINPUT.value = "";
         return false;
     }
 }
