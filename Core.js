@@ -39,8 +39,6 @@ function formQF(a, b, c) {
     return form;
 };
 
-//console.log(formQF(2, 4 , -6)); //Ok
-
 
 //Function that calculates the great common divisor
 
@@ -53,16 +51,10 @@ function gcd(m, n) {
     }
 }
 
-//console.log(gcd(60,144)); /* to test */
-//console.log(gcd(12, gcd(144, gcd (6, 32)))); /* to test */
-
 
 //Function that returns a number as a product of prime numbers
 
 function factorization(num) {
-
-    //console.log(num); //Ok
-
     const FACTORS = [], ARR = [];
     while (num > 1) {
         for (let i = 2; i <= num; i++) {
@@ -73,9 +65,6 @@ function factorization(num) {
             }
         }
     }
-
-    //console.log(FACTORS); //Ok
-
     let i = 0;
     while (i < FACTORS.length) {
         let j = FACTORS[i], occurrences;
@@ -83,13 +72,8 @@ function factorization(num) {
         ARR.push([j, occurrences]);
         i = FACTORS.lastIndexOf(j) + 1;
     }
-
-    //console.log(ARR); //Ok
-
     return ARR;
 }
-
-//console.log(factorization(242)); //Ok
 
 
 // Function that simplifies a square root
@@ -97,17 +81,8 @@ function factorization(num) {
 function rootSimplifier(num) {
     const ARR = factorization(num);
     let intPart = 1, radicandPart = 1;
-
-    //console.log(ARR); //Ok
-
     for (let i of ARR) {
-        //        console.log(i); //Ok
-        //        console.log(i[0]); //Ok
-
         let exponent = i[1];
-
-        //        console.log(exponent); //Ok
-
         if (exponent >= 2) {
             intPart *= (i[0] ** Math.floor(exponent / 2));
             if (exponent % 2 != 0) {
@@ -117,13 +92,8 @@ function rootSimplifier(num) {
             radicandPart *= i[0];
         }
     }
-
-    //    console.log(`${intPart}\u221A${radicandPart}`); //Ok
-
     return [intPart, radicandPart];
 }
-
-//console.log(rootSimplifier(124)); //Ok
 
 
 //Function that calculates x value(s)
@@ -178,9 +148,6 @@ function quadraticFunction(a, b, c) {
             }
         } else {
             const DELTAROOTSIMPLIFIED = rootSimplifier(DELTA);
-
-            //console.log(DELTAROOTSIMPLIFIED); //Ok
-
             let intDeltaPart = DELTAROOTSIMPLIFIED[0];
             const IRRATIONALDELTAPART = DELTAROOTSIMPLIFIED[1],
                 GCD = gcd(intDeltaPart, aa);
@@ -211,17 +178,11 @@ function quadraticFunction(a, b, c) {
                 }
             } else {
                 const GCDB = gcd(GCD, b);
-
-                //console.log(b, intDeltaPart, aa, GCDB); //Ok
-
                 if (GCDB != 1) {
                     intDeltaPart /= GCDB;
                     aa /= GCDB;
                     b /= GCDB;
                 }
-
-                //console.log(b, intDeltaPart, aa); //Ok
-
                 if (aa == 1) {
                     if (intDeltaPart == -1 || intDeltaPart == 1) {
                         x1 = `${b} -\u221A${IRRATIONALDELTAPART}`;

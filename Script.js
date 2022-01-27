@@ -15,7 +15,6 @@ function calculate() {
         VERTEX = document.querySelector("#coordinates"),
         RESULTCOORDINATES = document.querySelector("#result-coordinates"),
         FORM = document.querySelector(".function-form");
-
     try {
         const [Y0, COORDINATES] = quadraticFunction(A, B, C);
         FORM.innerHTML = formQF(A, B, C);
