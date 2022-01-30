@@ -37,31 +37,34 @@ body {
 }
 
 .values-input {
-  padding: 2px;
+  padding: 2.5px;
   border-radius: 6px;
-  font-size: 0.9em;
-}
-
-#calculate-button {
+  font-size: .9em;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
   background-color: #f0f0f0;
 }
 
-#calculate-button:hover {
-  background-color: #bdbdbd;
+.values-input:hover {
+  background-color: #e6e6e6;
 }
 
-.result {
+#calculate-button {
+  padding: 4px 10px;
+}
+
+#result {
   display: flex;
   flex-direction: column;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 15px;
+  gap: 50px;
 }
 
 .result div {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5px;
+  gap: 7px;
 }
 
 .stron {
@@ -70,6 +73,18 @@ body {
 
 footer {
   position: fixed;
-  bottom: 10px;
+  bottom: 0px;
+  padding: 7px;
+  background-color: #242424;
   font-size: x-small;
+}
+
+img {
+  max-width: 100%;
+}
+
+@media screen and (orientation: landscape){
+  #result {
+    flex-direction: row;
+  }
 }

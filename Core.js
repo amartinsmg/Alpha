@@ -102,27 +102,32 @@ function quadraticFunction(a, b, c) {
   } else if (a === 0) {
     throw 'In a quadratic function "a" must be a number NOT equal 0!';
   }
+  let aaaa = 4 * a;
   if (a < 0) {
     a = -a;
     b = -b;
     c = -c;
   }
   let aa = 2 * a,
-    aaaa = 4 * a,
     x = "";
   const DELTA = b ** 2 - 4 * a * c,
     DELTAROOT = Math.sqrt(DELTA);
   b = -b;
   const GCDX = gcd(b, aa),
     GCDY = gcd(DELTA, aaaa),
+    VERTEX_X = b / aa,
     VERTEXX = b % aa === 0 ? `${b / aa}` : `${b / GCDX}/${aa / GCDX}`,
     VERTEXY =
-      (-DELTA % aaaa) === 0
+      -DELTA % aaaa === 0
         ? `${-DELTA / aaaa}`
-        : `${-DELTA / GCDY}/${aaaa / GCDY}`,
-    VERTEX = `(${VERTEXX}, ${VERTEXY})`;
+        : aaaa > 0?
+          `${-DELTA / GCDY}/${aaaa / GCDY}`:
+          `${DELTA / GCDY}/${-aaaa / GCDY}`;
+    VERTEX = [VERTEXX, VERTEXY],
+    X1 = (b - DELTAROOT) / aa,
+    X2 = (b + DELTAROOT) / aa;
   if (DELTA < 0) {
-    x = "This quadratic function don't have any real value.";
+    x = "This quadratic function don't have any real zero.";
   } else if (DELTA === 0) {
     x = `x = ${VERTEXX}`;
   } else {
@@ -208,9 +213,9 @@ function quadraticFunction(a, b, c) {
         }
       }
     }
-    x = `x' = ${x1}, x" = ${x2}`;
+    x = `x' = ${x1}\nx" = ${x2}`;
   }
-  return [x, VERTEX];
+  return [x, X1, X2, VERTEX, VERTEX_X];
 }
 
 //Test function

@@ -13,14 +13,39 @@ function calculate() {
     RESULTDIV = document.querySelector("#result-yzero"),
     VERTEX = document.querySelector("#coordinates"),
     RESULTCOORDINATES = document.querySelector("#result-coordinates"),
-    FORM = document.querySelector(".function-form");
+    FORM = document.querySelector(".function-form"),
+    GRAPHICSDIV = document.querySelector("#sage");
+  GRAPHICSDIV.innerHTML = "";
   try {
-    const [Y0, COORDINATES] = quadraticFunction(A, B, C);
+    const [Y0, X1, X2, COORDINATES, VERTEXX] = quadraticFunction(A, B, C);
     FORM.innerHTML = formQF(A, B, C);
-    YZERO.innerHTML = "When y = 0:";
-    RESULTDIV.innerHTML = Y0;
-    VERTEX.innerHTML = "Vertex Coordinates:";
-    RESULTCOORDINATES.innerHTML = COORDINATES;
+    YZERO.innerHTML = "Zeros:";
+    RESULTDIV.innerHTML = Y0.replace("\n", "<br>");
+    VERTEX.innerHTML = "Vertex:";
+    RESULTCOORDINATES.innerHTML = `(${COORDINATES.join(", ")})`;
+    if (navigator.onLine) {
+      const DIVMYCELL = document.createElement("div"),
+        SAGESCRIPT = document.createElement("script"),
+        MINXVALUE = isNaN(X1) ? VERTEXX - 2 : Math.min(VERTEXX, X1) - 2,
+        MAXXVALUE = isNaN(X2) ? VERTEXX + 2 : Math.max(VERTEXX, X2) + 2;
+      DIVMYCELL.setAttribute("id", "cell");
+      SAGESCRIPT.setAttribute("type", "text/x-sage");
+      SAGESCRIPT.innerHTML = `plot(${A} * x ^ 2 + (${B}) * x + (${C}), (x, ${MINXVALUE}, ${MAXXVALUE}))`;
+      DIVMYCELL.appendChild(SAGESCRIPT);
+      GRAPHICSDIV.appendChild(DIVMYCELL);
+      sagecell.makeSagecell({
+        inputLocation: "#cell",
+        template: sagecell.templates.minimal,
+        evalButtonText: "Plot graphic"
+      });
+      const PLOTBUTTON = document.querySelector(".sagecell_input button");
+      PLOTBUTTON.style.padding = "4px 10px";
+      PLOTBUTTON.style.fontSize = ".9em";
+      PLOTBUTTON.style.fontFamily = "Cambria, Cochin, Georgia, Times, \"Times New Roman\", serif";
+      PLOTBUTTON.style.color = "#242424";
+      PLOTBUTTON.style.backgroudColor = "#f0f0f0";
+    }
+    location.href = "#result";
   } catch (e) {
     FORM.innerHTML = "y = ax\u00B2 + bx + c";
     YZERO.innerHTML = "This is NOT a Quadratic Function";
