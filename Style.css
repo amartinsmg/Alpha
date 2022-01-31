@@ -39,7 +39,7 @@ body {
 .values-input {
   padding: 2.5px;
   border-radius: 6px;
-  font-size: .9em;
+  font-size: 0.9em;
   font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
   background-color: #f0f0f0;
 }
@@ -83,7 +83,7 @@ img {
   max-width: 100%;
 }
 
-@media screen and (orientation: landscape){
+@media screen and (orientation: landscape) {
   #result {
     flex-direction: row;
   }

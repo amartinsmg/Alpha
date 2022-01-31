@@ -120,9 +120,9 @@ function quadraticFunction(a, b, c) {
     VERTEXY =
       -DELTA % aaaa === 0
         ? `${-DELTA / aaaa}`
-        : aaaa > 0?
-          `${-DELTA / GCDY}/${aaaa / GCDY}`:
-          `${DELTA / GCDY}/${-aaaa / GCDY}`;
+        : aaaa > 0
+          ? `${-DELTA / GCDY}/${aaaa / GCDY}`
+          : `${DELTA / GCDY}/${-aaaa / GCDY}`,
     VERTEX = [VERTEXX, VERTEXY],
     X1 = (b - DELTAROOT) / aa,
     X2 = (b + DELTAROOT) / aa;
