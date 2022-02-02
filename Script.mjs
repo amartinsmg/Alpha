@@ -1,3 +1,5 @@
+import { form as formQF, core as quadraticFunction } from "./Calc.mjs";
+
 const AINPUT = document.querySelector("#aValue"),
   BINPUT = document.querySelector("#bValue"),
   CINPUT = document.querySelector("#cValue"),
@@ -17,10 +19,10 @@ function calculate() {
     GRAPHICSDIV = document.querySelector("#sage");
   GRAPHICSDIV.innerHTML = "";
   try {
-    const [Y0, X1, X2, COORDINATES, VERTEXX] = quadraticFunction(A, B, C);
+    const [ZEROS, X1, X2, COORDINATES, VERTEXX] = quadraticFunction(A, B, C);
     FORM.innerHTML = formQF(A, B, C);
     YZERO.innerHTML = "Zeros:";
-    RESULTDIV.innerHTML = Y0.replace("\n", "<br>");
+    RESULTDIV.innerHTML = ZEROS.replace(/\n/, "<br>");
     VERTEX.innerHTML = "Vertex:";
     RESULTCOORDINATES.innerHTML = `(${COORDINATES.join(", ")})`;
     if (navigator.onLine) {
@@ -36,12 +38,12 @@ function calculate() {
       sagecell.makeSagecell({
         inputLocation: "#cell",
         template: sagecell.templates.minimal,
-        evalButtonText: "Plot graphic"
+        evalButtonText: "Plot graphic",
       });
       const PLOTBUTTON = document.querySelector(".sagecell_input button");
       PLOTBUTTON.style.padding = "4px 10px";
       PLOTBUTTON.style.fontSize = ".9em";
-      PLOTBUTTON.style.fontFamily = "Cambria, Cochin, Georgia, Times, \"Times New Roman\", serif";
+      PLOTBUTTON.style.fontFamily = 'Cambria, Cochin, Georgia, Times, "Times New Roman", serif';
       PLOTBUTTON.style.color = "#242424";
       PLOTBUTTON.style.backgroudColor = "#f0f0f0";
     }
@@ -83,3 +85,13 @@ CINPUT.onkeydown = (e) => {
     return true;
   }
 };
+
+//Test function
+
+/* void (function (a, b, c) {
+  try {
+    console.log(`${formQF(a, b, c)}\n${quadraticFunction(a, b, c)[0]}`);
+  } catch (e) {
+    console.warn(e);
+  }
+})(-2, -8, 16); //Ok */

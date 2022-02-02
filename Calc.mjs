@@ -1,6 +1,6 @@
 //Function that prints initial quadratic function
 
-function formQF(a, b, c) {
+export function form(a, b, c) {
   let form = "y = ";
 
   //ax²
@@ -96,7 +96,7 @@ function rootSimplifier(num) {
 
 //Function that calculates x value(s)
 
-function quadraticFunction(a, b, c) {
+export function core(a, b, c) {
   if (isNaN(a) || isNaN(b) || isNaN(c)) {
     throw 'In a quadratic function "a", "b" and "c" must be numbers!';
   } else if (a === 0) {
@@ -121,8 +121,8 @@ function quadraticFunction(a, b, c) {
       -DELTA % aaaa === 0
         ? `${-DELTA / aaaa}`
         : aaaa > 0
-          ? `${-DELTA / GCDY}/${aaaa / GCDY}`
-          : `${DELTA / GCDY}/${-aaaa / GCDY}`,
+        ? `${-DELTA / GCDY}/${aaaa / GCDY}`
+        : `${DELTA / GCDY}/${-aaaa / GCDY}`,
     VERTEX = [VERTEXX, VERTEXY],
     X1 = (b - DELTAROOT) / aa,
     X2 = (b + DELTAROOT) / aa;
@@ -217,13 +217,3 @@ function quadraticFunction(a, b, c) {
   }
   return [x, X1, X2, VERTEX, VERTEX_X];
 }
-
-//Test function
-
-/* void function (a, b, c) {
-  try {
-    console.log(`${formQF(a, b, c)}\n${quadraticFunction(a, b, c)[0]}`);
-  } catch (e) {
-    console.warn(e)
-  }
-}(-2, -8, 16); //Ok */
