@@ -17,11 +17,11 @@ function calculate() {
     RESULTCOORDINATES = document.querySelector("#result-coordinates"),
     FORM = document.querySelector(".function-form"),
     GRAPHICSDIV = document.querySelector("#sage");
-  GRAPHICSDIV.innerHTML = "";
+  GRAPHICSDIV.innerHTML = null;
   try {
-    const [ZEROS, X1, X2, COORDINATES, VERTEXX] = quadraticFunction(A, B, C);
+    const [ZEROS, COORDINATES, X1, X2, VERTEXX] = quadraticFunction(A, B, C);
     FORM.innerHTML = formQF(A, B, C);
-    YZERO.innerHTML = "Zeros:";
+    YZERO.innerHTML = "Zeros (when y = 0):";
     RESULTDIV.innerHTML = ZEROS.replace(/\n/, "<br>");
     VERTEX.innerHTML = "Vertex:";
     RESULTCOORDINATES.innerHTML = `(${COORDINATES.join(", ")})`;
@@ -45,13 +45,13 @@ function calculate() {
       PLOTBUTTON.style.fontSize = ".9em";
       PLOTBUTTON.style.fontFamily = 'Cambria, Cochin, Georgia, Times, "Times New Roman", serif';
       PLOTBUTTON.style.color = "#242424";
-      PLOTBUTTON.style.backgroudColor = "#f0f0f0";
+      PLOTBUTTON.style.backgroundColor = "#f0f0f0";
     }
     location.href = "#result";
-  } catch (e) {
+  } catch (err) {
     FORM.innerHTML = "y = ax\u00B2 + bx + c";
     YZERO.innerHTML = "This is NOT a Quadratic Function";
-    RESULTDIV.innerHTML = e;
+    RESULTDIV.innerHTML = err;
     VERTEX.innerHTML = null;
     RESULTCOORDINATES.innerHTML = null;
   }
@@ -85,13 +85,3 @@ CINPUT.onkeydown = (e) => {
     return true;
   }
 };
-
-//Test function
-
-/* void (function (a, b, c) {
-  try {
-    console.log(`${formQF(a, b, c)}\n${quadraticFunction(a, b, c)[0]}`);
-  } catch (e) {
-    console.warn(e);
-  }
-})(-2, -8, 16); //Ok */

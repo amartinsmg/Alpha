@@ -1,10 +1,9 @@
 //Function that prints initial quadratic function
 
-export function form(a, b, c) {
+function form(a, b, c) {
   let form = "y = ";
 
   //ax²
-
   switch (a) {
     case 1:
       form += `x\u00B2 `;
@@ -17,7 +16,6 @@ export function form(a, b, c) {
   }
 
   //bx
-
   if (b === -1) {
     form += `-x `;
   } else if (b === 1) {
@@ -29,7 +27,6 @@ export function form(a, b, c) {
   }
 
   //c
-
   if (c < 0) {
     form += `${c} `;
   } else if (c > 0) {
@@ -45,16 +42,15 @@ function gcd(m, n) {
   const MODULE = m % n;
   if (MODULE !== 0) {
     return gcd(n, MODULE);
-  } else {
-    return Math.abs(n);
   }
+  return Math.abs(n);
 }
 
 //Function that returns a number as a product of prime numbers
 
 function factorization(num) {
   const FACTORS = [],
-    ARR = [];
+    GROUPEDFACTORS = [];
   while (num > 1) {
     for (let i = 2; i <= num; i++) {
       if (num % i === 0) {
@@ -68,152 +64,137 @@ function factorization(num) {
   while (i < FACTORS.length) {
     let j = FACTORS[i],
       occurrences = FACTORS.lastIndexOf(j) - FACTORS.indexOf(j) + 1;
-    ARR.push([j, occurrences]);
+    GROUPEDFACTORS.push([j, occurrences]);
     i = FACTORS.lastIndexOf(j) + 1;
   }
-  return ARR;
+  return GROUPEDFACTORS;
 }
 
 // Function that simplifies a square root
 
 function rootSimplifier(num) {
-  const ARR = factorization(num);
+  const FACTORS = factorization(num);
   let intPart = 1,
-    radicandPart = 1;
-  for (let i of ARR) {
-    let exponent = i[1];
-    if (exponent >= 2) {
-      intPart *= i[0] ** Math.floor(exponent / 2);
-      if (exponent % 2 !== 0) {
-        radicandPart *= i[0];
+    irrationalPart = 1;
+  for (let i of FACTORS) {
+    const [BASE, EXPONENT] = i;
+    if (EXPONENT >= 2) {
+      intPart *= BASE ** Math.floor(EXPONENT / 2);
+      if (EXPONENT % 2 === 0) {
+        continue;
       }
-    } else {
-      radicandPart *= i[0];
     }
+    irrationalPart *= BASE;
   }
-  return [intPart, radicandPart];
+  return [intPart, irrationalPart];
 }
 
 //Function that calculates x value(s)
 
-export function core(a, b, c) {
+function core(a, b, c) {
   if (isNaN(a) || isNaN(b) || isNaN(c)) {
     throw 'In a quadratic function "a", "b" and "c" must be numbers!';
   } else if (a === 0) {
     throw 'In a quadratic function "a" must be a number NOT equal 0!';
   }
-  let aaaa = 4 * a;
+  let zeros;
+  const AAAA = 4 * a;
   if (a < 0) {
     a = -a;
     b = -b;
     c = -c;
   }
-  let aa = 2 * a,
-    x = "";
-  const DELTA = b ** 2 - 4 * a * c,
-    DELTAROOT = Math.sqrt(DELTA);
-  b = -b;
-  const GCDX = gcd(b, aa),
-    GCDY = gcd(DELTA, aaaa),
-    VERTEX_X = b / aa,
-    VERTEXX = b % aa === 0 ? `${b / aa}` : `${b / GCDX}/${aa / GCDX}`,
+  const AA = 2 * a,
+    DELTA = b ** 2 - 4 * a * c,
+    DELTAROOT = Math.sqrt(DELTA),
+    B = -b,
+    GCDX = gcd(B, AA),
+    GCDY = gcd(DELTA, AAAA),
+    VERTEX_X = B / AA,
+    VERTEXX = B % AA === 0 ? `${B / AA}` : `${B / GCDX}/${AA / GCDX}`,
     VERTEXY =
-      -DELTA % aaaa === 0
-        ? `${-DELTA / aaaa}`
-        : aaaa > 0
-        ? `${-DELTA / GCDY}/${aaaa / GCDY}`
-        : `${DELTA / GCDY}/${-aaaa / GCDY}`,
+      -DELTA % AAAA === 0
+        ? `${-DELTA / AAAA}`
+        : AAAA > 0
+          ? `${-DELTA / GCDY}/${AAAA / GCDY}`
+          : `${DELTA / GCDY}/${-AAAA / GCDY}`,
     VERTEX = [VERTEXX, VERTEXY],
-    X1 = (b - DELTAROOT) / aa,
-    X2 = (b + DELTAROOT) / aa;
+    X1 = (B - DELTAROOT) / AA,
+    X2 = (B + DELTAROOT) / AA;
   if (DELTA < 0) {
-    x = "This quadratic function don't have any real zero.";
+    zeros = "This quadratic function don't have any real zero.";
   } else if (DELTA === 0) {
-    x = `x = ${VERTEXX}`;
+    zeros = `x = ${VERTEXX}`;
   } else {
     let x1, x2;
-    if (Number.isInteger(DELTAROOT) === true) {
-      let numerator1 = b - DELTAROOT,
-        numerator2 = b + DELTAROOT;
-      if (numerator1 % aa === 0) {
-        x1 = `${numerator1 / aa}`;
-      } else {
-        const GCD1 = gcd(numerator1, aa);
-        if (GCD1 !== 1) {
-          numerator1 /= GCD1;
-          aa /= GCD1;
-        }
-        x1 = `${numerator1}/${aa}`;
-      }
-      if (numerator2 % aa === 0) {
-        x2 = numerator2 / aa;
-      } else {
-        const GCD2 = gcd(numerator2, aa);
-        if (GCD2 !== 0) {
-          numerator2 /= GCD2;
-          aa /= GCD2;
-        }
-        x2 = `${numerator2}/${aa}`;
-      }
+    if (DELTAROOT % 1 === 0) {
+      const NUMERATOR1 = B - DELTAROOT,
+        NUMERATOR2 = B + DELTAROOT,
+        GCD1 = gcd(NUMERATOR1, AA),
+        GCD2 = gcd(NUMERATOR2, AA);
+      x1 = NUMERATOR1 % AA === 0
+        ? `${NUMERATOR1 / AA}`
+        : `${NUMERATOR1 / GCD1}/${AA / GCD1}`;
+      x2 = NUMERATOR2 % AA === 0
+        ? `${NUMERATOR2 / AA}`
+        : `${NUMERATOR2 / GCD2}/${AA / GCD2}`;
     } else {
-      const DELTAROOTSIMPLIFIED = rootSimplifier(DELTA);
-      let intDeltaPart = DELTAROOTSIMPLIFIED[0];
-      const IRRATIONALDELTAPART = DELTAROOTSIMPLIFIED[1],
-        GCD = gcd(intDeltaPart, aa);
-
-      if (b === 0) {
-        if (intDeltaPart % aa === 0) {
-          intDeltaPart /= aa;
-          if (intDeltaPart === 1 || intDeltaPart === -1) {
+      const [INTDELTAPART, IRRATIONALDELTAPART] = rootSimplifier(DELTA),
+        GCD = gcd(INTDELTAPART, AA);
+      if (B === 0) {
+        if (INTDELTAPART % AA === 0) {
+          if (INTDELTAPART / AA === 1) {
             x1 = `-\u221A${IRRATIONALDELTAPART}`;
             x2 = `\u221A${IRRATIONALDELTAPART}`;
           } else {
-            x1 = `${-intDeltaPart}\u221A${IRRATIONALDELTAPART}`;
-            x2 = `${intDeltaPart}\u221A${IRRATIONALDELTAPART}`;
+            x1 = `${-INTDELTAPART / AA}\u221A${IRRATIONALDELTAPART}`;
+            x2 = `${INTDELTAPART / AA}\u221A${IRRATIONALDELTAPART}`;
           }
         } else {
-          if (GCD !== 1) {
-            intDeltaPart /= GCD;
-            aa /= GCD;
-          }
-          if (intDeltaPart === 1 || intDeltaPart === -1) {
-            x1 = `-(\u221A${IRRATIONALDELTAPART})/${aa}`;
-            x2 = `(\u221A${IRRATIONALDELTAPART})/${aa}`;
+          if (INTDELTAPART / GCD === 1) {
+            x1 = `-(\u221A${IRRATIONALDELTAPART})/${AA / GCD}`;
+            x2 = `(\u221A${IRRATIONALDELTAPART})/${AA / GCD}`;
           } else {
-            x1 = `${-intDeltaPart}\u221A(${IRRATIONALDELTAPART})/${aa}`;
-            x2 = `${intDeltaPart}\u221A(${IRRATIONALDELTAPART})/${aa}`;
+            x1 = `${-INTDELTAPART / GCD}\u221A(${IRRATIONALDELTAPART})/${AA / GCD}`;
+            x2 = `${INTDELTAPART / GCD}\u221A(${IRRATIONALDELTAPART})/${AA / GCD}`;
           }
         }
       } else {
-        const GCDB = gcd(GCD, b);
-        if (GCDB !== 1) {
-          intDeltaPart /= GCDB;
-          aa /= GCDB;
-          b /= GCDB;
-        }
-        if (aa === 1) {
-          if (intDeltaPart === -1 || intDeltaPart === 1) {
-            x1 = `${b} -\u221A${IRRATIONALDELTAPART}`;
-            x2 = `${b} +\u221A${IRRATIONALDELTAPART}`;
+        const GCDB = gcd(GCD, B);
+        if (AA / GCDB === 1) {
+          if (INTDELTAPART / GCDB === 1) {
+            x1 = `${B / GCDB} -\u221A${IRRATIONALDELTAPART}`;
+            x2 = `${B / GCDB} +\u221A${IRRATIONALDELTAPART}`;
           } else {
-            if (intDeltaPart < 0) {
-              intDeltaPart = -intDeltaPart;
-            }
-            x1 = `${b} ${-intDeltaPart}\u221A${IRRATIONALDELTAPART}`;
-            x2 = `${b} + ${intDeltaPart}\u221A${IRRATIONALDELTAPART}`;
+            x1 = `${B / GCDB} ${-INTDELTAPART / GCDB}\u221A${IRRATIONALDELTAPART}`;
+            x2 = `${B / GCDB} + ${INTDELTAPART / GCDB}\u221A${IRRATIONALDELTAPART}`;
           }
         } else {
-          if (intDeltaPart === 1 || intDeltaPart === -1) {
-            x1 = `(${b} -\u221A${IRRATIONALDELTAPART})/${aa}`;
-            x2 = `(${b} +\u221A${IRRATIONALDELTAPART})/${aa}`;
+          if (INTDELTAPART / GCDB === 1) {
+            x1 = `(${B / GCDB} -\u221A${IRRATIONALDELTAPART})/${AA / GCDB}`;
+            x2 = `(${B / GCDB} +\u221A${IRRATIONALDELTAPART})/${AA / GCDB}`;
           } else {
-            x1 = `(${b} ${-intDeltaPart}\u221A${IRRATIONALDELTAPART})/${aa}`;
-            x2 = `(${b} +${intDeltaPart}\u221A${IRRATIONALDELTAPART})/${aa}`;
+            x1 = `(${B / GCDB} ${-INTDELTAPART / GCDB}\u221A${IRRATIONALDELTAPART})/${AA / GCDB}`;
+            x2 = `(${B / GCDB} +${INTDELTAPART / GCDB}\u221A${IRRATIONALDELTAPART})/${AA / GCDB}`;
           }
         }
       }
     }
-    x = `x' = ${x1}\nx" = ${x2}`;
+    zeros = `x' = ${x1}\nx" = ${x2}`;
   }
-  return [x, X1, X2, VERTEX, VERTEX_X];
+  return [zeros, VERTEX, X1, X2, VERTEX_X];
 }
+
+
+//Test function
+
+/* void (function (a, b, c) {
+  try {
+    console.log(`${form(a, b, c)}\n${core(a, b, c)[0]}`);
+  } catch (e) {
+    console.warn(e);
+  }
+})(-2, -8, 16); //Ok */
+
+
+export { form, core };
