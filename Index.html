@@ -9,10 +9,10 @@
     <script src="Script.mjs" type="module" defer></script>
   </head>
   <body>
-    <main class="content">
-      <h1 class="page-title">Quadratic Function Calculator</h1>
-      <div class="function-form">y = ax&#178; + bx + c</div>
-      <form class="input-form">
+    <main>
+      <h1 id="page-title">Quadratic Function Calculator</h1>
+      <div id="function-form">y = ax&#178; + bx + c</div>
+      <form id="input-form">
         <div>
           <label for="aValue">a value:</label>
           <input class="values-input" type="number" value="1" id="aValue" />
@@ -35,17 +35,18 @@
         </div>
       </form>
       <div id="result">
-        <div>
-          <div id="y-zero" class="stron"></div>
-          <div id="result-yzero"></div>
+        <div id="textual-result">
+          <div>
+            <div id="roots"><span class="strong-class"></span></div>
+            <div id="result-roots"><span></span></div>
+          </div>
+          <div>
+            <div id="coordinates"><span class="strong-class"></span></div>
+            <div id="result-coordinates"><span></span></div>
+          </div>
         </div>
-        <div>
-          <div id="coordinates" class="stron"></div>
-          <div id="result-coordinates"></div>
-        </div>
+        <div id="sage"></div>
       </div>
-      <div id="sage"></div>
     </main>
-    <footer>Powered by amartinsmg</footer>
   </body>
 </html>

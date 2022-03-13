@@ -62,10 +62,10 @@ function factorization(num) {
   }
   let i = 0;
   while (i < FACTORS.length) {
-    let j = FACTORS[i],
-      occurrences = FACTORS.lastIndexOf(j) - FACTORS.indexOf(j) + 1;
-    GROUPEDFACTORS.push([j, occurrences]);
-    i = FACTORS.lastIndexOf(j) + 1;
+    const J = FACTORS[i],
+      OCCURRENCES = FACTORS.lastIndexOf(J) - FACTORS.indexOf(J) + 1;
+    GROUPEDFACTORS.push([J, OCCURRENCES]);
+    i = FACTORS.lastIndexOf(J) + 1;
   }
   return GROUPEDFACTORS;
 }
@@ -97,7 +97,7 @@ function core(a, b, c) {
   } else if (a === 0) {
     throw 'In a quadratic function "a" must be a number NOT equal 0!';
   }
-  let zeros;
+  let roots;
   const AAAA = 4 * a;
   if (a < 0) {
     a = -a;
@@ -110,21 +110,28 @@ function core(a, b, c) {
     B = -b,
     GCDX = gcd(B, AA),
     GCDY = gcd(DELTA, AAAA),
-    VERTEX_X = B / AA,
-    VERTEXX = B % AA === 0 ? `${B / AA}` : `${B / GCDX}/${AA / GCDX}`,
-    VERTEXY =
+    XVERTEXNUMERIC = B / AA,
+    XVERTEX = B % AA === 0 ? `${B / AA}` : `${B / GCDX}/${AA / GCDX}`,
+    YVERTEX =
       -DELTA % AAAA === 0
         ? `${-DELTA / AAAA}`
         : AAAA > 0
-          ? `${-DELTA / GCDY}/${AAAA / GCDY}`
-          : `${DELTA / GCDY}/${-AAAA / GCDY}`,
-    VERTEX = [VERTEXX, VERTEXY],
+        ? `${-DELTA / GCDY}/${AAAA / GCDY}`
+        : `${DELTA / GCDY}/${-AAAA / GCDY}`,
+    VERTEX = [XVERTEX, YVERTEX],
     X1 = (B - DELTAROOT) / AA,
     X2 = (B + DELTAROOT) / AA;
   if (DELTA < 0) {
-    zeros = "This quadratic function don't have any real zero.";
+    roots = "This quadratic function don't have any real zero.";
   } else if (DELTA === 0) {
-    zeros = `x = ${VERTEXX}`;
+    roots =
+      XVERTEXNUMERIC % 1 === 0
+        ? `x = ${XVERTEX}`
+        : `x = ${XVERTEX}, (Decimal x' = ${
+            XVERTEXNUMERIC.toFixed(5).length > XVERTEXNUMERIC.toString().length
+              ? XVERTEXNUMERIC.toString()
+              : XVERTEXNUMERIC.toFixed(5)
+          })`;
   } else {
     let x1, x2;
     if (DELTAROOT % 1 === 0) {
@@ -132,59 +139,152 @@ function core(a, b, c) {
         NUMERATOR2 = B + DELTAROOT,
         GCD1 = gcd(NUMERATOR1, AA),
         GCD2 = gcd(NUMERATOR2, AA);
-      x1 = NUMERATOR1 % AA === 0
-        ? `${NUMERATOR1 / AA}`
-        : `${NUMERATOR1 / GCD1}/${AA / GCD1}`;
-      x2 = NUMERATOR2 % AA === 0
-        ? `${NUMERATOR2 / AA}`
-        : `${NUMERATOR2 / GCD2}/${AA / GCD2}`;
+      x1 =
+        NUMERATOR1 % AA === 0
+          ? `${NUMERATOR1 / AA}`
+          : `${NUMERATOR1 / GCD1}/${AA / GCD1}, (Decimal x' = ${
+              X1.toFixed(5).length > X1.toString().length
+                ? X1.toString()
+                : X1.toFixed(5)
+            })`;
+      x2 =
+        NUMERATOR2 % AA === 0
+          ? `${NUMERATOR2 / AA}`
+          : `${NUMERATOR2 / GCD2}/${AA / GCD2}, (Decimal x" = ${
+              X2.toFixed(5).length > X2.toString().length
+                ? X2.toString()
+                : X2.toFixed(5)
+            })`;
     } else {
       const [INTDELTAPART, IRRATIONALDELTAPART] = rootSimplifier(DELTA),
         GCD = gcd(INTDELTAPART, AA);
       if (B === 0) {
         if (INTDELTAPART % AA === 0) {
           if (INTDELTAPART / AA === 1) {
-            x1 = `-\u221A${IRRATIONALDELTAPART}`;
-            x2 = `\u221A${IRRATIONALDELTAPART}`;
+            x1 = `-\u221A${IRRATIONALDELTAPART}, (Decimal x' = ${
+              X1.toFixed(5).length > X1.toString().length
+                ? X1.toString()
+                : X1.toFixed(5)
+            })`;
+            x2 = `\u221A${IRRATIONALDELTAPART}, (Decimal x" = ${
+              X2.toFixed(5).length > X2.toString().length
+                ? X2.toString()
+                : X2.toFixed(5)
+            })`;
           } else {
-            x1 = `${-INTDELTAPART / AA}\u221A${IRRATIONALDELTAPART}`;
-            x2 = `${INTDELTAPART / AA}\u221A${IRRATIONALDELTAPART}`;
+            x1 = `${
+              -INTDELTAPART / AA
+            }\u221A${IRRATIONALDELTAPART}, (Decimal x' = ${
+              X1.toFixed(5).length > X1.toString().length
+                ? X1.toString()
+                : X1.toFixed(5)
+            })`;
+            x2 = `${
+              INTDELTAPART / AA
+            }\u221A${IRRATIONALDELTAPART}, (Decimal x" = ${
+              X2.toFixed(5).length > X2.toString().length
+                ? X2.toString()
+                : X2.toFixed(5)
+            })`;
           }
         } else {
           if (INTDELTAPART / GCD === 1) {
-            x1 = `-(\u221A${IRRATIONALDELTAPART})/${AA / GCD}`;
-            x2 = `(\u221A${IRRATIONALDELTAPART})/${AA / GCD}`;
+            x1 = `-(\u221A${IRRATIONALDELTAPART})/${AA / GCD}, (Decimal x' = ${
+              X1.toFixed(5).length > X1.toString().length
+                ? X1.toString()
+                : X1.toFixed(5)
+            })`;
+            x2 = `(\u221A${IRRATIONALDELTAPART})/${AA / GCD}, (Decimal x" = ${
+              X2.toFixed(5).length > X2.toString().length
+                ? X2.toString()
+                : X2.toFixed(5)
+            })`;
           } else {
-            x1 = `${-INTDELTAPART / GCD}\u221A(${IRRATIONALDELTAPART})/${AA / GCD}`;
-            x2 = `${INTDELTAPART / GCD}\u221A(${IRRATIONALDELTAPART})/${AA / GCD}`;
+            x1 = `${-INTDELTAPART / GCD}\u221A(${IRRATIONALDELTAPART})/${
+              AA / GCD
+            }, (Decimal x' = ${
+              X1.toFixed(5).length > X1.toString().length
+                ? X1.toString()
+                : X1.toFixed(5)
+            })`;
+            x2 = `${INTDELTAPART / GCD}\u221A(${IRRATIONALDELTAPART})/${
+              AA / GCD
+            }, (Decimal x" = ${
+              X2.toFixed(5).length > X2.toString().length
+                ? X2.toString()
+                : X2.toFixed(5)
+            })`;
           }
         }
       } else {
         const GCDB = gcd(GCD, B);
         if (AA / GCDB === 1) {
           if (INTDELTAPART / GCDB === 1) {
-            x1 = `${B / GCDB} -\u221A${IRRATIONALDELTAPART}`;
-            x2 = `${B / GCDB} +\u221A${IRRATIONALDELTAPART}`;
+            x1 = `${B / GCDB} -\u221A${IRRATIONALDELTAPART}, (Decimal x' = ${
+              X1.toFixed(5).length > X1.toString().length
+                ? X1.toString()
+                : X1.toFixed(5)
+            })`;
+            x2 = `${B / GCDB} +\u221A${IRRATIONALDELTAPART}, (Decimal x" = ${
+              X2.toFixed(5).length > X2.toString().length
+                ? X2.toString()
+                : X2.toFixed(5)
+            })`;
           } else {
-            x1 = `${B / GCDB} ${-INTDELTAPART / GCDB}\u221A${IRRATIONALDELTAPART}`;
-            x2 = `${B / GCDB} + ${INTDELTAPART / GCDB}\u221A${IRRATIONALDELTAPART}`;
+            x1 = `${B / GCDB} ${
+              -INTDELTAPART / GCDB
+            }\u221A${IRRATIONALDELTAPART}, (Decimal x' = ${
+              X1.toFixed(5).length > X1.toString().length
+                ? X1.toString()
+                : X1.toFixed(5)
+            })`;
+            x2 = `${B / GCDB} + ${
+              INTDELTAPART / GCDB
+            }\u221A${IRRATIONALDELTAPART}, (Decimal x" = ${
+              X2.toFixed(5).length > X2.toString().length
+                ? X2.toString()
+                : X2.toFixed(5)
+            })`;
           }
         } else {
           if (INTDELTAPART / GCDB === 1) {
-            x1 = `(${B / GCDB} -\u221A${IRRATIONALDELTAPART})/${AA / GCDB}`;
-            x2 = `(${B / GCDB} +\u221A${IRRATIONALDELTAPART})/${AA / GCDB}`;
+            x1 = `(${B / GCDB} -\u221A${IRRATIONALDELTAPART})/${
+              AA / GCDB
+            }, (Decimal x' = ${
+              X1.toFixed(5).length > X1.toString().length
+                ? X1.toString()
+                : X1.toFixed(5)
+            })`;
+            x2 = `(${B / GCDB} +\u221A${IRRATIONALDELTAPART})/${
+              AA / GCDB
+            }, (Decimal x" = ${
+              X2.toFixed(5).length > X2.toString().length
+                ? X2.toString()
+                : X2.toFixed(5)
+            })`;
           } else {
-            x1 = `(${B / GCDB} ${-INTDELTAPART / GCDB}\u221A${IRRATIONALDELTAPART})/${AA / GCDB}`;
-            x2 = `(${B / GCDB} +${INTDELTAPART / GCDB}\u221A${IRRATIONALDELTAPART})/${AA / GCDB}`;
+            x1 = `(${B / GCDB} ${
+              -INTDELTAPART / GCDB
+            }\u221A${IRRATIONALDELTAPART})/${AA / GCDB}, (Decimal x' = ${
+              X1.toFixed(5).length > X1.toString().length
+                ? X1.toString()
+                : X1.toFixed(5)
+            })`;
+            x2 = `(${B / GCDB} +${
+              INTDELTAPART / GCDB
+            }\u221A${IRRATIONALDELTAPART})/${AA / GCDB}, (Decimal x" = ${
+              X2.toFixed(5).length > X2.toString().length
+                ? X2.toString()
+                : X2.toFixed(5)
+            })`;
           }
         }
       }
     }
-    zeros = `x' = ${x1}\nx" = ${x2}`;
+    roots = `x' = ${x1}\nx" = ${x2}`;
   }
-  return [zeros, VERTEX, X1, X2, VERTEX_X];
+  return [roots, VERTEX, X1, X2, XVERTEXNUMERIC];
 }
-
 
 //Test function
 
@@ -195,6 +295,5 @@ function core(a, b, c) {
     console.warn(e);
   }
 })(-2, -8, 16); //Ok */
-
 
 export { form, core };

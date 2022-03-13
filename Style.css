@@ -11,25 +11,25 @@ body {
   color: #ffffff;
 }
 
-.content {
+main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 40px;
+  gap: 35px;
   text-align: center;
   font-size: x-large;
 }
 
-.page-title {
+#page-title {
   font-weight: 800;
   color: #138fe2;
 }
 
-.function-form {
+#function-form {
   font-weight: 550;
 }
 
-.input-form {
+#input-form {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -53,30 +53,28 @@ body {
 }
 
 #result {
-  display: flex;
+  display: inherit;
   flex-direction: column;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 50px;
+  align-items: inherit;
+  gap: 15px;
 }
 
-.result div {
-  display: flex;
+#textual-result {
+  display: inherit;
+  flex-direction: inherit;
+  align-items: inherit;
+  gap: 10px;
+}
+
+#textual-result div {
+  display: inherit;
   flex-direction: column;
-  align-items: center;
+  align-items: inherit;
   gap: 7px;
 }
 
-.stron {
+.strong-class {
   font-weight: 550;
-}
-
-footer {
-  position: fixed;
-  bottom: 0px;
-  padding: 7px;
-  background-color: #242424;
-  font-size: x-small;
 }
 
 img {
@@ -84,7 +82,12 @@ img {
 }
 
 @media screen and (orientation: landscape) {
-  #result {
+  #textual-result {
+    gap: 20px;
+  }
+  #textual-result div{
     flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
   }
 }
