@@ -110,7 +110,6 @@ function core(a, b, c) {
     B = -b,
     GCDX = gcd(B, AA),
     GCDY = gcd(DELTA, AAAA),
-    XVERTEXNUMERIC = B / AA,
     XVERTEX = B % AA === 0 ? `${B / AA}` : `${B / GCDX}/${AA / GCDX}`,
     YVERTEX =
       -DELTA % AAAA === 0
@@ -125,12 +124,12 @@ function core(a, b, c) {
     roots = "This quadratic function don't have any real zero.";
   } else if (DELTA === 0) {
     roots =
-      XVERTEXNUMERIC % 1 === 0
+      X1 % 1 === 0
         ? `x = ${XVERTEX}`
         : `x = ${XVERTEX}, (Decimal x' = ${
-            XVERTEXNUMERIC.toFixed(5).length > XVERTEXNUMERIC.toString().length
-              ? XVERTEXNUMERIC.toString()
-              : XVERTEXNUMERIC.toFixed(5)
+            X1.toFixed(5).length > X1.toString().length
+              ? X1.toString()
+              : X1.toFixed(5)
           })`;
   } else {
     let x1, x2;
@@ -283,7 +282,7 @@ function core(a, b, c) {
     }
     roots = `x' = ${x1}\nx" = ${x2}`;
   }
-  return [roots, VERTEX, X1, X2, XVERTEXNUMERIC];
+  return [roots, VERTEX];
 }
 
 //Test function
