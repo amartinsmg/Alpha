@@ -64,6 +64,6 @@ CINPUT.onkeydown = (e) => {
     if (CINPUT.value === ""){
       CINPUT.value = 0;
     }
-    FORM.onsubmit(e)
+    FORM.onsubmit(void e)
   }
 };
