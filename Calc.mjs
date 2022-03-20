@@ -203,7 +203,7 @@ function core(a, b, c) {
       }
     }
     x1 = X1 % 1 !== 0 ? `${x1} (Decimal ${X1DECIMAL})` : x1;
-    x2 = X2 % 1 !== 0 ? `${x1} (Decimal ${X2DECIMAL})` : x2;
+    x2 = X2 % 1 !== 0 ? `${x2} (Decimal ${X2DECIMAL})` : x2;
     roots = `x' = ${x1}\nx" = ${x2}`;
   }
   return [roots, VERTEX];

@@ -15,7 +15,9 @@ function calculate() {
     RESULTDIV = document.querySelector("#result-roots span"),
     VERTEX = document.querySelector("#coordinates span"),
     RESULTCOORDINATES = document.querySelector("#result-coordinates span"),
-    FORM = document.querySelector("#function-form");
+    FORM = document.querySelector("#function-form"),
+    GRAPHICDIV = document.querySelector("#graphic");
+  GRAPHICDIV.innerHTML = null;
   try {
     const [ROOTS, COORDINATES] = quadraticFunction(A, B, C);
     FORM.textContent = formQF(A, B, C);
@@ -23,6 +25,12 @@ function calculate() {
     RESULTDIV.innerHTML = ROOTS.replace(/\n/, "<br>");
     VERTEX.textContent = "Vertex:";
     RESULTCOORDINATES.textContent = `(${COORDINATES.join(", ")})`;
+    void (async function (){
+      const GRAPHICXML = await (await fetch(`http://127.0.0.1:5000/plot-graphic?a=${A}&b=${B}&c=${C}`)).text(),
+        GRAPHICSVG = document.createElement("svg");
+      GRAPHICSVG.innerHTML = GRAPHICXML;
+      GRAPHICDIV.appendChild(GRAPHICSVG);
+    })()
   } catch (err) {
     FORM.textContent = "y = ax\u00B2 + bx + c";
     ROOTSDIV.textContent = "This is NOT a Quadratic Function";
@@ -51,7 +59,7 @@ AINPUT.onkeydown = (e) => {
 BINPUT.onkeydown = (e) => {
   if (e.keyCode === 13) {
     if (BINPUT.value === ""){
-      BINPUT.value = 0;
+      BINPUT.value = "0";
     }
     CINPUT.focus();
     CINPUT.value = "";
@@ -62,7 +70,7 @@ BINPUT.onkeydown = (e) => {
 CINPUT.onkeydown = (e) => {
   if (e.keyCode === 13) {
     if (CINPUT.value === ""){
-      CINPUT.value = 0;
+      CINPUT.value = "0";
     }
     FORM.onsubmit(void e)
   }
