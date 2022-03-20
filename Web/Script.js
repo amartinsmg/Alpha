@@ -1,5 +1,3 @@
-import { form as formQF, core as quadraticFunction } from "./Calc.mjs";
-
 const AINPUT = document.querySelector("#aValue"),
   BINPUT = document.querySelector("#bValue"),
   CINPUT = document.querySelector("#cValue"),
@@ -7,36 +5,47 @@ const AINPUT = document.querySelector("#aValue"),
 
 //Function that calls the others
 
-function calculate() {
+async function calculate() {
   const A = parseInt(AINPUT.value),
     B = parseInt(BINPUT.value),
     C = parseInt(CINPUT.value),
     ROOTSDIV = document.querySelector("#roots span"),
-    RESULTDIV = document.querySelector("#result-roots span"),
+    ROOTSRESULTDIV = document.querySelector("#result-roots span"),
     VERTEX = document.querySelector("#coordinates span"),
     RESULTCOORDINATES = document.querySelector("#result-coordinates span"),
-    FORM = document.querySelector("#function-form"),
+    FORMDIV = document.querySelector("#function-form"),
     GRAPHICDIV = document.querySelector("#graphic");
   GRAPHICDIV.innerHTML = null;
   try {
-    const [ROOTS, COORDINATES] = quadraticFunction(A, B, C);
-    FORM.textContent = formQF(A, B, C);
+    if (isNaN(A) || isNaN(B) || isNaN(C)) {
+      throw 'In a quadratic function "a", "b" and "c" must be numbers!';
+    } else if (A === 0) {
+      throw 'In a quadratic function "a" must be a number NOT equal 0!';
+    }
+    const {X1, X2, XVERTEX, YVERTEX, FORM, REALROOTS} = await (await fetch(`http://127.0.0.1:5000/roots-vertex?a=${A}&b=${B}&c=${C}`)).json(),
+      GRAPHICXML = await (await fetch(`http://127.0.0.1:5000/plot-graphic?a=${A}&b=${B}&c=${C}`)).text(),
+      GRAPHICSVG = document.createElement("svg");
+    let ROOTS;
+    if (!REALROOTS){
+      ROOTS = "This quadratic function don't have any real zero.";
+    }else if (X1 !== X2){
+      ROOTS = `x' = ${X1.replace(/\u002A*sqrt/, "\u221A")}<br>x" =  ${X2.replace(/\u002A*sqrt/, "\u221A")}`;
+    }else{
+      ROOTS = `x = ${X1}`;
+    }
+    FORMDIV.textContent = FORM;
     ROOTSDIV.textContent = "Roots (when y = 0):";
-    RESULTDIV.innerHTML = ROOTS.replace(/\n/, "<br>");
+    ROOTSRESULTDIV.innerHTML = ROOTS;
     VERTEX.textContent = "Vertex:";
-    RESULTCOORDINATES.textContent = `(${COORDINATES.join(", ")})`;
-    void (async function (){
-      const GRAPHICXML = await (await fetch(`http://127.0.0.1:5000/plot-graphic?a=${A}&b=${B}&c=${C}`)).text(),
-        GRAPHICSVG = document.createElement("svg");
-      GRAPHICSVG.innerHTML = GRAPHICXML;
-      GRAPHICDIV.appendChild(GRAPHICSVG);
-    })()
+    RESULTCOORDINATES.textContent = `(${XVERTEX}, ${YVERTEX})`;
+    GRAPHICSVG.innerHTML = GRAPHICXML;
+    GRAPHICDIV.appendChild(GRAPHICSVG);
   } catch (err) {
-    FORM.textContent = "y = ax\u00B2 + bx + c";
+    FORMDIV.textContent = "y = ax\u00B2 + bx + c";
     ROOTSDIV.textContent = "This is NOT a Quadratic Function";
-    RESULTDIV.textContent = err;
+    ROOTSRESULTDIV.textContent = null;
     VERTEX.textContent = null;
-    RESULTCOORDINATES.textContent = null;
+    RESULTCOORDINATES.textContent = err;
   }
   location.href = "#result";
 }
@@ -72,6 +81,6 @@ CINPUT.onkeydown = (e) => {
     if (CINPUT.value === ""){
       CINPUT.value = "0";
     }
-    FORM.onsubmit(void e)
+    FORM.onsubmit(e)
   }
 };

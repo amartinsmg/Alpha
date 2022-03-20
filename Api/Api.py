@@ -41,36 +41,47 @@ def roots_vertex():
     a = int(request.args.get('a'))
     b = int(request.args.get('b'))
     c = int(request.args.get('c'))
-    # a = 1
-    # b = -1
-    # c = -1
+    ax2 = 'x\u00B2' if a == 1 else '-x\u00B2' if a == -1 else ('{}x\u00B2').format(a)
+    if b == 1:
+        bx = '+x'
+    elif b == -1:
+        bx = '-x'
+    elif b > 0:
+        bx = ('+{}x').format(b)
+    elif b < 0:
+        bx = ('{}x').format(b)
+    else:
+        bx = ''
+    cStr = ('+{}').format(c) if c > 0 else str(c) if c < 0 else ''
+    form = ('y = {} {} {}').format(ax2, bx, cStr)
+
     delta = b ** 2 - 4 *a * c
     x = sy.symbols('x')
-    r = sy.solve(a * x ** 2 + b * x + c)
+    y = sy.solve(a * x ** 2 + b * x + c)
     if delta > 0:
-        x1Sym = str(r[0])
-        x2Sym = str(r[1])
-        x1Num = float(r[0])
-        x2Num = float(r[1])
+        x1Sym = str(y[0])
+        x2Sym = str(y[1])
+        x1Num = float(y[0])
+        x2Num = float(y[1])
         x1NumF = str(x1Num) if len(str(x1Num)) <= len(format(x1Num, '.5f')) else format(x1Num, '.5f')
         x2NumF = str(x2Num) if len(str(x2Num)) <= len(format(x2Num, '.5f')) else format(x2Num, '.5f')
         x1 = x1Sym if x1Num % 1 == 0 else ('{} (Decimal {})').format(x1Sym, x1NumF)
         x2 = x2Sym if x2Num % 1 == 0 else ('{} (Decimal {})').format(x2Sym, x2NumF)
-        noRealRoots = False
+        realRoots = True
     elif delta == 0:
-        xSym = str(r[0])
-        xNum = float(r[0])
+        xSym = str(y[0])
+        xNum = float(y[0])
         xNumF = str(xNum) if len(str(xNum)) <= len(format(xNum, '.5f')) else format(xNum, '.5f')
-        x1 = x2 = xSym if xNum % 1  else ('{} (Decimal {})').format(xSym, xNumF)
-        noRealRoots = False
+        x1 = x2 = xSym if xNum % 1 == 0  else ('{} (Decimal {})').format(xSym, xNumF)
+        realRoots = True
     else:
         x1 = x2 = ''
-        noRealRoots = True
+        realRoots = False
 
     xVertex = str(sy.Rational(-b/(2*a)))
     yVertex = str(sy.Rational(-delta/(4*a)))
 
-    response = jsonify(x1=x1, x2=x2, noRealRoots=noRealRoots, xVertex=xVertex, yVertex=yVertex)
+    response = jsonify(FORM=form, X1=x1, X2=x2, REALROOTS=realRoots, XVERTEX=xVertex, YVERTEX=yVertex)
     response.mimetype = 'application/json'
     response.headers['Access-Control-Allow-Origin'] = '*'
     response.headers['Access-Control-Allow-Credentials'] = 'true'
