@@ -42,10 +42,10 @@ async function calculate() {
     GRAPHICDIV.appendChild(GRAPHICSVG);
   } catch (err) {
     FORMDIV.textContent = "y = ax\u00B2 + bx + c";
-    ROOTSDIV.textContent = "This is NOT a Quadratic Function";
-    ROOTSRESULTDIV.textContent = null;
+    ROOTSDIV.textContent = null;
+    ROOTSRESULTDIV.textContent = err;
     VERTEX.textContent = null;
-    RESULTCOORDINATES.textContent = err;
+    RESULTCOORDINATES.textContent = null;
   }
   location.href = "#result";
 }
