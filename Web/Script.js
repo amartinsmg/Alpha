@@ -29,7 +29,7 @@ async function calculate() {
     if (!REALROOTS){
       ROOTS = "This quadratic function don't have any real zero.";
     }else if (X1 !== X2){
-      ROOTS = `x' = ${X1.replace(/\u002A*sqrt/, "\u221A")}<br>x" =  ${X2.replace(/\u002A*sqrt/, "\u221A")}`;
+      ROOTS = `x' = ${X1}<br>x" =  ${X2}`;
     }else{
       ROOTS = `x = ${X1}`;
     }

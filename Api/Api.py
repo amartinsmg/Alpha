@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request, send_file
 import numpy as np
 import sympy as sy
 from matplotlib import pyplot as plt
+import re
 
 app = Flask(__name__)
 
@@ -59,8 +60,8 @@ def roots_vertex():
     x = sy.symbols('x')
     y = sy.solve(a * x ** 2 + b * x + c)
     if delta > 0:
-        x1Sym = str(y[0])
-        x2Sym = str(y[1])
+        x1Sym = re.sub('[*]*sqrt', '\u221A', str(y[0]))
+        x2Sym = re.sub('[*]*sqrt', '\u221A', str(y[1]))
         x1Num = float(y[0])
         x2Num = float(y[1])
         x1NumF = str(x1Num) if len(str(x1Num)) <= len(format(x1Num, '.5f')) else format(x1Num, '.5f')
