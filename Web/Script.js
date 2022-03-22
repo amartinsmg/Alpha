@@ -13,7 +13,7 @@ async function calculate() {
     ROOTSRESULTDIV = document.querySelector("#result-roots span"),
     VERTEX = document.querySelector("#coordinates span"),
     RESULTCOORDINATES = document.querySelector("#result-coordinates span"),
-    FORMDIV = document.querySelector("#function-form"),
+    FORMDIV = document.querySelector("#function-form span"),
     GRAPHICDIV = document.querySelector("#graphic");
   GRAPHICDIV.innerHTML = null;
   try {
@@ -22,20 +22,24 @@ async function calculate() {
     } else if (A === 0) {
       throw 'In a quadratic function "a" must be a number NOT equal 0!';
     }
-    const {X1, X2, XVERTEX, YVERTEX, FORM, REALROOTS} = await (await fetch(`http://127.0.0.1:5000/roots-vertex?a=${A}&b=${B}&c=${C}`)).json(),
-      GRAPHICXML = await (await fetch(`http://127.0.0.1:5000/plot-graphic?a=${A}&b=${B}&c=${C}`)).text(),
+    const { X1, X2, XVERTEX, YVERTEX, FORM, REALROOTS } = await (
+        await fetch(`http://127.0.0.1:5000/roots-vertex?a=${A}&b=${B}&c=${C}`)
+      ).json(),
+      GRAPHICXML = await (
+        await fetch(`http://127.0.0.1:5000/plot-graphic?a=${A}&b=${B}&c=${C}`)
+      ).text(),
       GRAPHICSVG = document.createElement("svg");
-    let ROOTS;
-    if (!REALROOTS){
-      ROOTS = "This quadratic function don't have any real zero.";
-    }else if (X1 !== X2){
-      ROOTS = `x' = ${X1}<br>x" =  ${X2}`;
-    }else{
-      ROOTS = `x = ${X1}`;
+    let roots;
+    if (!REALROOTS) {
+      roots = "This quadratic function don't have any real zero.";
+    } else if (X1 !== X2) {
+      roots = `x' = ${X1}<br>x" =  ${X2}`;
+    } else {
+      roots = `x = ${X1}`;
     }
     FORMDIV.textContent = FORM;
     ROOTSDIV.textContent = "Roots (when y = 0):";
-    ROOTSRESULTDIV.innerHTML = ROOTS;
+    ROOTSRESULTDIV.innerHTML = roots;
     VERTEX.textContent = "Vertex:";
     RESULTCOORDINATES.textContent = `(${XVERTEX}, ${YVERTEX})`;
     GRAPHICSVG.innerHTML = GRAPHICXML;
@@ -67,7 +71,7 @@ AINPUT.onkeydown = (e) => {
 
 BINPUT.onkeydown = (e) => {
   if (e.keyCode === 13) {
-    if (BINPUT.value === ""){
+    if (BINPUT.value === "") {
       BINPUT.value = "0";
     }
     CINPUT.focus();
@@ -78,9 +82,9 @@ BINPUT.onkeydown = (e) => {
 
 CINPUT.onkeydown = (e) => {
   if (e.keyCode === 13) {
-    if (CINPUT.value === ""){
+    if (CINPUT.value === "") {
       CINPUT.value = "0";
     }
-    FORM.onsubmit(e)
+    FORM.onsubmit(e);
   }
 };
