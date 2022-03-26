@@ -3,7 +3,7 @@ const AINPUT = document.querySelector("#aValue"),
   CINPUT = document.querySelector("#cValue"),
   FORM = document.querySelector("#input-form");
 
-//Function that calls the others
+//Function that calls the Api
 
 async function calculate() {
   const A = parseInt(AINPUT.value),
@@ -30,12 +30,15 @@ async function calculate() {
       ).text(),
       GRAPHICSVG = document.createElement("svg");
     let roots;
-    if (!REALROOTS) {
-      roots = "This quadratic function don't have any real zero.";
-    } else if (X1 !== X2) {
-      roots = `x' = ${X1}<br>x" =  ${X2}`;
-    } else {
-      roots = `x = ${X1}`;
+    switch (REALROOTS) {
+      case 2:
+        roots = `x' = ${X1}<br>x" =  ${X2}`;
+        break;
+      case 1:
+        roots = `x = ${X1}`;
+        break;
+      default:
+        roots = "This quadratic function don't have any real zero.";
     }
     FORMDIV.textContent = FORM;
     ROOTSDIV.textContent = "Roots (when y = 0):";
