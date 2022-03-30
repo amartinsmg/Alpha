@@ -1,8 +1,10 @@
 from flask import Flask, jsonify, request, send_file
-import numpy as np
-import sympy as sy
+from math import sqrt
 from matplotlib import pyplot as plt
-import re
+from numpy import arange
+from re import sub as re_sub
+from sympy import symbols, solve, Rational as rational
+
 
 app = Flask(__name__)
 
@@ -14,14 +16,15 @@ def plot_graphic():
     c = int(request.args.get('c'))
     delta = b**2 - 4 * a * c
     if delta > 0:
-        xMin = (-b - np.sqrt(delta)) / (2 * a)
-        xMax = (-b + np.sqrt(delta)) / (2 * a)
+        xMin = (-b - sqrt(delta)) / (2 * a)
+        xMax = (-b + sqrt(delta)) / (2 * a)
         if a < 0:
             xMin, xMax = xMin, xMax
     else:
         xMin = xMax = -b / (2 * a)
-
-    x = np.arange((xMin - 2), (xMax + 2), .01)
+    xMin -= 2
+    xMax += 2
+    x = arange(xMin, xMax, .01)
     y = a * x**2 + b * x + c
     fig = plt.figure()
     plt.plot(x, y)
@@ -52,11 +55,11 @@ def roots_vertex():
     form = ('y = {} {}{}').format(ax2, bx, cStr).strip()
 
     delta = b**2 - 4 * a * c
-    x = sy.symbols('x')
-    y = sy.solve(a * x**2 + b * x + c)
+    x = symbols('x')
+    y = solve(a * x**2 + b * x + c)
     if delta > 0:
-        x1Sym = re.sub('[*]*sqrt', '\u221A', str(y[0]))
-        x2Sym = re.sub('[*]*sqrt', '\u221A', str(y[1]))
+        x1Sym = re_sub('[*]*sqrt', '\u221A', str(y[0]))
+        x2Sym = re_sub('[*]*sqrt', '\u221A', str(y[1]))
         x1Num = float(y[0])
         x2Num = float(y[1])
         x1NumFormated = str(x1Num) if (x1Num * 10**5) % 1 == 0 else format(x1Num, '.5f')
@@ -74,8 +77,8 @@ def roots_vertex():
         x1 = x2 = ''
         realRoots = 0
 
-    xVertex = str(sy.Rational(-b / (2 * a)))
-    yVertex = str(sy.Rational(-delta / (4 * a)))
+    xVertex = str(rational(-b, (2 * a)))
+    yVertex = str(rational(-delta, (4 * a)))
     response = jsonify(FORM=form,
                        X1=x1,
                        X2=x2,

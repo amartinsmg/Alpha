@@ -59,35 +59,38 @@ async function calculate() {
 
 //Functions that change the document
 
+function defaultValue(inputElement) {
+  if (inputElement.value === "") {
+    inputElement.value = "0";
+  }
+}
+
 FORM.onsubmit = (e) => {
   calculate();
   e.preventDefault();
 };
 
-AINPUT.onkeydown = (e) => {
+AINPUT.onkeydown = function (e) {
   if (e.keyCode === 13) {
+    defaultValue(this);
     BINPUT.focus();
     BINPUT.value = "";
     e.preventDefault();
   }
 };
 
-BINPUT.onkeydown = (e) => {
+BINPUT.onkeydown = function (e) {
   if (e.keyCode === 13) {
-    if (BINPUT.value === "") {
-      BINPUT.value = "0";
-    }
+    defaultValue(this);
     CINPUT.focus();
     CINPUT.value = "";
     e.preventDefault();
   }
 };
 
-CINPUT.onkeydown = (e) => {
+CINPUT.onkeydown = function (e) {
   if (e.keyCode === 13) {
-    if (CINPUT.value === "") {
-      CINPUT.value = "0";
-    }
+    defaultValue(this);
     FORM.onsubmit(e);
   }
 };
