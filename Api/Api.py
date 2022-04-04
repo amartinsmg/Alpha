@@ -1,21 +1,15 @@
-from flask import Flask, jsonify, make_response, request
+from flask import Flask, jsonify, request
 from io import StringIO
 from math import sqrt
 from matplotlib import pyplot as plt
 from numpy import arange
-from re import sub as re_sub
 from sympy import Rational as rational, solve, symbols
 
 
 app = Flask(__name__)
 
 
-@app.route('/plot-graphic', methods=['GET'])
-def plot_graphic():
-    a = int(request.args.get('a'))
-    b = int(request.args.get('b'))
-    c = int(request.args.get('c'))
-    delta = b**2 - 4 * a * c
+def plot_graphic(a, b, c, delta):
     if delta > 0:
         xMin = (-b - sqrt(delta)) / (2 * a)
         xMax = (-b + sqrt(delta)) / (2 * a)
@@ -33,14 +27,10 @@ def plot_graphic():
     fig.savefig(img_data, format='svg')
     img_data.seek(0)
     data = img_data.getvalue()
-    response = make_response(data)
-    response.mimetype='application/xml'
-    response.headers['Access-Control-Allow-Origin'] = '*'
-    response.headers['Access-Control-Allow-Credentials'] = 'true'
-    return response
+    return data
 
 
-@app.route('/roots-vertex')
+@app.route('/')
 def roots_vertex():
     a = int(request.args.get('a'))
     b = int(request.args.get('b'))
@@ -50,6 +40,7 @@ def roots_vertex():
     y = a * x**2 + b * x + c
     form = str(y)
     root = solve(y)
+    graphic = plot_graphic(a, b, c, delta)
     if delta > 0:
         x1Sym = str(root[0])
         x2Sym = str(root[1])
@@ -73,11 +64,13 @@ def roots_vertex():
     xVertex = str(rational(-b, (2 * a)))
     yVertex = str(rational(-delta, (4 * a)))
     response = jsonify(FORM=form,
+                       GRAPHIC=graphic,
+                       REALROOTS=realRoots,
                        X1=x1,
                        X2=x2,
-                       REALROOTS=realRoots,
                        XVERTEX=xVertex,
-                       YVERTEX=yVertex)
+                       YVERTEX=yVertex,
+                       )
     response.mimetype = 'application/json'
     response.headers['Access-Control-Allow-Origin'] = '*'
     response.headers['Access-Control-Allow-Credentials'] = 'true'

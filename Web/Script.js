@@ -22,12 +22,9 @@ async function calculate() {
     } else if (A === 0) {
       throw 'In a quadratic function "a" must be a number NOT equal 0!';
     }
-    const { X1, X2, XVERTEX, YVERTEX, FORM, REALROOTS } = await (
-        await fetch(`http://127.0.0.1:5000/roots-vertex?a=${A}&b=${B}&c=${C}`)
+    const { X1, X2, XVERTEX, YVERTEX, FORM, REALROOTS, GRAPHIC: GRAPHICXML } = await (
+        await fetch(`http://127.0.0.1:5000/?a=${A}&b=${B}&c=${C}`)
       ).json(),
-      GRAPHICXML = await (
-        await fetch(`http://127.0.0.1:5000/plot-graphic?a=${A}&b=${B}&c=${C}`)
-      ).text(),
       GRAPHICSVG = document.createElement("svg");
     let roots;
     switch (REALROOTS) {
@@ -40,15 +37,15 @@ async function calculate() {
       default:
         roots = "This quadratic function don't have any real zero.";
     }
-    FORMDIV.textContent = FORM;
+    FORMDIV.textContent = FORM.replace(/[*][*]2/, "\u00b2").replace(/[*]/g, "");
     ROOTSDIV.textContent = "Roots (when y = 0):";
-    ROOTSRESULTDIV.innerHTML = roots;
+    ROOTSRESULTDIV.innerHTML = roots.replace(/[*]*sqrt/g, "\u221a").replace(/approx/g, "\u2248");
     VERTEX.textContent = "Vertex:";
     RESULTCOORDINATES.textContent = `(${XVERTEX}, ${YVERTEX})`;
     GRAPHICSVG.innerHTML = GRAPHICXML;
     GRAPHICDIV.appendChild(GRAPHICSVG);
   } catch (err) {
-    FORMDIV.textContent = "y = ax\u00B2 + bx + c";
+    FORMDIV.textContent = "y = ax\u00b2 + bx + c";
     ROOTSDIV.textContent = null;
     ROOTSRESULTDIV.textContent = null;
     VERTEX.textContent = null;
