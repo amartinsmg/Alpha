@@ -38,7 +38,7 @@ def roots_vertex():
     delta = b**2 - 4 * a * c
     x = symbols('x')
     y = a * x**2 + b * x + c
-    form = str(y)
+    form = 'y = ' + str(y)
     root = solve(y)
     graphic = plot_graphic(a, b, c, delta)
     if delta > 0:
