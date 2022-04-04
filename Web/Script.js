@@ -32,7 +32,7 @@ async function calculate() {
     let roots;
     switch (REALROOTS) {
       case 2:
-        roots = `x' = ${X1}<br>x" =  ${X2}`;
+        roots = `x\u2081 = ${X1}<br>x\u2082 =  ${X2}`;
         break;
       case 1:
         roots = `x = ${X1}`;
@@ -50,9 +50,9 @@ async function calculate() {
   } catch (err) {
     FORMDIV.textContent = "y = ax\u00B2 + bx + c";
     ROOTSDIV.textContent = null;
-    ROOTSRESULTDIV.textContent = err;
+    ROOTSRESULTDIV.textContent = null;
     VERTEX.textContent = null;
-    RESULTCOORDINATES.textContent = null;
+    RESULTCOORDINATES.textContent = err;
   }
   location.href = "#result";
 }

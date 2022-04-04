@@ -1,9 +1,10 @@
-from flask import Flask, jsonify, request, send_file
+from flask import Flask, jsonify, make_response, request
+from io import StringIO
 from math import sqrt
 from matplotlib import pyplot as plt
 from numpy import arange
 from re import sub as re_sub
-from sympy import symbols, solve, Rational as rational
+from sympy import Rational as rational, solve, symbols
 
 
 app = Flask(__name__)
@@ -28,8 +29,12 @@ def plot_graphic():
     y = a * x**2 + b * x + c
     fig = plt.figure()
     plt.plot(x, y)
-    fig.savefig('Temp/Plot.svg')
-    response = send_file('Temp/Plot.svg', mimetype='application/xml')
+    img_data = StringIO()
+    fig.savefig(img_data, format='svg')
+    img_data.seek(0)
+    data = img_data.getvalue()
+    response = make_response(data)
+    response.mimetype='application/xml'
     response.headers['Access-Control-Allow-Origin'] = '*'
     response.headers['Access-Control-Allow-Credentials'] = 'true'
     return response
@@ -40,38 +45,26 @@ def roots_vertex():
     a = int(request.args.get('a'))
     b = int(request.args.get('b'))
     c = int(request.args.get('c'))
-    ax2 = 'x\u00B2' if a == 1 else '-x\u00B2' if a == -1 else ('{}x\u00B2').format(a)
-    if b == 1:
-        bx = '+x '
-    elif b == -1:
-        bx = '-x '
-    elif b > 0:
-        bx = ('+{}x ').format(b)
-    elif b < 0:
-        bx = ('{}x ').format(b)
-    else:
-        bx = ''
-    cStr = ('+{}').format(c) if c > 0 else str(c) if c < 0 else ''
-    form = ('y = {} {}{}').format(ax2, bx, cStr).strip()
-
     delta = b**2 - 4 * a * c
     x = symbols('x')
-    y = solve(a * x**2 + b * x + c)
+    y = a * x**2 + b * x + c
+    form = str(y)
+    root = solve(y)
     if delta > 0:
-        x1Sym = re_sub('[*]*sqrt', '\u221A', str(y[0]))
-        x2Sym = re_sub('[*]*sqrt', '\u221A', str(y[1]))
-        x1Num = float(y[0])
-        x2Num = float(y[1])
-        x1NumFormated = str(x1Num) if (x1Num * 10**5) % 1 == 0 else format(x1Num, '.5f')
-        x2NumFormated = str(x2Num) if (x2Num * 10**5) % 1 == 0 else format(x2Num, '.5f')
-        x1 = x1Sym if x1Num % 1 == 0 else ('{} (Decimal {})').format(x1Sym, x1NumFormated)
-        x2 = x2Sym if x2Num % 1 == 0 else ('{} (Decimal {})').format(x2Sym, x2NumFormated)
+        x1Sym = str(root[0])
+        x2Sym = str(root[1])
+        x1Num = float(root[0])
+        x2Num = float(root[1])
+        x1NumFormated = f'= {x1Num}' if (x1Num * 10**5) % 1 == 0 else 'approx {:.5f}'.format(x1Num)
+        x2NumFormated = f'= {x2Num}' if (x2Num * 10**5) % 1 == 0 else 'approx {:.5f}'.format(x2Num)
+        x1 = x1Sym if x1Num % 1 == 0 else f'{x1Sym} {x1NumFormated}'
+        x2 = x2Sym if x2Num % 1 == 0 else f'{x2Sym} {x2NumFormated}'
         realRoots = 2
     elif delta == 0:
-        xSym = str(y[0])
-        xNum = float(y[0])
-        xNumFormated = str(xNum) if (xNum * 10**5) % 1 == 0 else format(xNum, '.5f')
-        x1 = x2 = xSym if xNum % 1 == 0 else ('{} (Decimal {})').format(xSym, xNumFormated)
+        xSym = str(root[0])
+        xNum = float(root[0])
+        xNumFormated = f'= {xNum}' if (xNum * 10**5) % 1 == 0 else '\u2248 {:.5f}...'.format(xNum)
+        x1 = x2 = xSym if xNum % 1 == 0 else f'{xSym} {xNumFormated}'
         realRoots = 1
     else:
         x1 = x2 = ''
