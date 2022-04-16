@@ -36,6 +36,12 @@ main {
   gap: 20px;
 }
 
+#input-form div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .values-input {
   padding: 2.5px;
   border-radius: 6px;
@@ -46,6 +52,19 @@ main {
 
 .values-input:hover {
   background-color: #e6e6e6;
+}
+
+.invalid-input input {
+  background-color: #ff8888;
+}
+
+.invalid-input input:hover {
+  background-color: #ff5353;
+}
+
+.invalid-message {
+  font-size: 0.7em;
+  color: #ff5353
 }
 
 #calculate-button {

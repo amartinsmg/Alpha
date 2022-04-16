@@ -1,31 +1,57 @@
 const AINPUT: HTMLInputElement = document.querySelector("#aValue"),
   BINPUT: HTMLInputElement = document.querySelector("#bValue"),
   CINPUT: HTMLInputElement = document.querySelector("#cValue"),
-  FORM: HTMLFormElement = document.querySelector("#input-form");
+  FORM: HTMLFormElement = document.querySelector("#input-form"),
+  FORMDIV: HTMLSpanElement = document.querySelector("#function-form span"),
+  ROOTSDIV: HTMLSpanElement = document.querySelector("#roots span"),
+  RESULTROOTSDIV: HTMLSpanElement = document.querySelector("#result-roots span"),
+  COORDINATESDIV: HTMLSpanElement = document.querySelector("#coordinates span"),
+  RESULTCOORDINATESDIV: HTMLSpanElement = document.querySelector("#result-coordinates span"),
+  GRAPHICDIV: HTMLDivElement = document.querySelector("#graphic");
+
+function testAndGetInput(el: HTMLInputElement) :string {
+  const FractionRegEx = /^-?\d+[/]\d+$/,
+    FloatRegEx = /^-?\d*[.]\d{1,6}$/,
+    IntegerRegEx = /^-?\d+$/,
+    DivideByZeroRegEx = /[/]0/,
+    INPUT = el.value.trim(),
+    VALIDFRACTION = FractionRegEx.test(INPUT) && !DivideByZeroRegEx.test(INPUT),
+    VALIDEFLOAT = FloatRegEx.test(INPUT),
+    VALIDEINTEGER = IntegerRegEx.test(INPUT),
+    ParentEl = el.parentElement;
+  try{
+    if(el.id === "aValue" && (/^-?0+[/]/.test(INPUT) || /^-?0+[.]0+$/.test(INPUT))){
+      throw "Please, enter a non-zero number!";
+    }
+    if(VALIDFRACTION || VALIDEFLOAT || VALIDEINTEGER){
+      return INPUT.replace("/", "dividedBy");
+    }else {
+      throw "Please, enter a integer, float or fractional number!";
+    }
+  }catch (err){
+    const ErrorSpan = document.createElement("span");
+    ErrorSpan.setAttribute("class", "invalid-message")
+    ErrorSpan.textContent = err;
+    ParentEl.setAttribute("class", "invalid-input")
+    ParentEl.appendChild(ErrorSpan)
+    el.addEventListener("focus", () => {
+      ParentEl.removeAttribute("class");
+      ParentEl.lastElementChild.remove();
+    }, {once: true});
+    throw "Invalid Input!"
+  }
+  
+}
 
 //Function that calls the Api
 
 async function calculate() {
-  const A: number = parseInt(AINPUT.value),
-    B: number = parseInt(BINPUT.value),
-    C: number = parseInt(CINPUT.value),
-    ROOTSDIV: HTMLSpanElement = document.querySelector("#roots span"),
-    ROOTSRESULTDIV: HTMLSpanElement =
-      document.querySelector("#result-roots span"),
-    VERTEX: HTMLSpanElement = document.querySelector("#coordinates span"),
-    RESULTCOORDINATES: HTMLSpanElement = document.querySelector(
-      "#result-coordinates span"
-    ),
-    FORMDIV: HTMLSpanElement = document.querySelector("#function-form span"),
-    GRAPHICDIV: HTMLDivElement = document.querySelector("#graphic");
   GRAPHICDIV.innerHTML = null;
   try {
-    if (isNaN(A) || isNaN(B) || isNaN(C)) {
-      throw 'In a quadratic function "a", "b" and "c" must be numbers!';
-    } else if (A === 0) {
-      throw 'In a quadratic function "a" must be a number NOT equal 0!';
-    }
-    const {
+    const A = testAndGetInput(AINPUT),
+      B = testAndGetInput(BINPUT),
+      C = testAndGetInput(CINPUT),
+      {
         X1,
         X2,
         XVERTEX,
@@ -44,7 +70,7 @@ async function calculate() {
       } = await (
         await fetch(`http://127.0.0.1:5000/?a=${A}&b=${B}&c=${C}`)
       ).json(),
-      GRAPHICSVG: HTMLElement = document.createElement("svg");
+      GRAPHICSVG = document.createElement("svg");
     let roots: string;
     switch (REALROOTS) {
       case 2:
@@ -56,21 +82,21 @@ async function calculate() {
       default:
         roots = "This quadratic function don't have any real zero.";
     }
-    FORMDIV.textContent = FORM.replace(/[*][*]2/, "\u00b2").replace(/[*]/g, "");
+    FORMDIV.textContent = FORM.replace("**2", "\u00b2").replace(/[*]/g, "");
     ROOTSDIV.textContent = "Roots (when y = 0):";
-    ROOTSRESULTDIV.innerHTML = roots
+    RESULTROOTSDIV.innerHTML = roots
       .replace(/[*]*sqrt/g, "\u221a")
       .replace(/approx/g, "\u2248");
-    VERTEX.textContent = "Vertex:";
-    RESULTCOORDINATES.textContent = `(${XVERTEX}, ${YVERTEX})`;
+    COORDINATESDIV.textContent = "Vertex:";
+    RESULTCOORDINATESDIV.textContent = `(${XVERTEX}, ${YVERTEX})`;
     GRAPHICSVG.innerHTML = GRAPHIC;
     GRAPHICDIV.appendChild(GRAPHICSVG);
   } catch (err) {
     FORMDIV.textContent = "y = ax\u00b2 + bx + c";
     ROOTSDIV.textContent = null;
-    ROOTSRESULTDIV.textContent = null;
-    VERTEX.textContent = null;
-    RESULTCOORDINATES.textContent = err;
+    RESULTROOTSDIV.textContent = null;
+    COORDINATESDIV.textContent = null;
+    RESULTCOORDINATESDIV.textContent = err.message === "Failed to fetch" ? err.message : err;
   }
   location.href = "#result";
 }
@@ -95,7 +121,7 @@ const defaultValue = function (value: string) {
     }
   };
 
-FORM.onsubmit = function (e: SubmitEvent) {
+FORM.onsubmit = function (e) {
   calculate();
   if (e) {
     e.preventDefault();
@@ -105,6 +131,6 @@ FORM.onsubmit = function (e: SubmitEvent) {
 AINPUT.onblur = defaultValue.bind(AINPUT, "1");
 BINPUT.onblur = defaultValue.bind(BINPUT, "0");
 CINPUT.onblur = defaultValue.bind(CINPUT, "0");
-AINPUT.onkeydown = (e) => whenKeyDown.apply(AINPUT, [BINPUT, e]);
-BINPUT.onkeydown = (e) => whenKeyDown.apply(BINPUT, [CINPUT, e]);
-CINPUT.onkeydown = (e) => whenKeyDown.apply(CINPUT, [FORM, e]);
+AINPUT.onkeydown = (e) => whenKeyDown.call(AINPUT, BINPUT, e);
+BINPUT.onkeydown = (e) => whenKeyDown.call(BINPUT, CINPUT, e);
+CINPUT.onkeydown = (e) => whenKeyDown.call(CINPUT, FORM, e);
