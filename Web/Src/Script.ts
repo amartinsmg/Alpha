@@ -1,6 +1,6 @@
-const AINPUT: HTMLInputElement = document.querySelector("#aValue"),
-  BINPUT: HTMLInputElement = document.querySelector("#bValue"),
-  CINPUT: HTMLInputElement = document.querySelector("#cValue"),
+const AINPUT: HTMLInputElement = document.querySelector("#a-value"),
+  BINPUT: HTMLInputElement = document.querySelector("#b-value"),
+  CINPUT: HTMLInputElement = document.querySelector("#c-value"),
   FORM: HTMLFormElement = document.querySelector("#input-form"),
   FORMDIV: HTMLSpanElement = document.querySelector("#function-form span"),
   ROOTSDIV: HTMLSpanElement = document.querySelector("#roots span"),
@@ -10,17 +10,13 @@ const AINPUT: HTMLInputElement = document.querySelector("#aValue"),
   GRAPHICDIV: HTMLDivElement = document.querySelector("#graphic");
 
 function testAndGetInput(el: HTMLInputElement) :string {
-  const FractionRegEx = /^-?\d+[/]\d+$/,
-    FloatRegEx = /^-?\d*[.]\d{1,6}$/,
-    IntegerRegEx = /^-?\d+$/,
-    DivideByZeroRegEx = /[/]0/,
-    INPUT = el.value.trim(),
-    VALIDFRACTION = FractionRegEx.test(INPUT) && !DivideByZeroRegEx.test(INPUT),
-    VALIDEFLOAT = FloatRegEx.test(INPUT),
-    VALIDEINTEGER = IntegerRegEx.test(INPUT),
+  const INPUT = el.value.trim(),
+    VALIDFRACTION = /^-?\d+[/]\d+$/.test(INPUT) && !/[/]0/.test(INPUT),
+    VALIDEFLOAT = /^-?\d*[.]\d{1,15}$/.test(INPUT),
+    VALIDEINTEGER = /^-?\d+$/.test(INPUT),
     ParentEl = el.parentElement;
   try{
-    if(el.id === "aValue" && (/^-?0+[/]/.test(INPUT) || /^-?0+[.]0+$/.test(INPUT))){
+    if(el.id === "a-value" && (/^-?0+[/]/.test(INPUT) || /^-?0*[.]0+$/.test(INPUT) || /^-?0+$/.test(INPUT))){
       throw "Please, enter a non-zero number!";
     }
     if(VALIDFRACTION || VALIDEFLOAT || VALIDEINTEGER){
@@ -30,15 +26,15 @@ function testAndGetInput(el: HTMLInputElement) :string {
     }
   }catch (err){
     const ErrorSpan = document.createElement("span");
-    ErrorSpan.setAttribute("class", "invalid-message")
+    ErrorSpan.setAttribute("class", "invalid-message");
     ErrorSpan.textContent = err;
-    ParentEl.setAttribute("class", "invalid-input")
-    ParentEl.appendChild(ErrorSpan)
+    ParentEl.setAttribute("class", "invalid-input");
+    ParentEl.appendChild(ErrorSpan);
     el.addEventListener("focus", () => {
       ParentEl.removeAttribute("class");
       ParentEl.lastElementChild.remove();
     }, {once: true});
-    throw "Invalid Input!"
+    throw "Invalid Input!";
   }
   
 }
@@ -51,25 +47,27 @@ async function calculate() {
     const A = testAndGetInput(AINPUT),
       B = testAndGetInput(BINPUT),
       C = testAndGetInput(CINPUT),
-      {
-        X1,
-        X2,
-        XVERTEX,
-        YVERTEX,
-        FORM,
-        REALROOTS,
-        GRAPHIC,
+      RESPONSE = await fetch(`http://127.0.0.1:5000/?a=${A}&b=${B}&c=${C}`);
+    if (!RESPONSE.ok){
+      throw await RESPONSE.text();
+    }
+    const {
+        x1: X1,
+        x2: X2,
+        xVertex: XVERTEX,
+        yVertex: YVERTEX,
+        form: FORM,
+        realRoots: REALROOTS,
+        graphic: GRAPHIC,
       }: {
-        X1: string;
-        X2: string;
-        XVERTEX: string;
-        YVERTEX: string;
-        FORM: string;
-        REALROOTS: number;
-        GRAPHIC: string;
-      } = await (
-        await fetch(`http://127.0.0.1:5000/?a=${A}&b=${B}&c=${C}`)
-      ).json(),
+        x1: string;
+        x2: string;
+        xVertex: string;
+        yVertex: string;
+        form: string;
+        realRoots: number;
+        graphic: string;
+      } = await (RESPONSE).json(),
       GRAPHICSVG = document.createElement("svg");
     let roots: string;
     switch (REALROOTS) {
@@ -103,16 +101,16 @@ async function calculate() {
 
 //Functions that provides reactivity to document
 
-const defaultValue = function (value: string) {
-    if (this.value === "") {
-      this.value = value;
+const defaultValue = function (el: HTMLInputElement, value: string) {
+    if (el.value === "") {
+      el.value = value;
     }
   },
-  whenKeyDown = function (nextEl: HTMLElement, e: KeyboardEvent) {
+  whenKeyDown = function (el: HTMLInputElement, nextEl: HTMLElement, e: KeyboardEvent) {
     if (e.keyCode === 13) {
-      this.onblur();
       if (nextEl instanceof HTMLFormElement) {
-        nextEl.submit();
+        el.blur();
+        calculate();
       } else if (nextEl instanceof HTMLInputElement) {
         nextEl.focus();
         nextEl.value = "";
@@ -120,17 +118,14 @@ const defaultValue = function (value: string) {
       }
     }
   };
-
-FORM.onsubmit = function (e) {
+  
+FORM.onsubmit = (e) => {
   calculate();
-  if (e) {
-    e.preventDefault();
-  }
+  e.preventDefault();
 };
-
-AINPUT.onblur = defaultValue.bind(AINPUT, "1");
-BINPUT.onblur = defaultValue.bind(BINPUT, "0");
-CINPUT.onblur = defaultValue.bind(CINPUT, "0");
-AINPUT.onkeydown = (e) => whenKeyDown.call(AINPUT, BINPUT, e);
-BINPUT.onkeydown = (e) => whenKeyDown.call(BINPUT, CINPUT, e);
-CINPUT.onkeydown = (e) => whenKeyDown.call(CINPUT, FORM, e);
+AINPUT.onblur = () => defaultValue(AINPUT, "1");
+BINPUT.onblur = () => defaultValue(BINPUT, "0");
+CINPUT.onblur = () => defaultValue(CINPUT, "0");
+AINPUT.onkeydown = (e) => whenKeyDown(AINPUT, BINPUT, e);
+BINPUT.onkeydown = (e) => whenKeyDown(BINPUT, CINPUT, e);
+CINPUT.onkeydown = (e) => whenKeyDown(CINPUT, FORM, e);
