@@ -6,7 +6,7 @@
 }
 
 body {
-  background-color: #242424;
+  background-color: #1d1d1d;
   font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
   color: #ffffff;
 }
@@ -17,7 +17,7 @@ main {
   align-items: center;
   gap: 35px;
   text-align: center;
-  font-size: x-large;
+  font-size: 1.7em;
 }
 
 #page-title {
@@ -54,17 +54,9 @@ main {
   background-color: #e6e6e6;
 }
 
-.invalid-input input {
-  background-color: #ff8888;
-}
-
-.invalid-input input:hover {
-  background-color: #ff5353;
-}
-
 .invalid-message {
-  font-size: 0.7em;
-  color: #ff5353
+  font-size: .7em;
+  color: #ff0000
 }
 
 #calculate-button {

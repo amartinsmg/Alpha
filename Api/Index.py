@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, make_response, request
 from io import StringIO
 from math import sqrt
 from matplotlib import pyplot as plt
@@ -7,8 +7,9 @@ from sympy import Rational as rational, solve, symbols, sympify
 
 app = Flask(__name__)
 
+#Plot the quadratic function
 
-def plot_graphic(a, b, c, delta):
+def plot_graph(a, b, c, delta):
     if delta > 0:
         xMin = (-b - sqrt(delta)) / (2 * a)
         xMax = (-b + sqrt(delta)) / (2 * a)
@@ -30,6 +31,8 @@ def plot_graphic(a, b, c, delta):
     data = img_data.getvalue()
     return data
 
+#Convert the input value to an integer or rational value
+
 def convert_into_number(num):
     num = num.replace('dividedBy', '/')
     if num.find('/') == -1:
@@ -40,6 +43,8 @@ def convert_into_number(num):
 
     return num
 
+#Get the arguments, process the response items and send it in JSON format
+
 @app.route('/')
 def quadratic_function():
     try:
@@ -49,9 +54,9 @@ def quadratic_function():
         delta = b**2 - 4 * a * c
         x = symbols('x')
         y = a * x**2 + b * x + c
-        data = {'form': 'y = ' + str(y)}
+        data = {'form': f'y = {y}'}
         root = solve(y)
-        data['graphic'] = plot_graphic(a, b, c, delta)
+        data['graph'] = plot_graph(a, b, c, delta)
         if delta > 0:
             x1_symbolic = str(root[0])
             x2_symbolic = str(root[1])
@@ -77,7 +82,7 @@ def quadratic_function():
         response.mimetype = 'application/json'
         response.status = 200
     except Exception as e:
-        response = jsonify(str(e))
+        response = make_response(str(e))
         response.status = 400
 
     response.headers['Access-Control-Allow-Origin'] = '*'

@@ -1,5 +1,6 @@
 # Quadratic Function Calculator
 
-Olá,
+Hello,
 
-Este é um projeto para criar uma calculadora para funções quadráticas, que pega as inputs dos valores de a, b e c, calcula e imprime os resultados de x no documento html.
+This is a personal project for creating a quadratic function calculator.
+It contains two main parts, the API that process the Web Page's input data, which shows its output data.
