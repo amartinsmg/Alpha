@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, make_response, request
+from flask import Flask, jsonify, request
 from io import StringIO
 from math import sqrt
 from matplotlib import pyplot as plt
@@ -11,17 +11,18 @@ app = Flask(__name__)
 
 def plot_graph(a, b, c, delta):
     if delta > 0:
-        xMin = (-b - sqrt(delta)) / (2 * a)
-        xMax = (-b + sqrt(delta)) / (2 * a)
+        x_min_value = (-b - sqrt(delta)) / (2 * a)
+        x_max_value = (-b + sqrt(delta)) / (2 * a)
         if a < 0:
-            xMin, xMax = xMax, xMin
+            x_min_value, x_max_value = x_max_value, x_min_value
+        extra_value = max(2, (abs(x_max_value - x_min_value)/5), min(abs(x_min_value), abs(x_max_value)))
     else:
-        xMin = xMax = -b / (2 * a)
-    extraValue = max(2, abs(xMax - xMin)/5)
-    xMin -= extraValue
-    xMax += extraValue
-    step = (xMax - xMin) / 100
-    x = arange(xMin, xMax, step)
+        x_min_value = x_max_value = -b / (2 * a)
+        extra_value = max(2, abs(x_max_value))
+    x_min_value -= extra_value
+    x_max_value += extra_value
+    step = (x_max_value - x_min_value) / 250
+    x = arange(x_min_value, x_max_value, step)
     y = a * x**2 + b * x + c
     fig = plt.figure()
     plt.plot(x, y)
@@ -82,7 +83,7 @@ def quadratic_function():
         response.mimetype = 'application/json'
         response.status = 200
     except Exception as e:
-        response = make_response(str(e))
+        response = jsonify(error = str(e).capitalize())
         response.status = 400
 
     response.headers['Access-Control-Allow-Origin'] = '*'

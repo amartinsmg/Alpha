@@ -6,8 +6,11 @@
 }
 
 body {
-  background-color: #1d1d1d;
-  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+  background-color: #121212;
+  font-family: Helvetica, Arial, sans-serif;
+  letter-spacing: .9px;
+  font-size: 20px;
+  line-height: 1.3;
   color: #ffffff;
 }
 
@@ -17,71 +20,78 @@ main {
   align-items: center;
   gap: 35px;
   text-align: center;
-  font-size: 1.7em;
 }
 
 #page-title {
+  font-size: 1.5em;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
   font-weight: 800;
-  color: #138fe2;
+  color: #00a8cc;
 }
 
 #function-form {
   font-weight: 550;
 }
 
-#input-form {
+form {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 25px;
 }
 
-#input-form div {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.values-input {
-  padding: 2.5px;
+.data-inputs {
+  padding: 3px;
   border-radius: 6px;
   font-size: 0.9em;
-  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
-  background-color: #f0f0f0;
+  font-family: Helvetica, Arial, sans-serif;
+  background-color: #ffffff;
 }
 
-.values-input:hover {
-  background-color: #e6e6e6;
+.data-inputs:hover {
+  background-color: #e1e1e1;
+}
+
+.invalid-input {
+  border: solid 3px #c62828;
 }
 
 .invalid-message {
+  margin: 8px;
+  padding: 2px 8px;
+  background-color: #c62828;
   font-size: .7em;
-  color: #ff0000
 }
 
 #calculate-button {
+  font-size: 1em;
+  background-color: #b1b1b1;
   padding: 4px 10px;
 }
 
-#result {
+#calculate-button:hover {
+  background-color: #9e9e9e;
+}
+
+#output {
   display: inherit;
   flex-direction: column;
   align-items: inherit;
   gap: 15px;
 }
 
-#textual-result {
+#textual-output {
   display: inherit;
   flex-direction: inherit;
   align-items: inherit;
-  gap: 10px;
+  gap: 12px;
 }
 
-#textual-result div {
+.textual-output-group {
   display: inherit;
   flex-direction: column;
   align-items: inherit;
-  gap: 7px;
+  gap: 8px;
 }
 
 .strong-class {
@@ -92,13 +102,8 @@ svg {
   max-width: 100%;
 }
 
-@media screen and (orientation: landscape) {
-  #textual-result {
-    gap: 20px;
-  }
-  #textual-result div{
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 10px;
+@media screen and (orientation: landscape){
+  #page-title {
+    font-size: 2.5em;
   }
 }

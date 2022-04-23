@@ -1,24 +1,21 @@
 //Constatns that store elements that will be often read or changed
 
-const AINPUT: HTMLInputElement = document.querySelector("#a-value"),
-  BINPUT: HTMLInputElement = document.querySelector("#b-value"),
-  CINPUT: HTMLInputElement = document.querySelector("#c-value"),
-  FORM: HTMLFormElement = document.querySelector("#input-form"),
-  FORMDIV: HTMLSpanElement = document.querySelector("#function-form span"),
-  ROOTSDIV: HTMLSpanElement = document.querySelector("#roots span"),
-  RESULTROOTSDIV: HTMLSpanElement = document.querySelector("#result-roots span"),
-  COORDINATESDIV: HTMLSpanElement = document.querySelector("#coordinates span"),
-  RESULTCOORDINATESDIV: HTMLSpanElement = document.querySelector("#result-coordinates span"),
-  GRAPHDIV: HTMLDivElement = document.querySelector("#graph");
+const AInput: HTMLInputElement = document.querySelector("#a-value"),
+  BInput: HTMLInputElement = document.querySelector("#b-value"),
+  CInput: HTMLInputElement = document.querySelector("#c-value"),
+  Form: HTMLFormElement = document.querySelector("#input-form"),
+  FormDiv: HTMLDivElement = document.querySelector("#function-form"),
+  RootsDiv: HTMLDivElement = document.querySelector("#roots"),
+  ResultRootsDiv: HTMLDivElement = document.querySelector("#result-roots"),
+  CoordinatesDiv: HTMLDivElement = document.querySelector("#coordinates"),
+  ResultCoordinatesDiv: HTMLDivElement = document.querySelector("#result-coordinates"),
+  GraphDiv: HTMLDivElement = document.querySelector("#graph");
 
-//Read an element's value (if empty set it to default) and check if it's valid
+//Read an element's value and check if it's valid
 
 function testInput(...els: HTMLInputElement[]) {
   let isValid = true;
   for (let el of els){
-    if (el.value.trim() === ""){
-      el.value = el.defaultValue;
-    }
     const VALUE = el.value.trim(),
       FractionRegEx = /^-?\d+[/]\d+$/,
       DividedByZeroRegEx = /[/]0/,
@@ -40,14 +37,14 @@ function testInput(...els: HTMLInputElement[]) {
       }
     }catch (err){
       if (ParentEl.childElementCount === 2){
-        const ErrorSpan = document.createElement("span");
-        ErrorSpan.setAttribute("class", "invalid-message");
-        ErrorSpan.textContent = err;
-        el.style.backgroundColor = "#ff8888";
-        ParentEl.appendChild(ErrorSpan);
+        const InvalidMessageDiv = document.createElement("div");
+        el.classList.add("invalid-input");
+        InvalidMessageDiv.classList.add("invalid-message");
+        InvalidMessageDiv.textContent = err;
+        ParentEl.appendChild(InvalidMessageDiv);
         el.addEventListener("focus", () => {
-          el.removeAttribute("style");
-          ParentEl.lastElementChild.remove();
+          el.classList.remove("invalid-input");
+          InvalidMessageDiv.remove();
         }, {once: true});
       }
       isValid = false;
@@ -77,17 +74,17 @@ function whenKeyDown(e: KeyboardEvent, nextEl?: HTMLInputElement) {
 //Call the API, read its response and update the document
 
 async function main() {
-  GRAPHDIV.innerHTML = null;
+  GraphDiv.innerHTML = null;
   try {
-    if (!testInput(AINPUT, BINPUT, CINPUT)){
+    if (!testInput(AInput, BInput, CInput)){
       throw "Invalid input!";
     }
-    const A = getValue(AINPUT),
-      B = getValue(BINPUT),
-      C = getValue(CINPUT),
+    const A = getValue(AInput),
+      B = getValue(BInput),
+      C = getValue(CInput),
       RESPONSE = await fetch(`http://127.0.0.1:5000/?a=${A}&b=${B}&c=${C}`);
     if (!RESPONSE.ok){
-      throw await RESPONSE.text();
+      throw (await RESPONSE.json()).error;
     }
     const {
         x1: X1,
@@ -106,7 +103,7 @@ async function main() {
         realRoots: number;
         graph: string;
       } = await (RESPONSE).json(),
-      GRAPHSVG = document.createElement("svg");
+      GraphSvg = document.createElement("svg");
     let roots: string;
     switch (REALROOTS) {
       case 2:
@@ -118,40 +115,40 @@ async function main() {
       default:
         roots = "This quadratic function don't have any real zero.";
     }
-    FORMDIV.textContent = FORM.replace("**2", "\u00b2").replace(/[*]/g, "");
-    ROOTSDIV.textContent = "Roots (when y = 0):";
-    RESULTROOTSDIV.innerHTML = roots
+    FormDiv.textContent = FORM.replace("**2", "\u00b2").replace(/[*]/g, "");
+    RootsDiv.textContent = "Roots (when y = 0):";
+    ResultRootsDiv.innerHTML = roots
       .replace(/[*]*sqrt/g, "\u221a")
       .replace(/approx/g, "\u2248");
-    COORDINATESDIV.textContent = "Vertex:";
-    RESULTCOORDINATESDIV.textContent = `(${XVERTEX}, ${YVERTEX})`;
-    GRAPHSVG.innerHTML = GRAPH;
-    GRAPHDIV.appendChild(GRAPHSVG);
+    CoordinatesDiv.textContent = "Vertex:";
+    ResultCoordinatesDiv.textContent = `(${XVERTEX}, ${YVERTEX})`;
+    GraphSvg.innerHTML = GRAPH;
+    GraphDiv.appendChild(GraphSvg);
   } catch (err) {
-    FORMDIV.textContent = "y = ax\u00b2 + bx + c";
-    ROOTSDIV.textContent = null;
-    RESULTROOTSDIV.textContent = null;
-    COORDINATESDIV.textContent = null;
-    RESULTCOORDINATESDIV.textContent = err.message === "Failed to fetch" ? err.message : err;
+    FormDiv.textContent = "y = ax\u00b2 + bx + c";
+    RootsDiv.textContent = null;
+    ResultRootsDiv.textContent = null;
+    CoordinatesDiv.textContent = null;
+    ResultCoordinatesDiv.textContent = err.message === "Failed to fetch" ? err.message : err;
   }
   location.href = "#result";
 }
 
 //Call the main function when form is submitted
 
-FORM.onsubmit = (e) => {
+Form.onsubmit = (e) => {
   main();
   e.preventDefault();
 };
 
 //Methods that call the testInput function for their parent objects when they lose focus
 
-AINPUT.onblur = () => void testInput(AINPUT);
-BINPUT.onblur = () => void testInput(BINPUT);
-CINPUT.onblur = () => void testInput(CINPUT);
+AInput.onblur = () => void testInput(AInput);
+BInput.onblur = () => void testInput(BInput);
+CInput.onblur = () => void testInput(CInput);
 
 //Methods that call the whenKeyDown function when a key is downed
 
-AINPUT.onkeydown = (e) => whenKeyDown(e, BINPUT);
-BINPUT.onkeydown = (e) => whenKeyDown(e, CINPUT);
-CINPUT.onkeydown = (e) => whenKeyDown(e);
+AInput.onkeydown = (e) => whenKeyDown(e, BInput);
+BInput.onkeydown = (e) => whenKeyDown(e, CInput);
+CInput.onkeydown = (e) => whenKeyDown(e);
