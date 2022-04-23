@@ -59,18 +59,6 @@ function getValue (el: HTMLInputElement){
   return el.value.trim().replace("/", "dividedBy");
 }
 
-//Move focus to the next element or submit the form if there is none
-
-function whenKeyDown(e: KeyboardEvent, nextEl?: HTMLInputElement) {
-  if (e.keyCode === 13) {
-    if (nextEl) {
-      nextEl.focus();
-      nextEl.value = "";
-      e.preventDefault();
-    }
-  }
-};
-
 //Call the API, read its response and update the document
 
 async function main() {
@@ -133,6 +121,19 @@ async function main() {
   }
   location.href = "#result";
 }
+
+//Move focus to the next element or submit the form if there is none
+
+function whenKeyDown(e: KeyboardEvent, nextEl?: HTMLInputElement) {
+  if (e.keyCode === 13) {
+    if (nextEl) {
+      nextEl.focus();
+      nextEl.value = "";
+      e.preventDefault();
+    }
+    return void 0;
+  }
+};
 
 //Call the main function when form is submitted
 
