@@ -13,23 +13,24 @@ const AInput: HTMLInputElement = document.querySelector("#a-value"),
 
 //Read an element's value and check if it's valid
 
-function testInput(...els: HTMLInputElement[]) {
-  let isValid = true;
+function testInput(...els: HTMLInputElement[]): boolean {
+  let isValid: boolean = true;
   for (let el of els){
-    const VALUE = el.value.trim(),
-      FractionRegEx = /^-?\d+[/]\d+$/,
-      DividedByZeroRegEx = /[/]0/,
-      FloatRegEx = /^-?\d*[.]\d{1,15}$/,
-      IntegerRegEx = /^-?\d+$/,
-      ZeroFractionRegEx = /^-?0+[/]/,
-      ZeroFloatRegEx = /^-?0*[.]0+$/,
-      ZeroIntegerRegEx = /^-?0+$/,
-      VALIDFRACTION = FractionRegEx.test(VALUE) && !DividedByZeroRegEx.test(VALUE),
-      VALIDEFLOAT = FloatRegEx.test(VALUE),
-      VALIDEINTEGER = IntegerRegEx.test(VALUE),
-      ParentEl = el.parentElement;
+    const VALUE: string = el.value.trim(),
+      FractionRegEx: RegExp = /^-?\d+[/]\d+$/,
+      DividedByZeroRegEx: RegExp = /[/]0/,
+      FloatRegEx: RegExp = /^-?\d*[.]\d{1,15}$/,
+      IntegerRegEx: RegExp = /^-?\d+$/,
+      ZeroFractionRegEx: RegExp = /^-?0+[/]/,
+      ZeroFloatRegEx: RegExp = /^-?0*[.]0+$/,
+      ZeroIntegerRegEx: RegExp = /^-?0+$/,
+      VALIDFRACTION: boolean = FractionRegEx.test(VALUE) && !DividedByZeroRegEx.test(VALUE),
+      VALIDEFLOAT: boolean = FloatRegEx.test(VALUE),
+      VALIDEINTEGER: boolean = IntegerRegEx.test(VALUE),
+      ZERONUMBER: boolean = ZeroFractionRegEx.test(VALUE) || ZeroFloatRegEx.test(VALUE) || ZeroIntegerRegEx.test(VALUE),
+      ParentEl: HTMLElement = el.parentElement;
     try{
-      if(el.id === "a-value" && (ZeroFractionRegEx.test(VALUE) || ZeroFloatRegEx.test(VALUE) || ZeroIntegerRegEx.test(VALUE))){
+      if(el.id === "a-value" && ZERONUMBER){
         throw "Enter a non-zero number!";
       }
       if(!(VALIDFRACTION || VALIDEFLOAT || VALIDEINTEGER)){
@@ -55,22 +56,22 @@ function testInput(...els: HTMLInputElement[]) {
 
 //Get the value of an element and format it
 
-function getValue (el: HTMLInputElement){
+function getValue (el: HTMLInputElement): string {
   return el.value.trim().replace("/", "dividedBy");
 }
 
 //Call the API, read its response and update the document
 
-async function main() {
+async function main(): Promise<void> {
   GraphDiv.innerHTML = null;
   try {
     if (!testInput(AInput, BInput, CInput)){
       throw "Invalid input!";
     }
-    const A = getValue(AInput),
-      B = getValue(BInput),
-      C = getValue(CInput),
-      RESPONSE = await fetch(`http://127.0.0.1:5000/?a=${A}&b=${B}&c=${C}`);
+    const A: string = getValue(AInput),
+      B: string = getValue(BInput),
+      C: string = getValue(CInput),
+      RESPONSE: Response = await fetch(`http://127.0.0.1:5000/?a=${A}&b=${B}&c=${C}`);
     if (!RESPONSE.ok){
       throw (await RESPONSE.json()).error;
     }
@@ -117,14 +118,14 @@ async function main() {
     RootsDiv.textContent = null;
     ResultRootsDiv.textContent = null;
     CoordinatesDiv.textContent = null;
-    ResultCoordinatesDiv.textContent = err.message === "Failed to fetch" ? err.message : err;
+    ResultCoordinatesDiv.textContent = err instanceof Error ? err.message : err;
   }
-  location.href = "#result";
+  location.href = "#output";
 }
 
 //Move focus to the next element or submit the form if there is none
 
-function whenKeyDown(e: KeyboardEvent, nextEl?: HTMLInputElement) {
+function whenKeyDown(e: KeyboardEvent, nextEl?: HTMLInputElement): void {
   if (e.keyCode === 13) {
     if (nextEl) {
       nextEl.focus();
@@ -137,19 +138,19 @@ function whenKeyDown(e: KeyboardEvent, nextEl?: HTMLInputElement) {
 
 //Call the main function when form is submitted
 
-Form.onsubmit = (e) => {
+Form.onsubmit = (e): void => {
   main();
   e.preventDefault();
 };
 
 //Methods that call the testInput function for their parent objects when they lose focus
 
-AInput.onblur = () => void testInput(AInput);
-BInput.onblur = () => void testInput(BInput);
-CInput.onblur = () => void testInput(CInput);
+AInput.onblur = (): void => void testInput(AInput);
+BInput.onblur = (): void => void testInput(BInput);
+CInput.onblur = (): void => void testInput(CInput);
 
 //Methods that call the whenKeyDown function when a key is downed
 
-AInput.onkeydown = (e) => whenKeyDown(e, BInput);
-BInput.onkeydown = (e) => whenKeyDown(e, CInput);
-CInput.onkeydown = (e) => whenKeyDown(e);
+AInput.onkeydown = (e): void => whenKeyDown(e, BInput);
+BInput.onkeydown = (e): void => whenKeyDown(e, CInput);
+CInput.onkeydown = (e): void => whenKeyDown(e);
