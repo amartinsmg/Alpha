@@ -56,7 +56,7 @@ function testInput(...els: HTMLInputElement[]): boolean {
 
 //Get the value of an element and format it
 
-function getValue (el: HTMLInputElement): string {
+function getValue (el: HTMLInputElement){
   return el.value.trim().replace("/", "dividedBy");
 }
 
@@ -120,7 +120,7 @@ async function main(): Promise<void> {
     CoordinatesDiv.textContent = null;
     ResultCoordinatesDiv.textContent = err instanceof Error ? err.message : err;
   }
-  location.href = "#output";
+  location.href = "#outputs";
 }
 
 //Move focus to the next element or submit the form if there is none
@@ -138,19 +138,19 @@ function whenKeyDown(e: KeyboardEvent, nextEl?: HTMLInputElement): void {
 
 //Call the main function when form is submitted
 
-Form.onsubmit = (e): void => {
+Form.onsubmit = (e) => {
   main();
   e.preventDefault();
 };
 
 //Methods that call the testInput function for their parent objects when they lose focus
 
-AInput.onblur = (): void => void testInput(AInput);
-BInput.onblur = (): void => void testInput(BInput);
-CInput.onblur = (): void => void testInput(CInput);
+AInput.onblur = () => void testInput(AInput);
+BInput.onblur = () => void testInput(BInput);
+CInput.onblur = () => void testInput(CInput);
 
 //Methods that call the whenKeyDown function when a key is downed
 
-AInput.onkeydown = (e): void => whenKeyDown(e, BInput);
-BInput.onkeydown = (e): void => whenKeyDown(e, CInput);
-CInput.onkeydown = (e): void => whenKeyDown(e);
+AInput.onkeydown = (e) => whenKeyDown(e, BInput);
+BInput.onkeydown = (e) => whenKeyDown(e, CInput);
+CInput.onkeydown = (e) => whenKeyDown(e);
