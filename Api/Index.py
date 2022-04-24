@@ -57,7 +57,7 @@ def format_root(symbolic):
     else:
         return '{} approx {:.5f}'.format(symbolic, numeric)
 
-#Get the arguments, process the response items and send it in JSON format
+#Get the arguments, process data and send it in JSON format
 
 @app.route('/')
 def quadratic_function():
