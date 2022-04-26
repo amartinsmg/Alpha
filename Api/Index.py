@@ -1,9 +1,8 @@
 from flask import Flask, jsonify, request
 from io import StringIO
-from math import sqrt
 from matplotlib import pyplot as plt
-from numpy import arange
-from sympy import Rational as rational, solve, symbols, sympify
+from numpy import arange, sqrt
+from sympy import Rational as rational, re, solve, symbols, sympify
 
 app = Flask(__name__)
 
@@ -42,6 +41,13 @@ def convert_args_to_number(parameter):
     except:
         s = s.replace('dividedBy', '/')
         num = sympify(s)
+        try:
+            float(num)
+        except:
+            raise Exception
+    
+    if parameter == 'a' and num == 0:
+        raise '"a" must be a non-zero number'
 
     return num
 
@@ -65,6 +71,11 @@ def quadratic_function():
         a = convert_args_to_number('a')
         b = convert_args_to_number('b')
         c = convert_args_to_number('c')
+    except Exception as e:
+        response = jsonify(error = str(e).capitalize())
+        response.status = 400
+
+    try:
         delta = b**2 - 4 * a * c
         x = symbols('x')
         y = a * x**2 + b * x + c
@@ -87,7 +98,7 @@ def quadratic_function():
         response.status = 200
     except Exception as e:
         response = jsonify(error = str(e).capitalize())
-        response.status = 400
+        response.status = 500
 
     response.mimetype = 'application/json'
     response.headers['Access-Control-Allow-Origin'] = '*'

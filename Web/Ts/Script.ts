@@ -16,19 +16,19 @@ const AInput: HTMLInputElement = document.querySelector("#a-value"),
 function testInput(...els: HTMLInputElement[]): boolean {
   let isValid: boolean = true;
   for (let el of els){
-    const VALUE: string = el.value.trim(),
-      FractionRegEx: RegExp = /^-?\d+[/]\d+$/,
-      DividedByZeroRegEx: RegExp = /[/]0/,
-      FloatRegEx: RegExp = /^-?\d*[.]\d{1,15}$/,
-      IntegerRegEx: RegExp = /^-?\d+$/,
-      ZeroFractionRegEx: RegExp = /^-?0+[/]/,
-      ZeroFloatRegEx: RegExp = /^-?0*[.]0+$/,
-      ZeroIntegerRegEx: RegExp = /^-?0+$/,
-      VALIDFRACTION: boolean = FractionRegEx.test(VALUE) && !DividedByZeroRegEx.test(VALUE),
-      VALIDEFLOAT: boolean = FloatRegEx.test(VALUE),
-      VALIDEINTEGER: boolean = IntegerRegEx.test(VALUE),
-      ZERONUMBER: boolean = ZeroFractionRegEx.test(VALUE) || ZeroFloatRegEx.test(VALUE) || ZeroIntegerRegEx.test(VALUE),
-      ParentEl: HTMLElement = el.parentElement;
+    const VALUE = el.value.trim(),
+      FractionRegEx = /^-?\d+[/]\d+$/,
+      DividedByZeroRegEx = /[/]0/,
+      FloatRegEx = /^-?\d*[.]\d{1,15}$/,
+      IntegerRegEx = /^-?\d+$/,
+      ZeroFractionRegEx = /^-?0+[/]/,
+      ZeroFloatRegEx = /^-?0*[.]0+$/,
+      ZeroIntegerRegEx = /^-?0+$/,
+      VALIDFRACTION = FractionRegEx.test(VALUE) && !DividedByZeroRegEx.test(VALUE),
+      VALIDEFLOAT = FloatRegEx.test(VALUE),
+      VALIDEINTEGER = IntegerRegEx.test(VALUE),
+      ZERONUMBER = ZeroFractionRegEx.test(VALUE) || ZeroFloatRegEx.test(VALUE) || ZeroIntegerRegEx.test(VALUE),
+      ParentEl = el.parentElement;
     try{
       if(el.id === "a-value" && ZERONUMBER){
         throw "Enter a non-zero number!";
@@ -56,7 +56,7 @@ function testInput(...els: HTMLInputElement[]): boolean {
 
 //Get the value of an element and format it
 
-function getValue (el: HTMLInputElement){
+function getValue (el: HTMLInputElement): string {
   return el.value.trim().replace("/", "dividedBy");
 }
 
@@ -68,10 +68,10 @@ async function main(): Promise<void> {
     if (!testInput(AInput, BInput, CInput)){
       throw "Invalid input!";
     }
-    const A: string = getValue(AInput),
-      B: string = getValue(BInput),
-      C: string = getValue(CInput),
-      RESPONSE: Response = await fetch(`http://127.0.0.1:5000/?a=${A}&b=${B}&c=${C}`);
+    const A = getValue(AInput),
+      B = getValue(BInput),
+      C = getValue(CInput),
+      RESPONSE = await fetch(`http://127.0.0.1:5000/?a=${A}&b=${B}&c=${C}`);
     if (!RESPONSE.ok){
       throw (await RESPONSE.json()).error;
     }
