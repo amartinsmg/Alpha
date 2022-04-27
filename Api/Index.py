@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request
 from io import StringIO
 from matplotlib import pyplot as plt
 from numpy import arange, sqrt
-from sympy import Rational as rational, re, solve, symbols, sympify
+from sympy import Pow, Rational as rational, solve, symbols, sympify
 
 app = Flask(__name__)
 
@@ -44,10 +44,10 @@ def convert_args_to_number(parameter):
         try:
             float(num)
         except:
-            raise Exception
+            raise Exception(f'{parameter} must be a real number')
     
     if parameter == 'a' and num == 0:
-        raise '"a" must be a non-zero number'
+        raise Exception('a must be a non-zero number')
 
     return num
 
@@ -72,8 +72,11 @@ def quadratic_function():
         b = convert_args_to_number('b')
         c = convert_args_to_number('c')
     except Exception as e:
-        response = jsonify(error = str(e).capitalize())
+        response = jsonify(error = str(e))
         response.status = 400
+        response.mimetype = 'application/json'
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        return response
 
     try:
         delta = b**2 - 4 * a * c
@@ -81,19 +84,20 @@ def quadratic_function():
         y = a * x**2 + b * x + c
         data = {'form': f'y = {y}'}
         root = solve(y)
-        data['graph'] = plot_graph(a, b, c, delta)
+        data['graph'] = plot_graph(float(a), float(b), float(c), float(delta))
         if delta > 0:
             data['x1'] = format_root(root[0])
             data['x2'] = format_root(root[1])
             data['realRoots'] = 2
         elif delta == 0:
-            data['x1'] = data['x2'] = format_root(root[0])
+            data['x1'] = format_root(root[0])
+            data['x2'] = ''
             data['realRoots'] = 1
         else:
             data['x1'] = data['x2'] = ''
             data['realRoots'] = 0
-        data['xVertex'] = str(rational(-b, (2 * a)))
-        data['yVertex'] = str(rational(-delta, (4 * a)))
+        data['xVertex'] = str(sympify(f'{-b}/{Pow((2 * a), -1, evaluate=None)}', rational=True))
+        data['yVertex'] = str(sympify(f'{-delta}/{Pow((4 * a), -1, evaluate=None)}', rational=True))
         response = jsonify(data)
         response.status = 200
     except Exception as e:
@@ -102,7 +106,6 @@ def quadratic_function():
 
     response.mimetype = 'application/json'
     response.headers['Access-Control-Allow-Origin'] = '*'
-    response.headers['Access-Control-Allow-Credentials'] = 'true'
     return response
 
 if __name__ == '__main__':
