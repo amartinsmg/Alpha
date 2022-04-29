@@ -23,7 +23,8 @@ def quadratic_function():
         response = jsonify(data)
         response.status = 200
     except Exception as e:
-        response = jsonify(error = str(e).capitalize())
+        print(str(e))
+        response = jsonify(error = 'Internal error!')
         response.status = 500
 
     response.mimetype = 'application/json'

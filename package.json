@@ -1,5 +1,18 @@
 {
-  "dependencies": {
+  "scripts": {
+    "build": "npm run build:types && npm run build:js && npm run build:css && npm run build:html",
+    "build:types": "tsc --noEmit",
+    "build:js": "babel Web/Src --out-dir Web/Dist --out-file-extension .min.js --extensions \".ts,.tsx\"",
+    "build:css": "cp Web/Src/Style.css Web/Dist/",
+    "build:html": "cp Web/Src/Index.html Web/Dist/"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.17.6",
+    "@babel/core": "^7.17.9",
+    "@babel/plugin-transform-runtime": "^7.17.0",
+    "@babel/preset-env": "^7.16.11",
+    "@babel/preset-typescript": "^7.16.7",
+    "@babel/runtime": "^7.17.9",
     "typescript": "^4.6.3"
   }
 }

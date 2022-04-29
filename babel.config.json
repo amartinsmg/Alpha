@@ -1,0 +1,14 @@
+{
+    "presets": [
+      "@babel/preset-typescript",
+      [
+        "@babel/preset-env",
+        {
+          "targets": "> 1%, not dead"
+        }
+      ]
+    ],
+    "plugins": ["@babel/plugin-transform-async-to-generator"],
+    "minified": true,
+    "comments": false
+  }

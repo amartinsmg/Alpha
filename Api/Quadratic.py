@@ -1,7 +1,7 @@
 from io import StringIO
 from matplotlib import pyplot as plt
 from numpy import arange, sqrt
-from sympy import Pow, Rational as rational, solve, symbols, sympify
+from sympy import Rational as rational, solve, symbols, sympify
 
 # Calculate function roots and vertex coordinates
 
@@ -24,10 +24,13 @@ def calculate(a, b, c):
     else:
         f['x1'] = f['x2'] = ''
         f['realRoots'] = 0
-    f['xVertex'] = str(sympify(f'{-b}/{Pow((2 * a), -1, evaluate=None)}', rational=True))
-    f['yVertex'] = str(sympify(f'{-delta}/{Pow((4 * a), -1, evaluate=None)}', rational=True))
+    xVertex = str(sympify(f'{-b}/{2 * a}', rational=True))
+    yVertex = str(sympify(f'{-delta}/{4 * a}', rational=True))
+    f['vertex'] = [xVertex, yVertex]
     return f
+
 # Plot the quadratic function
+
 def plot_graph(a, b, c, delta):
     if delta > 0:
         x_min_value = (-b - sqrt(delta)) / (2 * a)
@@ -50,7 +53,9 @@ def plot_graph(a, b, c, delta):
     img_data.seek(0)
     graph = img_data.getvalue()
     return graph
+
 # Get the value of a parameter and convert it to an integer or rational value
+
 def convert_args_to_number(parameter, value):
     try:
         num = float(value)

@@ -1,5 +1,15 @@
-function main(){
+interface APIData {
+  x1?: string;
+  x2?: string;
+  vertex?: string[];
+  form?: string;
+  realRoots?: number;
+  graph?: string;
+  error?: string;
+}
 
+function main() {
+  
   //Constatns that store elements that will be often read or changed
 
   const AInput: HTMLInputElement = document.querySelector("#a-value"),
@@ -7,28 +17,21 @@ function main(){
     CInput: HTMLInputElement = document.querySelector("#c-value"),
     Form: HTMLFormElement = document.querySelector("#input-form"),
     FormDiv: HTMLDivElement = document.querySelector("#function-form"),
-    RootsDiv: HTMLDivElement = document.querySelector("#roots"),
-    ResultRootsDiv: HTMLDivElement = document.querySelector("#result-roots"),
-    CoordinatesDiv: HTMLDivElement = document.querySelector("#coordinates"),
-    ResultCoordinatesDiv: HTMLDivElement = document.querySelector("#result-coordinates"),
-    GraphDiv: HTMLDivElement = document.querySelector("#graph");
+    RootsDiv: HTMLDivElement = document.querySelector("#label-roots"),
+    ResultRootsDiv: HTMLDivElement = document.querySelector("#roots"),
+    CoordinatesDiv: HTMLDivElement = document.querySelector("#label-coordinates"),
+    ResultCoordinatesDiv: HTMLDivElement = document.querySelector("#coordinates"),
+    GraphDiv: HTMLDivElement = document.querySelector("#graph")
 
-  interface APIData {
-    x1: string;
-    x2: string;
-    xVertex: string;
-    yVertex: string;
-    form: string;
-    realRoots: number;
-    graph: string;
-  }
-
+  
   //Call the API, read its response and update the document
 
   async function calculate(): Promise<void> {
     GraphDiv.innerHTML = null;
     try {
-      if (!testInput(AInput, BInput, CInput)){
+      try {
+        testInput([AInput, BInput, CInput]);
+      } catch {
         throw "Invalid input!";
       }
       const A = getValue(AInput),
@@ -38,6 +41,9 @@ function main(){
         Data: APIData = await RESPONSE.json(),
         GraphSvg = document.createElement("svg");
       let roots: string;
+      if (!RESPONSE.ok) {
+        throw Data.error;
+      }
       switch (Data.realRoots) {
         case 2:
           roots = `x\u2081 = ${Data.x1}<br>x\u2082 =  ${Data.x2}`;
@@ -48,13 +54,15 @@ function main(){
         default:
           roots = "This quadratic function don't have any real zero.";
       }
-      FormDiv.textContent = Data.form.replace("**2", "\u00b2").replace(/[*]/g, "");
+      FormDiv.textContent = Data.form
+        .replace("**2", "\u00b2")
+        .replace(/[*]/g, "");
       RootsDiv.textContent = "Roots (when y = 0):";
       ResultRootsDiv.innerHTML = roots
         .replace(/[*]*sqrt/g, "\u221a")
         .replace(/approx/g, "\u2248");
       CoordinatesDiv.textContent = "Vertex:";
-      ResultCoordinatesDiv.textContent = `(${Data.xVertex}, ${Data.yVertex})`;
+      ResultCoordinatesDiv.textContent = `(${Data.vertex.join(", ")})`;
       GraphSvg.innerHTML = Data.graph;
       GraphDiv.appendChild(GraphSvg);
     } catch (err) {
@@ -62,79 +70,91 @@ function main(){
       RootsDiv.textContent = null;
       ResultRootsDiv.textContent = null;
       CoordinatesDiv.textContent = null;
-      ResultCoordinatesDiv.textContent = err instanceof Error ? err.message : err;
+      ResultCoordinatesDiv.textContent =
+        err instanceof Error ? err.message : err;
     }
-    location.href = "#outputs";
+    location.href = "#output";
   }
-
-
 
   //Call the main function when form is submitted
 
-  Form.onsubmit = (e) => {
+  Form.onsubmit = e => {
     calculate();
     e.preventDefault();
   };
 
   //Methods that call the testInput function for their parent objects when they lose focus
 
-  AInput.onblur = () => void testInput(AInput);
-  BInput.onblur = () => void testInput(BInput);
-  CInput.onblur = () => void testInput(CInput);
+  AInput.onblur = () => testInput([AInput], displayMessage);
+  BInput.onblur = () => testInput([BInput], displayMessage);
+  CInput.onblur = () => testInput([CInput], displayMessage);
 
   //Methods that call the whenKeyDown function when a key is downed
 
-  AInput.onkeydown = (e) => whenKeyDown(e, BInput);
-  BInput.onkeydown = (e) => whenKeyDown(e, CInput);
-  CInput.onkeydown = (e) => whenKeyDown(e);
+  AInput.onkeydown = e => whenKeyDown(e, BInput);
+  BInput.onkeydown = e => whenKeyDown(e, CInput);
+  CInput.onkeydown = e => whenKeyDown(e);
 }
 
 //Read an element's value and check if it's valid
 
-function testInput(...els: HTMLInputElement[]): boolean {
-  let isValid: boolean = true;
-  for (let el of els){
-    const VALUE = el.value.trim(),
-      FractionRegEx = /^-?\d+[/]\d+$/,
-      DividedByZeroRegEx = /[/]0/,
+function testInput(els: HTMLInputElement[], catchEroor?: Function): void {
+  for (let el of els) {
+    const VALUE = getValue(el),
+      FractionRegEx = /^-?\d+dividedBy\d+$/,
+      DividedByZeroRegEx = /dividedBy0/,
       FloatRegEx = /^-?\d*[.]\d{1,15}$/,
       IntegerRegEx = /^-?\d+$/,
-      ZeroFractionRegEx = /^-?0+[/]/,
+      ZeroFractionRegEx = /^-?0+dividedBy/,
       ZeroFloatRegEx = /^-?0*[.]0+$/,
       ZeroIntegerRegEx = /^-?0+$/,
-      VALIDFRACTION = FractionRegEx.test(VALUE) && !DividedByZeroRegEx.test(VALUE),
+      VALIDFRACTION =
+        FractionRegEx.test(VALUE) && !DividedByZeroRegEx.test(VALUE),
       VALIDEFLOAT = FloatRegEx.test(VALUE),
       VALIDEINTEGER = IntegerRegEx.test(VALUE),
-      ZERONUMBER = ZeroFractionRegEx.test(VALUE) || ZeroFloatRegEx.test(VALUE) || ZeroIntegerRegEx.test(VALUE),
-      ParentEl = el.parentElement;
-    try{
-      if(el.id === "a-value" && ZERONUMBER){
+      ZERONUMBER =
+        ZeroFractionRegEx.test(VALUE) ||
+        ZeroFloatRegEx.test(VALUE) ||
+        ZeroIntegerRegEx.test(VALUE);
+    try {
+      if (el.id === "a-value" && ZERONUMBER) {
         throw "Enter a non-zero number!";
       }
-      if(!(VALIDFRACTION || VALIDEFLOAT || VALIDEINTEGER)){
+      if (!(VALIDFRACTION || VALIDEFLOAT || VALIDEINTEGER)) {
         throw "Enter a integer, float or fractional number!";
       }
-    }catch (err){
-      if (ParentEl.childElementCount === 2){
-        const InvalidMessageDiv = document.createElement("div");
-        el.classList.add("invalid-input");
-        InvalidMessageDiv.classList.add("invalid-message");
-        InvalidMessageDiv.textContent = err;
-        ParentEl.appendChild(InvalidMessageDiv);
-        el.addEventListener("focus", () => {
-          el.classList.remove("invalid-input");
-          InvalidMessageDiv.remove();
-        }, {once: true});
+    } catch (err) {
+      if (catchEroor) {
+        catchEroor(el, err);
+      } else {
+        throw err;
       }
-      isValid = false;
     }
   }
-  return isValid;
+}
+
+function displayMessage(el: HTMLElement, message: string): void {
+  const ParentEl = el.parentElement;
+  if (ParentEl.childElementCount === 2) {
+    const InvalidMessageDiv = document.createElement("div");
+    el.classList.add("invalid-input");
+    InvalidMessageDiv.classList.add("invalid-message");
+    InvalidMessageDiv.textContent = message;
+    ParentEl.appendChild(InvalidMessageDiv);
+    el.addEventListener(
+      "focus",
+      () => {
+        el.classList.remove("invalid-input");
+        InvalidMessageDiv.remove();
+      },
+      { once: true }
+    );
+  }
 }
 
 //Get the value of an element and format it
 
-function getValue (el: HTMLInputElement): string {
+function getValue(el: HTMLInputElement): string {
   return el.value.trim().replace("/", "dividedBy");
 }
 
@@ -149,6 +169,6 @@ function whenKeyDown(e: KeyboardEvent, nextEl?: HTMLInputElement): void {
     }
     return void 0;
   }
-};
+}
 
-window.onload = main;
+main();
