@@ -1,10 +1,8 @@
 {
   "scripts": {
-    "build": "npm run build:types && npm run build:js && npm run build:css && npm run build:html",
-    "build:types": "tsc --noEmit",
-    "build:js": "babel Web/Src --out-dir Web/Dist --out-file-extension .min.js --extensions \".ts,.tsx\"",
-    "build:css": "cp Web/Src/Style.css Web/Dist/",
-    "build:html": "cp Web/Src/Index.html Web/Dist/"
+    "build": "npm run build:check && npm run build:js",
+    "build:check": "tsc",
+    "build:js": "babel Web/Src -d Web/Dist --out-file-extension .min.js --extensions .ts -D --no-comments --minified"
   },
   "devDependencies": {
     "@babel/cli": "^7.17.6",

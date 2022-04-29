@@ -14,16 +14,11 @@ def calculate(a, b, c):
     roots = solve(y)
     f['graph'] = plot_graph(float(a), float(b), float(c), float(delta))
     if delta > 0:
-        f['x1'] = format_root(roots[0])
-        f['x2'] = format_root(roots[1])
-        f['realRoots'] = 2
+        f['roots'] = [format_root(roots[0]), format_root(roots[1])]
     elif delta == 0:
-        f['x1'] = format_root(roots[0])
-        f['x2'] = ''
-        f['realRoots'] = 1   
+        f['roots'] = [format_root(roots[0])]
     else:
-        f['x1'] = f['x2'] = ''
-        f['realRoots'] = 0
+        f['roots'] = []
     xVertex = str(sympify(f'{-b}/{2 * a}', rational=True))
     yVertex = str(sympify(f'{-delta}/{4 * a}', rational=True))
     f['vertex'] = [xVertex, yVertex]

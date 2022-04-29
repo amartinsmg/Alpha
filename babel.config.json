@@ -1,14 +1,14 @@
 {
-    "presets": [
-      "@babel/preset-typescript",
-      [
-        "@babel/preset-env",
-        {
-          "targets": "> 1%, not dead"
+  "presets": [
+    "@babel/preset-typescript",
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "chrome": "51",
+          "firefox": "54"
         }
-      ]
-    ],
-    "plugins": ["@babel/plugin-transform-async-to-generator"],
-    "minified": true,
-    "comments": false
-  }
+      }
+    ]
+  ]
+}
