@@ -2,7 +2,7 @@
   "scripts": {
     "build": "npm run build:check && npm run build:js",
     "build:check": "tsc",
-    "build:js": "babel Web/Src -d Web/Dist --out-file-extension .min.js --extensions .ts -D --no-comments --minified"
+    "build:js": "babel web/src -d web/dist --out-file-extension .min.js --extensions .ts -D --no-comments --minified"
   },
   "devDependencies": {
     "@babel/cli": "^7.17.6",

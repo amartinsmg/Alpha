@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request
-from Quadratic import *
+from quadratic import *
 
 app = Flask(__name__)
 
