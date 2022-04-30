@@ -37,9 +37,9 @@ class QFCalculator {
 
     //Constatns that store elements that will be often read or changed
 
-    const AInput: HTMLInputElement = document.querySelector("#a-value"),
-      BInput: HTMLInputElement = document.querySelector("#b-value"),
-      CInput: HTMLInputElement = document.querySelector("#c-value"),
+    const AInput: HTMLInputElement = document.querySelector("#a-input"),
+      BInput: HTMLInputElement = document.querySelector("#b-input"),
+      CInput: HTMLInputElement = document.querySelector("#c-input"),
       Form: HTMLFormElement = document.querySelector("#input-form"),
       FormDiv: HTMLDivElement = document.querySelector("#function-form"),
       RootsDiv: HTMLDivElement = document.querySelector("#label-roots"),
@@ -125,7 +125,7 @@ class QFCalculator {
           ZeroFloatRegEx.test(VALUE) ||
           ZeroIntegerRegEx.test(VALUE);
       try {
-        if (el.id === "a-value" && ZERONUMBER) {
+        if (el.id === "a-input" && ZERONUMBER) {
           throw "Enter a non-zero number!";
         }
         if (!(VALIDFRACTION || VALIDEFLOAT || VALIDEINTEGER)) {
@@ -150,7 +150,7 @@ class QFCalculator {
       InvalidMessageDiv.textContent = message;
       ParentEl.appendChild(InvalidMessageDiv);
       el.addEventListener(
-        "focus",
+        "keydown",
         () => {
           el.classList.remove("invalid-input");
           InvalidMessageDiv.remove();

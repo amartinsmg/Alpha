@@ -19,8 +19,8 @@ def calculate(a, b, c):
         f['roots'] = [format_root(roots[0])]
     else:
         f['roots'] = []
-    xVertex = str(sympify(f'{-b}/{2 * a}', rational=True))
-    yVertex = str(sympify(f'{-delta}/{4 * a}', rational=True))
+    xVertex = str(sympify(f'({-b})/({2 * a})', rational=True))
+    yVertex = str(sympify(f'({-delta})/({4 * a})', rational=True))
     f['vertex'] = [xVertex, yVertex]
     return f
 
@@ -49,9 +49,9 @@ def plot_graph(a, b, c, delta):
     graph = img_data.getvalue()
     return graph
 
-# Get the value of a parameter and convert it to an integer or rational value
+# Get the value of a argument and convert it to an integer or rational value
 
-def convert_args_to_number(parameter, value):
+def convert_args(name, value):
     try:
         num = float(value)
         num = int(num) if num % 1 == 0 else rational((num * 10**15), 10**15)
@@ -61,8 +61,8 @@ def convert_args_to_number(parameter, value):
         try:
             float(num)
         except:
-            raise Exception(f'{parameter} must be a real number')
-    if parameter == 'a' and num == 0:
+            raise Exception(f'{name} must be a real number')
+    if name == 'a' and num == 0:
         raise Exception('a must be a non-zero number')
     return num
 

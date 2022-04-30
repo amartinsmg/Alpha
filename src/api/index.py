@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request
-from quadratic import *
+from quadratic import calculate, convert_args
 
 app = Flask(__name__)
 
@@ -8,9 +8,9 @@ app = Flask(__name__)
 @app.route('/', methods=["GET"])
 def quadratic_function():
     try:
-        A = convert_args_to_number('a', request.args.get('a'))
-        B = convert_args_to_number('b', request.args.get('b'))
-        C = convert_args_to_number('c', request.args.get('c'))
+        A = convert_args('a', request.args.get('a'))
+        B = convert_args('b', request.args.get('b'))
+        C = convert_args('c', request.args.get('c'))
     except Exception as e:
         response = jsonify(error = str(e))
         response.status = 400

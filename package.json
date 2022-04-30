@@ -1,8 +1,9 @@
 {
   "scripts": {
-    "build": "npm run build:check && npm run build:js",
-    "build:check": "tsc",
-    "build:js": "babel web/src -d dist --out-file-extension .min.js --extensions .ts -D --no-comments --minified"
+    "build": "npm run check && npm run build:js",
+    "check": "tsc",
+    "build:js": "babel src/web -d build --out-file-extension .min.js --extensions .ts -D --no-comments --minified",
+    "api": "python src/api/index.py"
   },
   "devDependencies": {
     "@babel/cli": "^7.17.6",

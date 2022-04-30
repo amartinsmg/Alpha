@@ -75,8 +75,9 @@ main {
 }
 
 #calculate-button {
-  background-color: #b1b1b1;
+  margin: 0.5rem 0 0 0;
   padding: 0.375rem 0.5rem;
+  background-color: #b1b1b1;
   font-size: 1em;
 }
 
