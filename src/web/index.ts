@@ -1,19 +1,23 @@
-interface APIData {
-  readonly roots?: string[];
-  readonly vertex?: string[];
-  readonly form?: string;
-  readonly graph?: string;
-  readonly error?: string;
+interface APIDataSucess {
+  readonly roots: string[];
+  readonly vertex: string[];
+  readonly form: string;
+  readonly graph: string;
 }
 
-class QFCalculator {
+interface APIDataError {
+  readonly error: string;
+}
 
+type APIData = APIDataSucess | APIDataError;
+
+class QFCalculator {
   readonly roots: string;
   readonly vertex: string;
   readonly form: string;
   readonly graph: HTMLElement;
 
-  private constructor({ roots, vertex, form, graph }: APIData) {
+  private constructor({ roots, vertex, form, graph }: APIDataSucess) {
     roots = roots.map((i) =>
       i.replace("sqrt", "\u221a").replace("approx", "\u2248")
     );
@@ -34,7 +38,6 @@ class QFCalculator {
   }
 
   public static main(): void {
-
     //Constatns that store elements that will be often read or changed
 
     const AInput: HTMLInputElement = document.querySelector("#a-input"),
@@ -64,7 +67,7 @@ class QFCalculator {
           C = QFCalculator.getValue(CInput),
           RESPONSE = await fetch(`http://127.0.0.1:5000/?a=${A}&b=${B}&c=${C}`),
           Data: APIData = await RESPONSE.json();
-        if (!RESPONSE.ok) {
+        if ("error" in Data) {
           throw Data.error;
         }
         const QuadraticFunction = new QFCalculator(Data);
