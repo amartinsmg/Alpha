@@ -3,6 +3,8 @@ from matplotlib import pyplot as plt
 from numpy import arange, sqrt
 from sympy import Rational as rational, solve, symbols, sympify
 
+plt.switch_backend('svg')
+
 # Calculate function roots and vertex coordinates
 
 def calculate(a, b, c):
