@@ -18,20 +18,20 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
+        test: /\.ts$/,
         use: "babel-loader",
         exclude: /node_modules/,
       },
     ],
   },
   resolve: {
-    extensions: [".tsx", ".ts", ".js"],
+    extensions: [".ts"],
   },
   plugins: [
     new CopyPlugin({
       patterns: [
-        { from: "*.html", context: "src/web/" },
-        { from: "*.css", context: "src/web/" },
+        { from: "**/*.html", context: "src/web/" },
+        { from: "**/*.css", context: "src/web/" },
       ],
     }),
   ],
