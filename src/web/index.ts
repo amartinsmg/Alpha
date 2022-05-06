@@ -1,15 +1,15 @@
-interface APIDataSucess {
+interface IAPIDataSucess {
   readonly roots: string[];
   readonly vertex: string[];
   readonly form: string;
   readonly graph: string;
 }
 
-interface APIDataError {
+interface IAPIDataError {
   readonly error: string;
 }
 
-type APIData = APIDataSucess | APIDataError;
+type APIData = IAPIDataSucess | IAPIDataError;
 
 class QFCalculator {
   readonly roots: string;
@@ -17,16 +17,16 @@ class QFCalculator {
   readonly form: string;
   readonly graph: HTMLElement;
 
-  private constructor({ roots, vertex, form, graph }: APIDataSucess) {
-    roots = roots.map((i) =>
+  private constructor({ roots, vertex, form, graph }: IAPIDataSucess) {
+    const [R1, R2] = roots.map((i) =>
       i.replace("sqrt", "\u221a").replace("approx", "\u2248")
     );
     switch (roots.length) {
       case 2:
-        this.roots = `x\u2081 = ${roots[0]}<br>x\u2082 =  ${roots[1]}`;
+        this.roots = `x\u2081 = ${R1}<br>x\u2082 =  ${R2}`;
         break;
       case 1:
-        this.roots = `x = ${roots[0]}`;
+        this.roots = `x = ${R1}`;
         break;
       default:
         this.roots = "This quadratic function don't have any real zero.";
@@ -53,7 +53,7 @@ class QFCalculator {
 
     //Call the API, read its response and update the document when form is submitted
 
-    Form.addEventListener("submit", async (e) => {
+    Form.onsubmit = async (e) => {
       e.preventDefault();
       GraphDiv.innerHTML = null;
       try {
@@ -85,8 +85,8 @@ class QFCalculator {
         ResultCoordinatesDiv.textContent =
           err instanceof Error ? err.message : err;
       }
-      location.href = "#output";
-    });
+      location.hash = "output";
+    };
 
     //Methods that call the testInput method for their parent objects when they lose focus
 
