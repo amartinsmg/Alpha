@@ -2,7 +2,7 @@ const path = require("path");
 const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
-  entry: "./src/web/index.ts",
+  entry: "./src/frontend/index.ts",
   output: {
     filename: "bundle.js",
     path: path.resolve(__dirname, "dist"),
@@ -30,8 +30,8 @@ module.exports = {
   plugins: [
     new CopyPlugin({
       patterns: [
-        { from: "**/*.html", context: "src/web/" },
-        { from: "**/*.css", context: "src/web/" },
+        { from: "**/*.html", context: "src/frontend/" },
+        { from: "**/*.css", context: "src/frontend/" },
       ],
     }),
   ],

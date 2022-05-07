@@ -4,7 +4,7 @@
     "build:check": "tsc",
     "build:prod": "webpack",
     "dev": "webpack serve --hot",
-    "api": "python src/api/index.py"
+    "start": "python src/backend/index.py"
   },
   "devDependencies": {
     "@babel/cli": "^7.17.6",
