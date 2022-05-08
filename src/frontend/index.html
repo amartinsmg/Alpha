@@ -8,8 +8,10 @@
     <script src="bundle.js" defer></script>
   </head>
   <body>
-    <main>
+    <header>
       <h1 id="page-title">Quadratic Function Calculator</h1>
+    </header>
+    <main>
       <div id="function-form" class="bold">y = ax&#178; + bx + c</div>
       <form id="input-form">
         <div class="form-group">
@@ -17,6 +19,7 @@
           <input
             class="data-inputs"
             id="a-input"
+            name="a"
             type="text"
             placeholder="Enter a non-zero number!"
             value="1"
@@ -28,6 +31,7 @@
           <input
             class="data-inputs"
             id="b-input"
+            name="b"
             type="text"
             placeholder="Enter a number!"
             value="0"
@@ -35,10 +39,11 @@
           />
         </div>
         <div class="form-group">
-          <label for="c-input">c value:</label>
+          <label for="c-input">b value:</label>
           <input
             class="data-inputs"
             id="c-input"
+            name="c"
             type="text"
             placeholder="Enter a number!"
             value="0"
@@ -51,19 +56,20 @@
           </button>
         </div>
       </form>
-      <div id="output">
-        <div id="textual-output">
-          <div class="textual-output-group">
-            <div id="label-roots" class="bold"></div>
-            <div id="roots" class="result"></div>
-          </div>
-          <div class="textual-output-group">
-            <div id="label-coordinates" class="bold"></div>
-            <div id="coordinates" class="result"></div>
-          </div>
-        </div>
-        <div id="graph"></div>
-      </div>
+      <output id="output">
+        <section class="output-group">
+          <h3 class="bold non-display output-heading">Roots (when y = 0):</h3>
+          <div id="roots" class="result"></div>
+        </section>
+        <section class="output-group">
+          <h3 class="bold non-display output-heading">Vertex:</h3>
+          <div id="coordinates" class="result"></div>
+        </section>
+        <section class="output-group">
+          <h3 class="bold non-display output-heading">Graph:</h3>
+          <figure id="graph"></figure>
+        </section>
+      </output>
     </main>
   </body>
 </html>

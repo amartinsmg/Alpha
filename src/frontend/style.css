@@ -14,15 +14,25 @@ html {
 body {
   background-color: #121212;
   font-family: Arial, Helvetica, sans-serif;
-  line-height: 1.3;
+  line-height: 1.3rem;
   color: #ffffff;
 }
 
-main {
-  text-align: center;
+/* Generic */
+
+.bold {
+  font-weight: 550;
+}
+
+.non-display {
+  display: none;
 }
 
 /* Main title */
+
+header {
+  text-align: center;
+}
 
 #page-title {
   margin: 1.5rem 0;
@@ -32,16 +42,14 @@ main {
   color: #00a8cc;
 }
 
+main {
+  text-align: center;
+}
+
 /* Form div */
 
 #function-form {
   margin: 0 0 1.75rem 0;
-}
-
-/* Font weight bold */
-
-.bold {
-  font-weight: 550;
 }
 
 /* Form and inputs */
@@ -85,21 +93,17 @@ main {
   background-color: #9e9e9e;
 }
 
-/* Outputs */
+/* Output */
 
 #output {
   margin: 1.75rem 0;
 }
 
-#textual-output {
-  margin: 1.1rem 0;
-}
-
-.textual-output-group {
+.output-group {
   margin: 0 0 0.75rem 0;
 }
 
-.textual-output-group div {
+.output-heading {
   margin: 0 0 0.4rem 0;
 }
 

@@ -3,7 +3,7 @@
     "build": "npm run build:check && npm run build:prod",
     "build:check": "tsc",
     "build:prod": "webpack",
-    "dev": "webpack serve --hot",
+    "dev": "webpack serve",
     "start": "python src/backend/index.py"
   },
   "devDependencies": {
