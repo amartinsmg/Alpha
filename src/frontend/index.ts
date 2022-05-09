@@ -64,11 +64,7 @@ class QFCalculator {
       e.preventDefault();
       GraphFig.innerHTML = null;
       try {
-        try {
-          testInput([AInput, BInput, CInput]);
-        } catch {
-          throw "Invalid input!";
-        }
+        testInput([AInput, BInput, CInput]);
         const A = getValue(AInput),
           B = getValue(BInput),
           C = getValue(CInput),
@@ -140,7 +136,7 @@ class QFCalculator {
         if (catchEroor) {
           catchEroor(el, err);
         } else {
-          throw err;
+          throw "Invalid input!";
         }
       }
     }
