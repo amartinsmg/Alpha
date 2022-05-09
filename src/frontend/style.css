@@ -74,7 +74,7 @@ main {
   border: solid 0.1rem #c62828;
 }
 
-.invalid-message {
+.invalid-feedback {
   margin: 0.4rem auto;
   width: max-content;
   padding: 0.2rem 0.4rem;

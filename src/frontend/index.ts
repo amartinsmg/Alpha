@@ -39,7 +39,7 @@ class QFCalculator {
   public static main(): void {
     //Constatns that store elements that will be often read or changed
 
-    const displayMessage = QFCalculator.displayMessage,
+    const showFeedback = QFCalculator.showFeedback,
       getValue = QFCalculator.getValue,
       testInput = QFCalculator.testInput,
       whenKeyDown = QFCalculator.whenKeyDown,
@@ -51,10 +51,12 @@ class QFCalculator {
       OutputElement: HTMLOutputElement = document.querySelector("#output"),
       OutputHeadings: NodeListOf<HTMLHeadingElement> =
         document.querySelectorAll(".output-heading"),
-      ResultRootsDiv: HTMLDivElement = document.querySelector("#roots"),
-      ResultCoordinatesDiv: HTMLDivElement =
+      RootsDiv: HTMLDivElement = document.querySelector("#roots"),
+      CoordinatesDiv: HTMLDivElement =
         document.querySelector("#coordinates"),
-      GraphFig: HTMLElement = document.querySelector("#graph");
+      GraphFig: HTMLElement = document.querySelector("#graph"),
+      ErrorFeedbackDiv: HTMLDivElement =
+        document.querySelector("#error-feedback");
 
     //Call the API, read its response and update the document when form is submitted
 
@@ -78,24 +80,24 @@ class QFCalculator {
         const QuadraticFunction = new QFCalculator(Data);
         OutputHeadings.forEach((el) => el.classList.remove("non-display"));
         FormDiv.textContent = QuadraticFunction.form;
-        ResultRootsDiv.innerHTML = QuadraticFunction.roots;
-        ResultCoordinatesDiv.textContent = QuadraticFunction.vertex;
+        RootsDiv.innerHTML = QuadraticFunction.roots;
+        CoordinatesDiv.textContent = QuadraticFunction.vertex;
         GraphFig.innerHTML = QuadraticFunction.graph;
       } catch (err) {
         FormDiv.textContent = "y = ax\u00b2 + bx + c";
         OutputHeadings.forEach((el) => el.classList.add("non-display"));
-        ResultRootsDiv.textContent = null;
-        ResultCoordinatesDiv.textContent =
-          err instanceof Error ? err.message : err;
+        RootsDiv.textContent = null;
+        CoordinatesDiv.textContent = null;
+        ErrorFeedbackDiv.textContent = err instanceof Error ? err.message : err;
       }
       OutputElement.scrollIntoView();
     };
 
     //Methods that call the testInput method for their parent objects when they lose focus
 
-    AInput.onblur = () => testInput([AInput], displayMessage);
-    BInput.onblur = () => testInput([BInput], displayMessage);
-    CInput.onblur = () => testInput([CInput], displayMessage);
+    AInput.onblur = () => testInput([AInput], showFeedback);
+    BInput.onblur = () => testInput([BInput], showFeedback);
+    CInput.onblur = () => testInput([CInput], showFeedback);
 
     //Methods that call the QFCalculator.whenKeyDown function when a key is downed
 
@@ -144,12 +146,12 @@ class QFCalculator {
     }
   }
 
-  private static displayMessage(el: HTMLElement, message: string): void {
+  private static showFeedback(el: HTMLElement, message: string): void {
     const ParentEl = el.parentElement;
     if (ParentEl.childElementCount === 2) {
       const InvalidMessageDiv = document.createElement("div");
       el.classList.add("invalid-input");
-      InvalidMessageDiv.classList.add("invalid-message");
+      InvalidMessageDiv.classList.add("invalid-feedback");
       InvalidMessageDiv.textContent = message;
       ParentEl.appendChild(InvalidMessageDiv);
       el.addEventListener(
