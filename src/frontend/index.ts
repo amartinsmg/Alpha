@@ -52,8 +52,7 @@ class QFCalculator {
       OutputHeadings: NodeListOf<HTMLHeadingElement> =
         document.querySelectorAll(".output-heading"),
       RootsDiv: HTMLDivElement = document.querySelector("#roots"),
-      CoordinatesDiv: HTMLDivElement =
-        document.querySelector("#coordinates"),
+      CoordinatesDiv: HTMLDivElement = document.querySelector("#coordinates"),
       GraphFig: HTMLElement = document.querySelector("#graph"),
       ErrorFeedbackDiv: HTMLDivElement =
         document.querySelector("#error-feedback");
@@ -70,9 +69,7 @@ class QFCalculator {
           C = getValue(CInput),
           RESPONSE = await fetch(`http://127.0.0.1:5000/?a=${A}&b=${B}&c=${C}`),
           Data: APIData = await RESPONSE.json();
-        if ("error" in Data) {
-          throw Data.error;
-        }
+        if ("error" in Data) throw Data.error;
         const QuadraticFunction = new QFCalculator(Data);
         OutputHeadings.forEach((el) => el.classList.remove("non-display"));
         FormDiv.textContent = QuadraticFunction.form;
@@ -126,18 +123,12 @@ class QFCalculator {
           ZeroFloatRegEx.test(VALUE) ||
           ZeroIntegerRegEx.test(VALUE);
       try {
-        if (el.name === "a" && ZERONUMBER) {
-          throw "Enter a non-zero number!";
-        }
-        if (!(VALIDFRACTION || VALIDEFLOAT || VALIDEINTEGER)) {
+        if (el.name === "a" && ZERONUMBER) throw "Enter a non-zero number!";
+        if (!(VALIDFRACTION || VALIDEFLOAT || VALIDEINTEGER))
           throw "Enter a integer, float or fractional number!";
-        }
       } catch (err) {
-        if (catchEroor) {
-          catchEroor(el, err);
-        } else {
-          throw "Invalid input!";
-        }
+        if (catchEroor) catchEroor(el, err);
+        else throw "Invalid input!";
       }
     }
   }
