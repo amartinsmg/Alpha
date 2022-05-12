@@ -14,20 +14,16 @@ def quadratic_function():
     except Exception as e:
         response = jsonify(error = str(e))
         response.status = 400
-        response.mimetype = 'application/json'
-        response.headers['Access-Control-Allow-Origin'] = '*'
-        return response
+    else:
+        try:
+            data = calculate(A, B, C)
+            response = jsonify(data)
+            response.status = 200
+        except Exception as e:
+            print(str(e))
+            response = jsonify(error = 'Internal error!')
+            response.status = 500
 
-    try:
-        data = calculate(A, B, C)
-        response = jsonify(data)
-        response.status = 200
-    except Exception as e:
-        print(str(e))
-        response = jsonify(error = 'Internal error!')
-        response.status = 500
-
-    response.mimetype = 'application/json'
     response.headers['Access-Control-Allow-Origin'] = '*'
     return response
 

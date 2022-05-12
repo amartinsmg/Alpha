@@ -36,69 +36,6 @@ class QFCalculator {
     this.graph = graph;
   }
 
-  public static main(): void {
-    //Constatns that store elements that will be often read or changed
-
-    const showFeedback = QFCalculator.showFeedback,
-      getValue = QFCalculator.getValue,
-      testInput = QFCalculator.testInput,
-      whenKeyDown = QFCalculator.whenKeyDown,
-      FormDiv: HTMLDivElement = document.querySelector("#function-form"),
-      AInput: HTMLInputElement = document.querySelector("#a-input"),
-      BInput: HTMLInputElement = document.querySelector("#b-input"),
-      CInput: HTMLInputElement = document.querySelector("#c-input"),
-      Form: HTMLFormElement = document.querySelector("#input-form"),
-      OutputElement: HTMLOutputElement = document.querySelector("#output"),
-      OutputHeadings: NodeListOf<HTMLHeadingElement> =
-        document.querySelectorAll(".output-heading"),
-      RootsDiv: HTMLDivElement = document.querySelector("#roots"),
-      CoordinatesDiv: HTMLDivElement = document.querySelector("#coordinates"),
-      GraphFig: HTMLElement = document.querySelector("#graph"),
-      ErrorFeedbackDiv: HTMLDivElement =
-        document.querySelector("#error-feedback");
-
-    //Call the API, read its response and update the document when form is submitted
-
-    Form.onsubmit = async (e) => {
-      e.preventDefault();
-      GraphFig.innerHTML = null;
-      try {
-        testInput([AInput, BInput, CInput]);
-        const A = getValue(AInput),
-          B = getValue(BInput),
-          C = getValue(CInput),
-          RESPONSE = await fetch(`http://127.0.0.1:5000/?a=${A}&b=${B}&c=${C}`),
-          Data: APIData = await RESPONSE.json();
-        if ("error" in Data) throw Data.error;
-        const QuadraticFunction = new QFCalculator(Data);
-        OutputHeadings.forEach((el) => el.classList.remove("non-display"));
-        FormDiv.textContent = QuadraticFunction.form;
-        RootsDiv.innerHTML = QuadraticFunction.roots;
-        CoordinatesDiv.textContent = QuadraticFunction.vertex;
-        GraphFig.innerHTML = QuadraticFunction.graph;
-      } catch (err) {
-        FormDiv.textContent = "y = ax\u00b2 + bx + c";
-        OutputHeadings.forEach((el) => el.classList.add("non-display"));
-        RootsDiv.textContent = null;
-        CoordinatesDiv.textContent = null;
-        ErrorFeedbackDiv.textContent = err instanceof Error ? err.message : err;
-      }
-      OutputElement.scrollIntoView();
-    };
-
-    //Methods that call the testInput method for their parent objects when they lose focus
-
-    AInput.onblur = () => testInput([AInput], showFeedback);
-    BInput.onblur = () => testInput([BInput], showFeedback);
-    CInput.onblur = () => testInput([CInput], showFeedback);
-
-    //Methods that call the QFCalculator.whenKeyDown function when a key is downed
-
-    AInput.onkeydown = (e) => whenKeyDown(e, BInput);
-    BInput.onkeydown = (e) => whenKeyDown(e, CInput);
-    CInput.onkeydown = (e) => whenKeyDown(e);
-  }
-
   //Read an element's value and check if it's valid
 
   private static testInput(
@@ -118,14 +55,14 @@ class QFCalculator {
           FractionRegEx.test(VALUE) && !DividedByZeroRegEx.test(VALUE),
         VALIDEFLOAT = FloatRegEx.test(VALUE),
         VALIDEINTEGER = IntegerRegEx.test(VALUE),
+        VALIDENUMBER = VALIDFRACTION || VALIDEFLOAT || VALIDEINTEGER,
         ZERONUMBER =
           ZeroFractionRegEx.test(VALUE) ||
           ZeroFloatRegEx.test(VALUE) ||
           ZeroIntegerRegEx.test(VALUE);
       try {
         if (el.name === "a" && ZERONUMBER) throw "Enter a non-zero number!";
-        if (!(VALIDFRACTION || VALIDEFLOAT || VALIDEINTEGER))
-          throw "Enter a integer, float or fractional number!";
+        if (!VALIDENUMBER) throw "Enter a integer, float or fractional number!";
       } catch (err) {
         if (catchEroor) catchEroor(el, err);
         else throw "Invalid input!";
@@ -172,6 +109,75 @@ class QFCalculator {
       }
       return void 0;
     }
+  }
+
+  public static main(): void {
+    //Constatns that store elements that will be often read or changed
+
+    const showFeedback = QFCalculator.showFeedback,
+      getValue = QFCalculator.getValue,
+      testInput = QFCalculator.testInput,
+      whenKeyDown = QFCalculator.whenKeyDown,
+      FormDiv: HTMLDivElement = document.querySelector("#function-form"),
+      AInput: HTMLInputElement = document.querySelector("#a-input"),
+      BInput: HTMLInputElement = document.querySelector("#b-input"),
+      CInput: HTMLInputElement = document.querySelector("#c-input"),
+      Form: HTMLFormElement = document.querySelector("#input-form"),
+      OutputElement: HTMLOutputElement = document.querySelector("#output"),
+      OutputHeadings: NodeListOf<HTMLHeadingElement> =
+        document.querySelectorAll(".output-heading"),
+      RootsDiv: HTMLDivElement = document.querySelector("#roots"),
+      CoordinatesDiv: HTMLDivElement = document.querySelector("#coordinates"),
+      GraphFig: HTMLElement = document.querySelector("#graph"),
+      ErrorFeedbackDiv: HTMLDivElement =
+        document.querySelector("#error-feedback");
+
+    //Call the API, read its response and update the document when form is submitted
+
+    Form.onsubmit = async (e) => {
+      e.preventDefault();
+      GraphFig.innerHTML = null;
+      try {
+        testInput([AInput, BInput, CInput]);
+        const A = getValue(AInput),
+          B = getValue(BInput),
+          C = getValue(CInput),
+          RESPONSE = await fetch(
+            `http://${location.hostname}:5000/?a=${A}&b=${B}&c=${C}`
+          ),
+          Data: APIData = await RESPONSE.json();
+        if ("error" in Data) throw Data.error;
+        const QuadraticFunction = new QFCalculator(Data);
+        OutputHeadings.forEach((el) => el.classList.remove("non-display"));
+        FormDiv.textContent = QuadraticFunction.form;
+        RootsDiv.innerHTML = QuadraticFunction.roots;
+        CoordinatesDiv.textContent = QuadraticFunction.vertex;
+        GraphFig.innerHTML = QuadraticFunction.graph;
+      } catch (err) {
+        FormDiv.textContent = "y = ax\u00b2 + bx + c";
+        OutputHeadings.forEach((el) => el.classList.add("non-display"));
+        RootsDiv.textContent = null;
+        CoordinatesDiv.textContent = null;
+        ErrorFeedbackDiv.textContent = err instanceof Error ? err.message : err;
+        Form.addEventListener(
+          "submit",
+          () => (ErrorFeedbackDiv.textContent = null)
+        );
+      }
+      OutputElement.scrollIntoView();
+    };
+
+    //Methods that call the testInput method for their parent objects when they lose focus
+
+    AInput.onblur = () => testInput([AInput], showFeedback);
+    BInput.onblur = () => testInput([BInput], showFeedback);
+    CInput.onblur = () => testInput([CInput], showFeedback);
+
+    //Methods that call the QFCalculator.whenKeyDown function when a key is downed
+
+    AInput.onkeydown = (e) => whenKeyDown(e, BInput);
+    BInput.onkeydown = (e) => whenKeyDown(e, CInput);
+    CInput.onkeydown = (e) => whenKeyDown(e);
   }
 }
 
