@@ -1,8 +1,7 @@
 from io import StringIO
 from matplotlib import pyplot as plt
-from numpy import arange, sqrt
+from numpy import arange
 from sympy import Rational as rational, solve, symbols, sympify
-
 
 # Calculate function roots and vertex coordinates
 
