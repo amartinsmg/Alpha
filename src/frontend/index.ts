@@ -1,7 +1,11 @@
+require("mathjax/es5/tex-svg.js");
+
+declare let MathJax: any;
+
 interface IAPIDataSucess {
   readonly roots: string[];
   readonly vertex: string[];
-  readonly form: string;
+  readonly formula: string;
   readonly graph: string;
 }
 
@@ -14,25 +18,25 @@ type APIData = IAPIDataSucess | IAPIDataError;
 class QFCalculator {
   readonly roots: string;
   readonly vertex: string;
-  readonly form: string;
+  readonly formula: string;
   readonly graph: string;
 
-  private constructor({ roots, vertex, form, graph }: IAPIDataSucess) {
-    const [R1, R2] = roots.map((i) =>
-      i.replace("sqrt", "\u221a").replace("approx", "\u2248")
-    );
+  private constructor({ roots, vertex, formula, graph }: IAPIDataSucess) {
+    const convertTexToSvg = QFCalculator.convertTexToSvg;
     switch (roots.length) {
       case 2:
-        this.roots = `x\u2081 = ${R1}<br>x\u2082 =  ${R2}`;
+        this.roots = roots
+          .map((e, i) => convertTexToSvg(`{x}_{${i + 1}} = ${e}`))
+          .join("");
         break;
       case 1:
-        this.roots = `x = ${R1}`;
+        this.roots = convertTexToSvg(`x = ${roots.pop()}`);
         break;
       default:
         this.roots = "This quadratic function don't have any real zero.";
     }
-    this.vertex = `(${vertex.join(", ")})`;
-    this.form = form.replace("**2", "\u00b2").replace(/[*]/g, "");
+    this.vertex = convertTexToSvg(`(${vertex.join(", ")})`);
+    this.formula = QFCalculator.convertTexToSvg(formula);
     this.graph = graph;
   }
 
@@ -95,6 +99,10 @@ class QFCalculator {
     return el.value.trim().replace("/", "dividedBy").replace(",", ".");
   }
 
+  private static convertTexToSvg(texStr: string): string {
+    return MathJax.tex2svg(texStr).innerHTML;
+  }
+
   //Move focus to the next element or submit the form if there is none
 
   private static whenKeyDown(
@@ -118,7 +126,7 @@ class QFCalculator {
       getValue = QFCalculator.getValue,
       testInput = QFCalculator.testInput,
       whenKeyDown = QFCalculator.whenKeyDown,
-      FormDiv: HTMLDivElement = document.querySelector("#function-form"),
+      FormulaDiv: HTMLDivElement = document.querySelector("#formula"),
       AInput: HTMLInputElement = document.querySelector("#a-input"),
       BInput: HTMLInputElement = document.querySelector("#b-input"),
       CInput: HTMLInputElement = document.querySelector("#c-input"),
@@ -149,15 +157,15 @@ class QFCalculator {
         if ("error" in Data) throw Data.error;
         const QuadraticFunction = new QFCalculator(Data);
         OutputHeadings.forEach((el) => el.classList.remove("non-display"));
-        FormDiv.textContent = QuadraticFunction.form;
+        FormulaDiv.innerHTML = QuadraticFunction.formula;
         RootsDiv.innerHTML = QuadraticFunction.roots;
-        CoordinatesDiv.textContent = QuadraticFunction.vertex;
+        CoordinatesDiv.innerHTML = QuadraticFunction.vertex;
         GraphFig.innerHTML = QuadraticFunction.graph;
       } catch (err) {
-        FormDiv.textContent = "y = ax\u00b2 + bx + c";
+        FormulaDiv.innerHTML = MathJax.tex2svg("y = ax^2 + bx + c").innerHTML;
         OutputHeadings.forEach((el) => el.classList.add("non-display"));
-        RootsDiv.textContent = null;
-        CoordinatesDiv.textContent = null;
+        RootsDiv.innerHTML = null;
+        CoordinatesDiv.innerHTML = null;
         ErrorFeedbackDiv.textContent = err instanceof Error ? err.message : err;
         Form.addEventListener(
           "submit",

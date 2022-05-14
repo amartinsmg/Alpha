@@ -1,7 +1,7 @@
 from io import StringIO
 from matplotlib import pyplot as plt
 from numpy import arange
-from sympy import Rational as rational, solve, symbols, sympify
+from sympy import Rational as rational, latex, solve, symbols, sympify
 
 # Calculate function roots and vertex coordinates
 
@@ -11,12 +11,12 @@ def calculate(a, b, c):
     x = symbols('x')
     y = a * x**2 + b * x + c
     # Dictionary that stores the function data
-    f = {'form': f'y = {y}'}
+    f = {'formula': f'y = {latex(y)}'}
     roots = solve(y) if delta >= 0 else []
     f['graph'] = plot_graph(*list(map(float, [a, b, c, delta, *roots])))
     f['roots'] = list(map(format_root, roots))
-    xVertex = str(sympify(f'({-b})/({2 * a})', rational=True))
-    yVertex = str(sympify(f'({-delta})/({4 * a})', rational=True))
+    xVertex = latex(sympify(f'({-b})/({2 * a})', rational=True))
+    yVertex = latex(sympify(f'({-delta})/({4 * a})', rational=True))
     f['vertex'] = [xVertex, yVertex]
     return f
 
@@ -77,6 +77,6 @@ def format_root(symbolic):
     if numeric % 1 == 0:
         return str(symbolic)
     elif (numeric * 10**5) % 1 == 0:
-        return f'{symbolic} = {numeric}'
+        return f'{latex(symbolic)} = {numeric}'
     else:
-        return '{} approx {:.5f}'.format(symbolic, numeric)
+        return '{} \\approx {:.5f}'.format(latex(symbolic), numeric)

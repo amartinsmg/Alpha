@@ -46,9 +46,9 @@ main {
   text-align: center;
 }
 
-/* Form div */
+/* Formula div */
 
-#function-form {
+#formula {
   margin: 0 0 1.75rem 0;
 }
 
@@ -100,24 +100,23 @@ main {
 }
 
 .output-group {
-  margin: 0 0 0.75rem 0;
+  margin: 0 0 1rem 0;
 }
 
 .output-heading {
-  margin: 0 0 0.4rem 0;
+  margin: 0 0 0.5rem 0;
 }
 
-.result {
-  letter-spacing: 0.03em;
+#roots {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
 }
 
 svg {
   max-width: 90%;
   height: auto;
-}
-
-svg:hover {
-  opacity: 80%;
 }
 
 /* In medium screens */
