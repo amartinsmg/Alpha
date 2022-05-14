@@ -56,7 +56,7 @@ def plot_graph(a, b, c, delta, x_1=None, x_2=None):
 def convert_args(name, value):
     try:
         num = float(value)
-        num = int(num) if num % 1 == 0 else rational((num * 10**15), 10**15)
+        num = int(num) if num % 1 == 0 else rational((num * 1e15), 1e15)
     except:
         value = value.replace('dividedBy', '/')
         num = sympify(value)
@@ -76,7 +76,7 @@ def format_root(symbolic):
     numeric = float(symbolic)
     if numeric % 1 == 0:
         return str(symbolic)
-    elif (numeric * 10**5) % 1 == 0:
+    elif (numeric * 1e5) % 1 == 0:
         return f'{latex(symbolic)} = {numeric}'
     else:
         return '{} \\approx {:.5f}'.format(latex(symbolic), numeric)
