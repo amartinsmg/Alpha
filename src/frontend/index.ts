@@ -1,4 +1,5 @@
 require("mathjax/es5/tex-svg.js");
+require("./style.css");
 
 declare let MathJax: any;
 
@@ -77,19 +78,19 @@ class QFCalculator {
   private static showFeedback(el: HTMLElement, message: string): void {
     const ParentEl = el.parentElement;
     if (ParentEl.childElementCount === 2) {
-      const InvalidMessageDiv = document.createElement("div");
+      const InvalidMessageDiv = document.createElement("div"),
+        removeInvalidMessage = () => {
+          el.classList.remove("invalid-input");
+          InvalidMessageDiv.remove();
+        };
       el.classList.add("invalid-input");
       InvalidMessageDiv.classList.add("invalid-feedback");
       InvalidMessageDiv.textContent = message;
       ParentEl.appendChild(InvalidMessageDiv);
-      el.addEventListener(
-        "keydown",
-        () => {
-          el.classList.remove("invalid-input");
-          InvalidMessageDiv.remove();
-        },
-        { once: true }
-      );
+      el.addEventListener("keydown", removeInvalidMessage, { once: true });
+      document
+        .querySelector("form")
+        .addEventListener("reset", removeInvalidMessage, { once: true });
     }
   }
 

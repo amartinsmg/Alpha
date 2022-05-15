@@ -1,5 +1,8 @@
-const path = require("path");
-const CopyPlugin = require("copy-webpack-plugin");
+const path = require("path"),
+  CopyPlugin = require("copy-webpack-plugin"),
+  CssMinimizerWebpack = require("css-minimizer-webpack-plugin"),
+  MiniCssExtractPlugin = require("mini-css-extract-plugin"),
+  TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = {
   entry: "./src/frontend/index.ts",
@@ -18,21 +21,28 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.ts$/,
+        test: /\.(t|j)s$/,
         use: "babel-loader",
         exclude: /node_modules/,
+      },
+      {
+        test: /\.css$/,
+        use: [MiniCssExtractPlugin.loader, "css-loader"],
       },
     ],
   },
   resolve: {
-    extensions: [".ts"],
+    extensions: [".ts", ".js", ".css"],
+  },
+  optimization: {
+    minimizer: [new TerserPlugin(), new CssMinimizerWebpack()],
   },
   plugins: [
     new CopyPlugin({
-      patterns: [
-        { from: "**/*.html", context: "src/frontend/" },
-        { from: "**/*.css", context: "src/frontend/" },
-      ],
+      patterns: [{ from: "**/*.html", context: "src/frontend/" }],
+    }),
+    new MiniCssExtractPlugin({
+      filename: "bundle.css",
     }),
   ],
 };

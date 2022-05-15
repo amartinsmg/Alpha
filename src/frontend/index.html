@@ -4,7 +4,7 @@
     <title>Quadratic Function Calculator</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="Style.css" />
+    <link rel="stylesheet" href="bundle.css" />
     <script src="bundle.js" defer></script>
   </head>
   <body>
@@ -51,14 +51,19 @@
           />
         </div>
         <div class="form-group">
-          <button class="data-inputs" id="calculate-button" type="submit">
+          <button class="data-inputs btn" id="reset-btn" type="reset">
+            Reset
+          </button>
+          <button class="data-inputs btn" id="calculate-btn" type="submit">
             Calculate
           </button>
         </div>
       </form>
       <output id="output">
         <section class="output-group">
-          <h3 class="bold non-display output-heading">Roots (when \(y = 0\)):</h3>
+          <h3 class="bold non-display output-heading">
+            Roots (when \(y = 0\)):
+          </h3>
           <div id="roots" class="result"></div>
         </section>
         <section class="output-group">
