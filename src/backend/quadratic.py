@@ -13,11 +13,11 @@ def calculate(a, b, c):
     # Dictionary that stores the function data
     f = {'formula': f'y = {latex(y)}'}
     roots = solve(y) if delta >= 0 else []
-    f['graph'] = plot_graph(*list(map(float, [a, b, c, delta, *roots])))
-    f['roots'] = list(map(format_root, roots))
-    xVertex = latex(sympify(f'({-b})/({2 * a})', rational=True))
-    yVertex = latex(sympify(f'({-delta})/({4 * a})', rational=True))
-    f['vertex'] = [xVertex, yVertex]
+    f['graph'] = plot_graph(*[float(n) for n in [a, b, c, delta, *roots]])
+    f['roots'] = [format_root(n) for n in roots]
+    xVertex = f'({-b})/({2 * a})'
+    yVertex = f'({-delta})/({4 * a})'
+    f['vertex'] = [latex(sympify(s, rational=True)) for s in [xVertex, yVertex]]
     return f
 
 

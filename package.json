@@ -1,6 +1,6 @@
 {
   "name": "qfcalculator",
-  "version": "0.1.0",
+  "version": "0.9.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/amartinsmg/QuadraticFCalculator.git"
@@ -10,8 +10,9 @@
     "build": "npm run build:check && npm run build:prod",
     "build:check": "tsc",
     "build:prod": "webpack",
-    "dev": "webpack serve",
-    "start": "python src/backend/index.py"
+    "dev": "concurrently -k \"npm:dev:*\"",
+    "dev:webpack": "webpack-dev-server",
+    "dev:flask": "python src/backend/index.py"
   },
   "devDependencies": {
     "@babel/cli": "^7.17.6",
@@ -21,6 +22,7 @@
     "@babel/preset-typescript": "^7.16.7",
     "@babel/runtime": "^7.17.9",
     "babel-loader": "^8.2.5",
+    "concurrently": "^7.2.0",
     "copy-webpack-plugin": "^10.2.4",
     "css-loader": "^6.7.1",
     "css-minimizer-webpack-plugin": "^3.4.1",
