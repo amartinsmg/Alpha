@@ -9,15 +9,13 @@ app = Flask(__name__)
 @app.route('/', methods=["GET"])
 def quadratic_function():
     try:
-        A = convert_args('a', request.args.get('a'))
-        B = convert_args('b', request.args.get('b'))
-        C = convert_args('c', request.args.get('c'))
+        a, b, c = [convert_args(c, request.args.get(c)) for c in ['a', 'b', 'c']]
     except Exception as e:
         response = jsonify(error=str(e))
         response.status = 400
     else:
         try:
-            data = calculate(A, B, C)
+            data = calculate(a, b, c)
             response = jsonify(data)
             response.status = 200
         except Exception as e:

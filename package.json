@@ -12,7 +12,8 @@
     "build:prod": "webpack",
     "dev": "concurrently -k \"npm:dev:*\"",
     "dev:webpack": "webpack-dev-server",
-    "dev:flask": "python src/backend/index.py"
+    "dev:flask": "python src/backend/index.py",
+    "install": "pip install sympy numpy Flask matplotlib && npm install"
   },
   "devDependencies": {
     "@babel/cli": "^7.17.6",
@@ -34,7 +35,7 @@
     "webpack-dev-server": "^4.8.1"
   },
   "keywords": [
-    "math"
+    "math", "plotting"
   ],
   "author": "amartinsmg",
   "license": "ISC",
