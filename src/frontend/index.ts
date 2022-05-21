@@ -37,17 +37,29 @@ class QFCalculator {
         this.roots = "This quadratic function don't have any real zero.";
     }
     this.vertex = convertTexToSvg(`(${vertex.join(", ")})`);
-    this.formula = QFCalculator.convertTexToSvg(formula);
+    this.formula = convertTexToSvg(formula);
     this.graph = graph;
+  }
+
+  //Call MathJax method that convert latex to an svg element and get its innerHTML
+
+  private static convertTexToSvg(texStr: string): string {
+    return MathJax.tex2svg(texStr).innerHTML;
+  }
+
+  //Get the value of an element and format it
+
+  private static getValue(el: HTMLInputElement): string {
+    return el.value.trim().replace("/", "dividedBy").replace(",", ".");
   }
 
   //Read an element's value and check if it's valid
 
-  private static testInput(
+  private static testInputandReturnValue(
     els: HTMLInputElement[],
     catchEroor?: Function
-  ): void {
-    for (let el of els) {
+  ): string[] {
+    const VALUES = els.map((el) => {
       const VALUE = QFCalculator.getValue(el),
         FractionRegEx = /^-?\d+dividedBy\d+$/,
         DividedByZeroRegEx = /dividedBy0/,
@@ -66,14 +78,18 @@ class QFCalculator {
           ZeroFloatRegEx.test(VALUE) ||
           ZeroIntegerRegEx.test(VALUE);
       try {
-        if (el.name === "a" && ZERONUMBER) throw "Enter a non-zero number!";
         if (!VALIDENUMBER) throw "Enter a integer, float or fractional number!";
+        if (el.name === "a" && ZERONUMBER) throw "Enter a non-zero number!";
       } catch (err) {
         if (catchEroor) catchEroor(el, err);
         else throw "Invalid input!";
       }
-    }
+      return VALUE;
+    });
+    return VALUES;
   }
+
+  //Show the errors found in user input
 
   private static showFeedback(el: HTMLElement, message: string): void {
     const ParentEl = el.parentElement;
@@ -92,16 +108,6 @@ class QFCalculator {
         .querySelector("form")
         .addEventListener("reset", removeInvalidMessage, { once: true });
     }
-  }
-
-  //Get the value of an element and format it
-
-  private static getValue(el: HTMLInputElement): string {
-    return el.value.trim().replace("/", "dividedBy").replace(",", ".");
-  }
-
-  private static convertTexToSvg(texStr: string): string {
-    return MathJax.tex2svg(texStr).innerHTML;
   }
 
   //Move focus to the next element or submit the form if there is none
@@ -124,15 +130,14 @@ class QFCalculator {
     //Constatns that store elements that will be often read or changed
 
     const showFeedback = QFCalculator.showFeedback,
-      getValue = QFCalculator.getValue,
-      testInput = QFCalculator.testInput,
+      testInputandReturnValue = QFCalculator.testInputandReturnValue,
       whenKeyDown = QFCalculator.whenKeyDown,
       FormulaDiv: HTMLDivElement = document.querySelector("#formula"),
       AInput: HTMLInputElement = document.querySelector("#a-input"),
       BInput: HTMLInputElement = document.querySelector("#b-input"),
       CInput: HTMLInputElement = document.querySelector("#c-input"),
-      Form: HTMLFormElement = document.querySelector("#input-form"),
-      OutputElement: HTMLOutputElement = document.querySelector("#output"),
+      Form: HTMLFormElement = document.querySelector("form"),
+      OutputElement: HTMLOutputElement = document.querySelector("output"),
       OutputHeadings: NodeListOf<HTMLHeadingElement> =
         document.querySelectorAll(".output-heading"),
       RootsDiv: HTMLDivElement = document.querySelector("#roots"),
@@ -147,10 +152,7 @@ class QFCalculator {
       e.preventDefault();
       GraphFig.innerHTML = null;
       try {
-        testInput([AInput, BInput, CInput]);
-        const A = getValue(AInput),
-          B = getValue(BInput),
-          C = getValue(CInput),
+        const [A, B, C] = testInputandReturnValue([AInput, BInput, CInput]),
           RESPONSE = await fetch(
             `http://${location.hostname}:5000/?a=${A}&b=${B}&c=${C}`
           ),
@@ -176,11 +178,11 @@ class QFCalculator {
       OutputElement.scrollIntoView();
     };
 
-    //Methods that call the testInput method for their parent objects when they lose focus
+    //Methods that call the testInputandReturnValue method for their parent objects when they lose focus
 
-    AInput.onblur = () => testInput([AInput], showFeedback);
-    BInput.onblur = () => testInput([BInput], showFeedback);
-    CInput.onblur = () => testInput([CInput], showFeedback);
+    AInput.onblur = () => void testInputandReturnValue([AInput], showFeedback);
+    BInput.onblur = () => void testInputandReturnValue([BInput], showFeedback);
+    CInput.onblur = () => void testInputandReturnValue([CInput], showFeedback);
 
     //Methods that call the QFCalculator.whenKeyDown function when a key is downed
 
