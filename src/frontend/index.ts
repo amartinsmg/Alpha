@@ -170,7 +170,7 @@ class QFCalculator {
         CoordinatesDiv.innerHTML = QuadraticFunction.vertex;
         GraphFig.innerHTML = QuadraticFunction.graph;
       } catch (err) {
-        FormulaDiv.innerHTML = MathJax.tex2svg("y = ax^2 + bx + c").innerHTML;
+        FormulaDiv.innerHTML = QFCalculator.convertTexToSvg("y = ax^2 + bx + c");
         OutputHeadings.forEach((el) => el.classList.add("non-display"));
         RootsDiv.innerHTML = null;
         CoordinatesDiv.innerHTML = null;
