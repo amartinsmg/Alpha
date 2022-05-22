@@ -105,7 +105,7 @@ class QFCalculator {
       ParentEl.appendChild(InvalidMessageDiv);
       el.addEventListener("keydown", removeInvalidMessage, { once: true });
       document
-        .querySelector("form")
+        .querySelector("#coeficients-form")
         .addEventListener("reset", removeInvalidMessage, { once: true });
     }
   }
@@ -136,8 +136,8 @@ class QFCalculator {
       AInput: HTMLInputElement = document.querySelector("#a-input"),
       BInput: HTMLInputElement = document.querySelector("#b-input"),
       CInput: HTMLInputElement = document.querySelector("#c-input"),
-      Form: HTMLFormElement = document.querySelector("form"),
-      OutputElement: HTMLOutputElement = document.querySelector("output"),
+      Form: HTMLFormElement = document.querySelector("#coeficients-form"),
+      OutputElement: HTMLOutputElement = document.querySelector("#output-data"),
       OutputHeadings: NodeListOf<HTMLHeadingElement> =
         document.querySelectorAll(".output-heading"),
       RootsDiv: HTMLDivElement = document.querySelector("#roots"),

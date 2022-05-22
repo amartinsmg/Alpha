@@ -28,19 +28,21 @@ body {
   display: none;
 }
 
-/* Main title */
+/* Page title */
 
-header {
+#page-header {
+  margin: 1.5rem 0;
   text-align: center;
 }
 
 #page-title {
-  margin: 1.5rem 0;
   font-size: 1.5em;
   font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
   font-weight: 800;
-  color: #3F88C5;
+  color: #3f88c5;
 }
+
+/* Main content */
 
 main {
   text-align: center;
@@ -82,7 +84,7 @@ main {
   font-size: 0.7em;
 }
 
-.btn{
+.btn {
   margin: 0.5rem;
   width: 6rem;
   padding: 0.375rem 0.5rem;
@@ -91,29 +93,29 @@ main {
 }
 
 #calculate-btn {
-  background-color: #0C6291;
+  background-color: #0c6291;
   color: #ffffff;
 }
 
 #calculate-btn:hover {
-  border-color: #0C6291;
-  color: #0C6291;
+  border-color: #0c6291;
+  color: #0c6291;
   background: transparent;
 }
 
 #reset-btn {
-  background-color: #DCDCDD;
+  background-color: #dcdcdd;
 }
 
 #reset-btn:hover {
-  border-color: #DCDCDD;
-  color: #DCDCDD;
+  border-color: #dcdcdd;
+  color: #dcdcdd;
   background: transparent;
 }
 
 /* Output */
 
-output {
+#output-data {
   margin: 2rem 0;
 }
 
@@ -140,6 +142,9 @@ svg {
 /* In medium screens */
 
 @media screen and (min-width: 768px) {
+  body {
+    padding: 1rem 0;
+  }
   #page-title {
     font-size: 2.5em;
   }
