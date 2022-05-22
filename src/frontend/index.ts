@@ -55,9 +55,10 @@ class QFCalculator {
 
   //Read an element's value and check if it's valid
 
-  private static testInputandReturnValue(
+  private static testInputGetValue(
     els: HTMLInputElement[],
-    catchEroor?: Function
+    catchEroor?: Function,
+    parentForm?: HTMLFormElement
   ): string[] {
     const VALUES = els.map((el) => {
       const VALUE = QFCalculator.getValue(el),
@@ -81,7 +82,7 @@ class QFCalculator {
         if (!VALIDENUMBER) throw "Enter a integer, float or fractional number!";
         if (el.name === "a" && ZERONUMBER) throw "Enter a non-zero number!";
       } catch (err) {
-        if (catchEroor) catchEroor(el, err);
+        if (catchEroor) catchEroor(el, err, parentForm);
         else throw "Invalid input!";
       }
       return VALUE;
@@ -91,7 +92,11 @@ class QFCalculator {
 
   //Show the errors found in user input
 
-  private static showFeedback(el: HTMLElement, message: string): void {
+  private static showFeedback(
+    el: HTMLElement,
+    message: string,
+    parentForm: HTMLFormElement
+  ): void {
     const ParentEl = el.parentElement;
     if (ParentEl.childElementCount === 2) {
       const InvalidMessageDiv = document.createElement("div"),
@@ -104,9 +109,9 @@ class QFCalculator {
       InvalidMessageDiv.textContent = message;
       ParentEl.appendChild(InvalidMessageDiv);
       el.addEventListener("keydown", removeInvalidMessage, { once: true });
-      document
-        .querySelector("#coeficients-form")
-        .addEventListener("reset", removeInvalidMessage, { once: true });
+      parentForm.addEventListener("reset", removeInvalidMessage, {
+        once: true,
+      });
     }
   }
 
@@ -130,7 +135,7 @@ class QFCalculator {
     //Constatns that store elements that will be often read or changed
 
     const showFeedback = QFCalculator.showFeedback,
-      testInputandReturnValue = QFCalculator.testInputandReturnValue,
+      testInputGetValue = QFCalculator.testInputGetValue,
       whenKeyDown = QFCalculator.whenKeyDown,
       FormulaDiv: HTMLDivElement = document.querySelector("#formula"),
       AInput: HTMLInputElement = document.querySelector("#a-input"),
@@ -152,7 +157,7 @@ class QFCalculator {
       e.preventDefault();
       GraphFig.innerHTML = null;
       try {
-        const [A, B, C] = testInputandReturnValue([AInput, BInput, CInput]),
+        const [A, B, C] = testInputGetValue([AInput, BInput, CInput]),
           RESPONSE = await fetch(
             `http://${location.hostname}:5000/?a=${A}&b=${B}&c=${C}`
           ),
@@ -178,11 +183,11 @@ class QFCalculator {
       OutputElement.scrollIntoView();
     };
 
-    //Methods that call the testInputandReturnValue method for their parent objects when they lose focus
+    //Methods that call the testInputGetValue method for their parent objects when they lose focus
 
-    AInput.onblur = () => void testInputandReturnValue([AInput], showFeedback);
-    BInput.onblur = () => void testInputandReturnValue([BInput], showFeedback);
-    CInput.onblur = () => void testInputandReturnValue([CInput], showFeedback);
+    AInput.onblur = () => void testInputGetValue([AInput], showFeedback, Form);
+    BInput.onblur = () => void testInputGetValue([BInput], showFeedback, Form);
+    CInput.onblur = () => void testInputGetValue([CInput], showFeedback, Form);
 
     //Methods that call the QFCalculator.whenKeyDown function when a key is downed
 
