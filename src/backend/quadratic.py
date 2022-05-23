@@ -11,14 +11,14 @@ def calculate(a, b, c):
     x = symbols('x')
     y = a * x**2 + b * x + c
     # Dictionary that stores the function data
-    f = {'formula': f'y = {latex(y)}'}
+    data = {'formula': f'y = {latex(y)}'}
     roots = solve(y) if delta >= 0 else []
-    f['graph'] = plot_graph(*[float(n) for n in [a, b, c, delta, *roots]])
-    f['roots'] = [format_root(n) for n in roots]
-    xVertex = f'({-b})/({2 * a})'
-    yVertex = f'({-delta})/({4 * a})'
-    f['vertex'] = [latex(sympify(s, rational=True)) for s in [xVertex, yVertex]]
-    return f
+    data['graph'] = plot_graph(*[float(n) for n in [a, b, c, delta, *roots]])
+    data['roots'] = [format_root(r) for r in roots]
+    x_vertex = f'({-b})/({2 * a})'
+    y_vertex = f'({-delta})/({4 * a})'
+    data['vertex'] = [latex(sympify(s, rational=True)) for s in [x_vertex, y_vertex]]
+    return data
 
 
 # Plot the quadratic function
