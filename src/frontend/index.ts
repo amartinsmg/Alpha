@@ -1,17 +1,17 @@
-require("mathjax/es5/tex-svg.js");
-require("./style.css");
+import "mathjax/es5/tex-svg.js";
+import "./style.css";
 
 declare const MathJax: any;
 
 interface IAPIDataSucess {
-  readonly roots: string[];
-  readonly vertex: string[];
-  readonly formula: string;
-  readonly graph: string;
+  roots: string[];
+  vertex: string[];
+  formula: string;
+  graph: string;
 }
 
 interface IAPIDataError {
-  readonly error: string;
+  error: string;
 }
 
 type APIData = IAPIDataSucess | IAPIDataError;
@@ -101,15 +101,14 @@ class QFCalculator {
         removeInvalidMessage = () => {
           el.classList.remove("invalid-input");
           InvalidMessageDiv.remove();
-        };
+        },
+        once = true;
       el.classList.add("invalid-input");
       InvalidMessageDiv.classList.add("invalid-feedback");
       InvalidMessageDiv.textContent = message;
       ParentEl.appendChild(InvalidMessageDiv);
-      el.addEventListener("keydown", removeInvalidMessage, { once: true });
-      parentForm.addEventListener("reset", removeInvalidMessage, {
-        once: true,
-      });
+      el.addEventListener("input", removeInvalidMessage, { once });
+      parentForm.addEventListener("reset", removeInvalidMessage, { once });
     }
   }
 
@@ -151,7 +150,6 @@ class QFCalculator {
 
     Form.onsubmit = async (e) => {
       e.preventDefault();
-      GraphFig.innerHTML = null;
       try {
         const [A, B, C] = QFCalculator.testInputGetValue(InputsElements),
           FetchResponse = await fetch(
@@ -171,6 +169,7 @@ class QFCalculator {
         OutputHeadings.forEach((el) => el.classList.add("non-display"));
         RootsDiv.innerHTML = null;
         CoordinatesDiv.innerHTML = null;
+        GraphFig.innerHTML = null;
         ErrorFeedbackDiv.textContent = err instanceof Error ? err.message : err;
         Form.addEventListener(
           "submit",

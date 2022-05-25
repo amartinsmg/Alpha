@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 
 @app.route('/', methods=["GET"])
-def quadratic_function():
+def quadratic_f_calculator():
     try:
         a, b, c = [convert_args(c, request.args.get(c)) for c in ['a', 'b', 'c']]
     except Exception as e:
