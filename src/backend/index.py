@@ -1,15 +1,17 @@
 from flask import Flask, jsonify, request
 from quadratic import calculate, convert_args
+from urllib.parse import unquote
 
 app = Flask(__name__)
 
-# Get the arguments, process data and send it in JSON format
+get_unquote_arg = lambda s: unquote(request.args.get(s))
 
+# Get the arguments, process data and send it in JSON format
 
 @app.route('/', methods=["GET"])
 def quadratic_f_calculator():
     try:
-        a, b, c = [convert_args(c, request.args.get(c)) for c in ['a', 'b', 'c']]
+        a, b, c = [convert_args(c, get_unquote_arg(c)) for c in ['a', 'b', 'c']]
     except Exception as e:
         response = jsonify(error=str(e))
         response.status = 400

@@ -49,7 +49,7 @@ class QFCalculator {
   //Get the value of an element and format it
 
   private static getValue(el: HTMLInputElement): string {
-    return el.value.trim().replace("/", "dividedBy").replace(",", ".");
+    return encodeURIComponent(el.value.trim().replace(",", "."));
   }
 
   //Read an element's value and check if it's valid
@@ -61,11 +61,11 @@ class QFCalculator {
   ): string[] {
     const VALUES = els.map((el) => {
       const VALUE = QFCalculator.getValue(el),
-        FractionRegEx = /^-?\d+dividedBy\d+$/,
-        DividedByZeroRegEx = /dividedBy0/,
+        FractionRegEx = /^-?\d+%2F\d+$/,
+        DividedByZeroRegEx = /%2F0/,
         FloatRegEx = /^-?\d*[.]\d{1,15}$/,
         IntegerRegEx = /^-?\d+$/,
-        ZeroFractionRegEx = /^-?0+dividedBy/,
+        ZeroFractionRegEx = /^-?0+%2F/,
         ZeroFloatRegEx = /^-?0*[.]0+$/,
         ZeroIntegerRegEx = /^-?0+$/,
         VALID_NUMBER =

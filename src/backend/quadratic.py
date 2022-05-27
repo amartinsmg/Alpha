@@ -58,7 +58,6 @@ def convert_args(name, value):
         num = float(value)
         num = int(num) if num % 1 == 0 else rational((num * 1e15), 1e15)
     except:
-        value = value.replace('dividedBy', '/')
         num = sympify(value)
         try:
             float(num)
