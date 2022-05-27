@@ -1,11 +1,11 @@
-const path = require("path"),
-  CopyPlugin = require("copy-webpack-plugin"),
+const CopyPlugin = require("copy-webpack-plugin"),
   CssMinimizerWebpack = require("css-minimizer-webpack-plugin"),
   MiniCssExtractPlugin = require("mini-css-extract-plugin"),
+  path = require("path"),
   TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = {
-  entry: "./src/frontend/index.ts",
+  entry: "./src/frontend/main.ts",
   output: {
     filename: "bundle.js",
     path: path.resolve(__dirname, "dist"),
@@ -21,7 +21,12 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(t|j)s$/,
+        test: /\.ts$/,
+        use: ["babel-loader", "ts-loader"],
+        exclude: /node_modules/,
+      },
+      {
+        test: /\.js$/,
         use: "babel-loader",
         exclude: /node_modules/,
       },

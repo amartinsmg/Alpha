@@ -1,5 +1,5 @@
 import "mathjax/es5/tex-svg.js";
-import "./style.css";
+import "./main.css";
 
 declare const MathJax: any;
 
