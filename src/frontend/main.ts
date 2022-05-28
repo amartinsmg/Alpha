@@ -1,48 +1,79 @@
-import "mathjax/es5/tex-svg.js";
-import "./main.css";
+require("mathjax/es5/tex-svg.js");
+require("./main.css");
+const Algebrite = require("algebrite");
+const math = require("mathjs")
+const Plotly = require("plotly.js/dist/plotly-basic.min.js")
 
 declare const MathJax: any;
 
-interface IAPIDataSucess {
-  roots: string[];
-  vertex: string[];
-  formula: string;
-  graph: string;
-}
-
-interface IAPIDataError {
-  error: string;
-}
-
-type APIData = IAPIDataSucess | IAPIDataError;
-
-class QFCalculator {
-  readonly roots: string;
-  readonly vertex: string;
+class QuadraticFunction {
   readonly formula: string;
   readonly graph: string;
+  readonly roots: string;
+  readonly vertex?: string;
 
-  private constructor({ roots, vertex, formula, graph }: IAPIDataSucess) {
-    switch (roots.length) {
-      case 2:
-        this.roots = roots
-          .map((e, i) => QFCalculator.convertTexToSvg(`{x}_{${i + 1}} = ${e}`))
-          .join("");
-        break;
-      case 1:
-        this.roots = QFCalculator.convertTexToSvg(`x = ${roots.pop()}`);
-        break;
-      default:
-        this.roots = "This quadratic function don't have any real zero.";
-    }
-    this.vertex = QFCalculator.convertTexToSvg(`(${vertex.join(", ")})`);
-    this.formula = QFCalculator.convertTexToSvg(formula);
-    this.graph = graph;
+  constructor(a: string, b: string, c: string) {
+    b = b.match("-") ? b : "+" + b;
+    c = c.match("-") ? c : "+" + c;
+    const FORMULA = Algebrite.expand(`${a} * x^2 ${b} * x ${c}`),
+      ROOTS: any = Algebrite.roots(FORMULA),
+      DELTA_FORMULA = `(${b})^2 - 4 * (${a}) * (${c})`,
+      DELTA = parseFloat(Algebrite.float(DELTA_FORMULA).toString());
+    this.formula = QFCalculator.convertTexToSvg(
+      `y = ${FORMULA.toLatexString()}`
+    );
+    this.roots =
+      DELTA >= 0
+        ? QuadraticFunction.formatRoots(ROOTS)
+        : "This quadratic function don't have any real zero.";
+    const VERTEX = [`-(${b})/(2 * (${a}))`, `-(${DELTA_FORMULA})/(4 * (${a}))`];
+    this.vertex = QFCalculator.convertTexToSvg(
+      `(${VERTEX.map((str) => Algebrite.simplify(str).toLatexString()).join(
+        ", "
+      )})`
+    );
   }
+
+  private static formatRoots(rootsObj: any): string {
+    let rootsStr: string,
+      n = QuadraticFunction.numberFormatRoots(rootsObj),
+      roots: string[] = rootsObj
+        .toLatexString()
+        .replace("\\begin{bmatrix} ", "")
+        .replace(" \\end{bmatrix}", "")
+        .split(" & ");
+    roots = roots.map((str, i) => {
+      let num = n[i];
+      if (str.match("\\\\")) {
+        if (num.match("...")) return `${str} \\approx ${num}`;
+        else return `${str} = ${num}`;
+      }
+      return str;
+    });
+    if (roots.length === 2) {
+      rootsStr = roots
+        .map((e, i) => QFCalculator.convertTexToSvg(`{x}_{${i + 1}} = ${e}`))
+        .join("");
+    } else {
+      rootsStr = QFCalculator.convertTexToSvg(`x = ${roots.pop()}`);
+    }
+    return rootsStr;
+  }
+
+  private static numberFormatRoots(roots: any): string[] {
+    return Algebrite.float(roots)
+      .toString()
+      .replace("[", "")
+      .replace("]", "")
+      .split(",");
+  }
+}
+
+class QFCalculator {
 
   //Call MathJax method that convert latex to an svg element and get its innerHTML
 
-  private static convertTexToSvg(texStr: string): string {
+  public static convertTexToSvg(texStr: string): string {
     return MathJax.tex2svg(texStr).innerHTML;
   }
 
@@ -148,21 +179,20 @@ class QFCalculator {
 
     //Call the API, read its response and update the document when form is submitted
 
-    Form.onsubmit = async (e) => {
+    Form.onsubmit = (e) => {
       e.preventDefault();
       try {
-        const [A, B, C] = QFCalculator.testInputGetValue(InputsElements),
-          FetchResponse = await fetch(
-            `http://${location.hostname}:5000/?a=${A}&b=${B}&c=${C}`
-          ),
-          Data: APIData = await FetchResponse.json();
-        if ("error" in Data) throw Data.error;
-        const QuadraticFunction = new QFCalculator(Data);
+        const [A, B, C] = QFCalculator.testInputGetValue(InputsElements);
+        const { formula, graph, roots, vertex } = new QuadraticFunction(
+          A,
+          B,
+          C
+        );
         OutputHeadings.forEach((el) => el.classList.remove("non-display"));
-        FormulaDiv.innerHTML = QuadraticFunction.formula;
-        RootsDiv.innerHTML = QuadraticFunction.roots;
-        CoordinatesDiv.innerHTML = QuadraticFunction.vertex;
-        GraphFig.innerHTML = QuadraticFunction.graph;
+        FormulaDiv.innerHTML = formula;
+        RootsDiv.innerHTML = roots;
+        CoordinatesDiv.innerHTML = vertex;
+        GraphFig.innerHTML = graph;
       } catch (err) {
         FormulaDiv.innerHTML =
           QFCalculator.convertTexToSvg("y = ax^2 + bx + c");
