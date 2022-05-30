@@ -1,15 +1,8 @@
 {
   "compilerOptions": {
-    /* Language and Environment */
     "target": "ESNext" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
-
-    /* Modules */
-    "module": "commonjs",                                /* Specify what module code is generated. */
-    
-    /* JavaScript Support */
+    "module": "commonjs",                                /* Specify what module code is generated. */    
     "allowJs": true,                                  /* Allow JavaScript files to be a part of your program. Use the `checkJS` option to get errors from these files. */
-    
-    /* Type Checking */
     "strict": true,                                      /* Enable all strict type-checking options. */
     "strictNullChecks": false,                         /* When type checking, take into account `null` and `undefined`. */
     "useUnknownInCatchVariables": false,               /* Type catch clause variables as 'unknown' instead of 'any'. */

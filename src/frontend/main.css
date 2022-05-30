@@ -135,9 +135,8 @@ main {
   gap: 0.4rem;
 }
 
-svg {
+#graph {
   max-width: 90%;
-  height: auto;
 }
 
 /* In medium screens */

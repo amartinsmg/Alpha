@@ -1,76 +1,11 @@
 require("mathjax/es5/tex-svg.js");
 require("./main.css");
-const Algebrite = require("algebrite");
-const math = require("mathjs")
-const Plotly = require("plotly.js/dist/plotly-basic.min.js")
+const Plotly = require("plotly.js/dist/plotly-basic.min.js");
+import QuadraticFunction from "./qudratic";
 
 declare const MathJax: any;
 
-class QuadraticFunction {
-  readonly formula: string;
-  readonly graph: string;
-  readonly roots: string;
-  readonly vertex?: string;
-
-  constructor(a: string, b: string, c: string) {
-    b = b.match("-") ? b : "+" + b;
-    c = c.match("-") ? c : "+" + c;
-    const FORMULA = Algebrite.expand(`${a} * x^2 ${b} * x ${c}`),
-      ROOTS: any = Algebrite.roots(FORMULA),
-      DELTA_FORMULA = `(${b})^2 - 4 * (${a}) * (${c})`,
-      DELTA = parseFloat(Algebrite.float(DELTA_FORMULA).toString());
-    this.formula = QFCalculator.convertTexToSvg(
-      `y = ${FORMULA.toLatexString()}`
-    );
-    this.roots =
-      DELTA >= 0
-        ? QuadraticFunction.formatRoots(ROOTS)
-        : "This quadratic function don't have any real zero.";
-    const VERTEX = [`-(${b})/(2 * (${a}))`, `-(${DELTA_FORMULA})/(4 * (${a}))`];
-    this.vertex = QFCalculator.convertTexToSvg(
-      `(${VERTEX.map((str) => Algebrite.simplify(str).toLatexString()).join(
-        ", "
-      )})`
-    );
-  }
-
-  private static formatRoots(rootsObj: any): string {
-    let rootsStr: string,
-      n = QuadraticFunction.numberFormatRoots(rootsObj),
-      roots: string[] = rootsObj
-        .toLatexString()
-        .replace("\\begin{bmatrix} ", "")
-        .replace(" \\end{bmatrix}", "")
-        .split(" & ");
-    roots = roots.map((str, i) => {
-      let num = n[i];
-      if (str.match("\\\\")) {
-        if (num.match("...")) return `${str} \\approx ${num}`;
-        else return `${str} = ${num}`;
-      }
-      return str;
-    });
-    if (roots.length === 2) {
-      rootsStr = roots
-        .map((e, i) => QFCalculator.convertTexToSvg(`{x}_{${i + 1}} = ${e}`))
-        .join("");
-    } else {
-      rootsStr = QFCalculator.convertTexToSvg(`x = ${roots.pop()}`);
-    }
-    return rootsStr;
-  }
-
-  private static numberFormatRoots(roots: any): string[] {
-    return Algebrite.float(roots)
-      .toString()
-      .replace("[", "")
-      .replace("]", "")
-      .split(",");
-  }
-}
-
 class QFCalculator {
-
   //Call MathJax method that convert latex to an svg element and get its innerHTML
 
   public static convertTexToSvg(texStr: string): string {
@@ -80,7 +15,7 @@ class QFCalculator {
   //Get the value of an element and format it
 
   private static getValue(el: HTMLInputElement): string {
-    return encodeURIComponent(el.value.trim().replace(",", "."));
+    return el.value.trim().replace(",", ".");
   }
 
   //Read an element's value and check if it's valid
@@ -92,11 +27,11 @@ class QFCalculator {
   ): string[] {
     const VALUES = els.map((el) => {
       const VALUE = QFCalculator.getValue(el),
-        FractionRegEx = /^-?\d+%2F\d+$/,
-        DividedByZeroRegEx = /%2F0/,
+        FractionRegEx = /^-?\d+[/]\d+$/,
+        DividedByZeroRegEx = /[/]0/,
         FloatRegEx = /^-?\d*[.]\d{1,15}$/,
         IntegerRegEx = /^-?\d+$/,
-        ZeroFractionRegEx = /^-?0+%2F/,
+        ZeroFractionRegEx = /^-?0+[/]/,
         ZeroFloatRegEx = /^-?0*[.]0+$/,
         ZeroIntegerRegEx = /^-?0+$/,
         VALID_NUMBER =
@@ -183,16 +118,16 @@ class QFCalculator {
       e.preventDefault();
       try {
         const [A, B, C] = QFCalculator.testInputGetValue(InputsElements);
-        const { formula, graph, roots, vertex } = new QuadraticFunction(
-          A,
-          B,
-          C
-        );
-        OutputHeadings.forEach((el) => el.classList.remove("non-display"));
-        FormulaDiv.innerHTML = formula;
-        RootsDiv.innerHTML = roots;
-        CoordinatesDiv.innerHTML = vertex;
-        GraphFig.innerHTML = graph;
+        const QF = new QuadraticFunction(A, B, C);
+        const { formula, plotPoits, roots, vertex } = QF;
+        console.log(QF);
+        OutputHeadings.forEach((el) => el.classList.remove("non-dislay"));
+        FormulaDiv.innerHTML = QFCalculator.convertTexToSvg(formula);
+        RootsDiv.innerHTML = roots
+          .map((str) => QFCalculator.convertTexToSvg(str))
+          .join("");
+        CoordinatesDiv.innerHTML = QFCalculator.convertTexToSvg(vertex);
+        // Plotly.newPlot(GraphFig, {...plotPoits, type: "line"});
       } catch (err) {
         FormulaDiv.innerHTML =
           QFCalculator.convertTexToSvg("y = ax^2 + bx + c");
@@ -205,6 +140,7 @@ class QFCalculator {
           "submit",
           () => (ErrorFeedbackDiv.textContent = null)
         );
+        throw err;
       }
       OutputElement.scrollIntoView();
     };
