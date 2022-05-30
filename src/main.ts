@@ -1,7 +1,7 @@
-require("mathjax/es5/tex-svg.js");
-require("./main.css");
-const Plotly = require("plotly.js/dist/plotly-basic.min.js");
 import QuadraticFunction from "./qudratic";
+import "./main.css";
+require("mathjax/es5/tex-svg.js");
+const Plotly = require("plotly.js/dist/plotly-basic.min.js");
 
 declare const MathJax: any;
 
@@ -120,9 +120,11 @@ class QFCalculator {
       e.preventDefault();
       try {
         const [A, B, C] = QFCalculator.testInputGetValue(InputsElements);
-        const QF = new QuadraticFunction(A, B, C);
-        const { formula, plotPoits, roots, vertex } = QF;
-        console.log(QF);
+        const { formula, plotPoits, roots, vertex } = new QuadraticFunction(
+          A,
+          B,
+          C
+        );
         OutputHeadings.forEach((el) => el.classList.remove("non-display"));
         FormulaDiv.innerHTML = QFCalculator.convertTexToSvg(formula);
         RootsDiv.innerHTML = roots

@@ -26,7 +26,7 @@ class QuadraticFunction {
       X_1: number =
         DELTA >= 0
           ? parseFloat(NUMBER_ROOTS[0])
-          : parseFloat(VERTEX[0].toString()),
+          : parseFloat(Algebrite.float(VERTEX[0]).toString()),
       X_2: number = DELTA > 0 ? parseFloat(NUMBER_ROOTS[1]) : null;
     this.formula = `y = ${FORMULA.toLatexString()}`;
     this.roots =
