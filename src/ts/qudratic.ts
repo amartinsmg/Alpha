@@ -36,7 +36,6 @@ class QuadraticFunction {
     this.vertex = `(${VERTEX.map((obj) => obj.toLatexString()).join(", ")})`;
     this.plotPoits = QuadraticFunction.findPlotPoints(
       FORMULA.toString(),
-      DELTA,
       X_1,
       X_2
     );
@@ -73,13 +72,12 @@ class QuadraticFunction {
 
   private static findPlotPoints(
     formula: string,
-    delta: number,
     x1: number,
-    x2?: number
+    x2: number
   ): IPlotPoints {
     const expression = math.compile(formula);
     let extraValue: number, xMinValue: number, xMaxValue: number, step: number;
-    if (delta > 0) {
+    if (!(x2 === null)) {
       if (x1 > x2) [x1, x2] = [x2, x1];
       extraValue = math.max(
         2,

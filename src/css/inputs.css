@@ -1,0 +1,48 @@
+.form-group {
+  margin: 0 0 1.25rem 0;
+}
+
+.data-inputs {
+  padding: 0.2rem;
+  border-radius: 0.2rem;
+  font-size: 0.9em;
+  font-family: Helvetica, Arial, sans-serif;
+  background-color: #ffffff;
+}
+
+.data-inputs:focus {
+  background-color: #e1e1e1;
+}
+
+.invalid-input {
+  border: solid 0.1rem #d00000;
+}
+
+.invalid-feedback {
+  margin: 0.4rem auto;
+  width: max-content;
+  padding: 0.2rem 0.4rem;
+  background-color: #d00000;
+  font-size: 0.7em;
+}
+
+#calculate-btn {
+  background-color: #0c6291;
+  color: #ffffff;
+}
+
+#calculate-btn:hover {
+  border-color: #0c6291;
+  color: #0c6291;
+  background: transparent;
+}
+
+#reset-btn {
+  background-color: #dcdcdd;
+}
+
+#reset-btn:hover {
+  border-color: #dcdcdd;
+  color: #dcdcdd;
+  background: transparent;
+}

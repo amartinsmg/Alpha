@@ -2,14 +2,11 @@
 
 Hello,
 
-This is a personal project for creating a quadratic function calculator.
-It contains two main parts, the API that process the Web Page's input data, which shows its output data.
+This is a personal project for creating a quadratic function calculator web page, that give input data and shows output data.
 
-The front-end application takes the user's input and uses the Fetch API to send the http request to the server.
+The page gets the coefficients from the input data and instantiates the QuadraticFunction class. Its constructor uses Algebrite, a javascript library for symbolic computation, to calculate the function's roots and vertex coordinates. The class uses mathjs, a extensive math library, to calculate the plot points witch are used by Plotly, a data visualization library, to get the plot.
 
-The server gets the data from the request and uses the sympy, a python library for symbolic computation, to calculate the function's roots and vertex coordinates. The server uses numpy, a library for numeric computation, to calculate the plot poits and matplotlib, a library for data visualization, to obtains the plot in svg format. The server uses Flask, a micro-framework for web development, to receive the request and send the response, which is sent in JSON format.
-
-When the front-end app receive the JSON data, it's formatted using MathJax, a Javascript library for convert Latex to svg and other formats, and displayed to the user.
+The other data is formatted using MathJax, a Javascript library for converting Latex to svg and other formats, and displayed to the user.
 
 <figure>
 <img src="assets/index.png">

@@ -1,0 +1,29 @@
+/* General */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+}
+
+html {
+  font-size: 20px;
+}
+
+body {
+  background-color: #121212;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.3rem;
+  color: #ffffff;
+}
+
+main {
+  text-align: center;
+}
+
+@import url("generics.css");
+@import url("headers.css");
+@import url("inputs.css");
+@import url("outputs.css");
+@import url("responsive.css");
