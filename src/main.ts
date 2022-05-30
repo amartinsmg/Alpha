@@ -25,9 +25,9 @@ class QFCalculator {
     catchError?: Function,
     parentForm?: HTMLFormElement
   ): string[] {
-    const VALUES = els.map((el) => {
-      const VALUE = QFCalculator.getValue(el),
-        FractionRegEx = /^-?\d+[/]\d+$/,
+    const VALUES: string[] = els.map((el) => {
+      let value: string = QFCalculator.getValue(el);
+      const FractionRegEx = /^-?\d+[/]\d+$/,
         DividedByZeroRegEx = /[/]0/,
         FloatRegEx = /^-?\d*[.]\d{1,15}$/,
         IntegerRegEx = /^-?\d+$/,
@@ -35,13 +35,15 @@ class QFCalculator {
         ZeroFloatRegEx = /^-?0*[.]0+$/,
         ZeroIntegerRegEx = /^-?0+$/,
         VALID_NUMBER =
-          (FractionRegEx.test(VALUE) && !DividedByZeroRegEx.test(VALUE)) ||
-          FloatRegEx.test(VALUE) ||
-          IntegerRegEx.test(VALUE),
+          (FractionRegEx.test(value) && !DividedByZeroRegEx.test(value)) ||
+          FloatRegEx.test(value) ||
+          IntegerRegEx.test(value),
         ZERO_NUMBER =
-          ZeroFractionRegEx.test(VALUE) ||
-          ZeroFloatRegEx.test(VALUE) ||
-          ZeroIntegerRegEx.test(VALUE);
+          ZeroFractionRegEx.test(value) ||
+          ZeroFloatRegEx.test(value) ||
+          ZeroIntegerRegEx.test(value);
+      if (value.match(FloatRegEx))
+        value = `${parseFloat(value) * 1e15}/${1e15}`;
       try {
         if (!VALID_NUMBER) throw "Enter a integer, float or fractional number!";
         if (el.name === "a" && ZERO_NUMBER) throw "Enter a non-zero number!";
@@ -49,7 +51,7 @@ class QFCalculator {
         if (catchError) catchError(el, err, parentForm);
         else throw "Invalid input!";
       }
-      return VALUE;
+      return value;
     });
     return VALUES;
   }
@@ -121,13 +123,13 @@ class QFCalculator {
         const QF = new QuadraticFunction(A, B, C);
         const { formula, plotPoits, roots, vertex } = QF;
         console.log(QF);
-        OutputHeadings.forEach((el) => el.classList.remove("non-dislay"));
+        OutputHeadings.forEach((el) => el.classList.remove("non-display"));
         FormulaDiv.innerHTML = QFCalculator.convertTexToSvg(formula);
         RootsDiv.innerHTML = roots
           .map((str) => QFCalculator.convertTexToSvg(str))
           .join("");
         CoordinatesDiv.innerHTML = QFCalculator.convertTexToSvg(vertex);
-        // Plotly.newPlot(GraphFig, {...plotPoits, type: "line"});
+        Plotly.newPlot(GraphFig, [{ ...plotPoits, mode: "line" }]);
       } catch (err) {
         FormulaDiv.innerHTML =
           QFCalculator.convertTexToSvg("y = ax^2 + bx + c");

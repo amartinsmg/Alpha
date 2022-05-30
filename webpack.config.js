@@ -5,7 +5,7 @@ const CopyPlugin = require("copy-webpack-plugin"),
   TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = {
-  entry: "./src/frontend/main.ts",
+  entry: "./src/main.ts",
   output: {
     filename: "bundle.js",
     path: path.resolve(__dirname, "dist"),
@@ -44,7 +44,7 @@ module.exports = {
   },
   plugins: [
     new CopyPlugin({
-      patterns: [{ from: "**/*.html", context: "src/frontend/" }],
+      patterns: [{ from: "**/*.html", context: "src/" }],
     }),
     new MiniCssExtractPlugin({
       filename: "bundle.css",

@@ -5,13 +5,10 @@
     "type": "git",
     "url": "git+https://github.com/amartinsmg/QuadraticFCalculator.git"
   },
-  "main": "./src/frontend/index.ts",
+  "main": "./src/main.ts",
   "scripts": {
     "build": "webpack",
-    "dev": "concurrently -k \"npm:dev:*\"",
-    "dev:webpack": "webpack-dev-server",
-    "dev:flask": "python src/backend/index.py",
-    "install": "pip install sympy numpy Flask matplotlib && npm install"
+    "dev": "webpack-dev-server"
   },
   "devDependencies": {
     "@babel/cli": "^7.17.6",

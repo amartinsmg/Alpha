@@ -136,7 +136,11 @@ main {
 }
 
 #graph {
-  max-width: 90%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: auto;
+  max-width: 90vw;
 }
 
 /* In medium screens */
@@ -147,5 +151,8 @@ main {
   }
   #page-title {
     font-size: 2.5em;
+  }
+  #graph {
+    width: 640px;
   }
 }
