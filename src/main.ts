@@ -104,7 +104,7 @@ class QFCalculator {
       BInput: HTMLInputElement = document.querySelector("#b-input"),
       CInput: HTMLInputElement = document.querySelector("#c-input"),
       InputsElements = [AInput, BInput, CInput],
-      Form: HTMLFormElement = document.querySelector("#coeficients-form"),
+      Form: HTMLFormElement = document.querySelector("#coefficients-form"),
       OutputElement: HTMLOutputElement = document.querySelector("#output-data"),
       OutputHeadings: NodeListOf<HTMLHeadingElement> =
         document.querySelectorAll(".output-heading"),
