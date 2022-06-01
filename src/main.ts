@@ -1,6 +1,6 @@
 import QuadraticFunction from "./ts/qudratic";
 import "./css/main.css";
-require("mathjax/es5/tex-svg.js");
+import "mathjax/es5/tex-svg.js";
 const Plotly = require("plotly.js/dist/plotly-basic.min.js");
 
 declare const MathJax: any;
@@ -8,7 +8,7 @@ declare const MathJax: any;
 class QFCalculator {
   //Call MathJax method that convert latex to an svg element and get its innerHTML
 
-  public static convertTexToSvg(texStr: string): string {
+  private static convertTexToSvg(texStr: string): string {
     return MathJax.tex2svg(texStr).innerHTML;
   }
 
@@ -26,8 +26,8 @@ class QFCalculator {
     parentForm?: HTMLFormElement
   ): string[] {
     const VALUES: string[] = els.map((el) => {
-      let value: string = QFCalculator.getValue(el);
-      const FractionRegEx = /^-?\d+[/]\d+$/,
+      const VALUE: string = QFCalculator.getValue(el),
+        FractionRegEx = /^-?\d+[/]\d+$/,
         DividedByZeroRegEx = /[/]0/,
         FloatRegEx = /^-?\d*[.]\d{1,15}$/,
         IntegerRegEx = /^-?\d+$/,
@@ -35,15 +35,13 @@ class QFCalculator {
         ZeroFloatRegEx = /^-?0*[.]0+$/,
         ZeroIntegerRegEx = /^-?0+$/,
         VALID_NUMBER =
-          (FractionRegEx.test(value) && !DividedByZeroRegEx.test(value)) ||
-          FloatRegEx.test(value) ||
-          IntegerRegEx.test(value),
+          (FractionRegEx.test(VALUE) && !DividedByZeroRegEx.test(VALUE)) ||
+          FloatRegEx.test(VALUE) ||
+          IntegerRegEx.test(VALUE),
         ZERO_NUMBER =
-          ZeroFractionRegEx.test(value) ||
-          ZeroFloatRegEx.test(value) ||
-          ZeroIntegerRegEx.test(value);
-      if (value.match(FloatRegEx))
-        value = `${parseFloat(value) * 1e15}/${1e15}`;
+          ZeroFractionRegEx.test(VALUE) ||
+          ZeroFloatRegEx.test(VALUE) ||
+          ZeroIntegerRegEx.test(VALUE);
       try {
         if (!VALID_NUMBER) throw "Enter a integer, float or fractional number!";
         if (el.name === "a" && ZERO_NUMBER) throw "Enter a non-zero number!";
@@ -51,7 +49,9 @@ class QFCalculator {
         if (catchError) catchError(el, err, parentForm);
         else throw "Invalid input!";
       }
-      return value;
+      if (VALUE.match(FloatRegEx))
+        return `${parseFloat(VALUE) * 1e15}/${1e15}`;
+      else return VALUE;
     });
     return VALUES;
   }
@@ -99,32 +99,26 @@ class QFCalculator {
   public static main(): void {
     //Constatns that store elements that will be often read or changed
 
-    const FormulaDiv: HTMLDivElement = document.querySelector("#formula"),
+    const FormulaDiv = document.querySelector("#formula"),
       AInput: HTMLInputElement = document.querySelector("#a-input"),
       BInput: HTMLInputElement = document.querySelector("#b-input"),
       CInput: HTMLInputElement = document.querySelector("#c-input"),
       InputsElements = [AInput, BInput, CInput],
       Form: HTMLFormElement = document.querySelector("#coefficients-form"),
-      OutputElement: HTMLOutputElement = document.querySelector("#output-data"),
-      OutputHeadings: NodeListOf<HTMLHeadingElement> =
-        document.querySelectorAll(".output-heading"),
-      RootsDiv: HTMLDivElement = document.querySelector("#roots"),
-      CoordinatesDiv: HTMLDivElement = document.querySelector("#coordinates"),
-      GraphFig: HTMLElement = document.querySelector("#graph"),
-      ErrorFeedbackDiv: HTMLDivElement =
-        document.querySelector("#error-feedback");
+      OutputElement = document.querySelector("#output-data"),
+      OutputHeadings = document.querySelectorAll(".output-heading"),
+      RootsDiv = document.querySelector("#roots"),
+      CoordinatesDiv = document.querySelector("#coordinates"),
+      GraphFig = document.querySelector("#graph"),
+      ErrorFeedbackDiv = document.querySelector("#error-feedback");
 
-    //Call the API, read its response and update the document when form is submitted
+    //Instantiate QuadraticFunction class, read its data and update the document when form is submitted
 
     Form.onsubmit = (e) => {
       e.preventDefault();
       try {
         const [A, B, C] = QFCalculator.testInputGetValue(InputsElements),
-          { formula, plotPoits, roots, vertex } = new QuadraticFunction(
-            A,
-            B,
-            C
-          );
+          { formula, plotPoits, roots, vertex } = new QuadraticFunction(A, B, C);
         OutputHeadings.forEach((el) => el.classList.remove("non-display"));
         FormulaDiv.innerHTML = QFCalculator.convertTexToSvg(formula);
         RootsDiv.innerHTML = roots
@@ -152,12 +146,11 @@ class QFCalculator {
     for (let [i, el] of InputsElements.entries()) {
       //Method that calls the testInputGetValue method for their parent objects when its lose focus
 
-      el.onblur = () =>
-        void QFCalculator.testInputGetValue(
-          [el],
-          QFCalculator.showFeedback,
-          Form
-        );
+      el.onblur = () => void QFCalculator.testInputGetValue(
+        [el],
+        QFCalculator.showFeedback,
+        Form
+      );
 
       //Method that call the whenKeyDown method when a key is downed
 

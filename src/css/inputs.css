@@ -29,6 +29,7 @@
 #calculate-btn {
   background-color: #0c6291;
   color: #ffffff;
+  transition: 500ms;
 }
 
 #calculate-btn:hover {
@@ -39,6 +40,7 @@
 
 #reset-btn {
   background-color: #dcdcdd;
+  transition: 500ms;
 }
 
 #reset-btn:hover {

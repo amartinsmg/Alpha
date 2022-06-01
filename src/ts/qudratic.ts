@@ -1,5 +1,5 @@
-const Algebrite = require("algebrite");
-const math = require("mathjs");
+const { expand, float, roots: findRoots, simplify } = require("algebrite");
+const { abs, compile, max, min, range } = require("mathjs");
 
 interface IPlotPoints {
   x: number[];
@@ -12,88 +12,85 @@ class QuadraticFunction {
   readonly roots: string[];
   readonly vertex: string;
 
-  constructor(a: string, b: string, c: string) {
-    const FORMULA = Algebrite.expand(`${a} * x^2 + (${b}) * x + (${c})`),
-      ROOTS: any = Algebrite.roots(FORMULA),
+  //Gets the coefficient's values and uses Algebrite to calculate the roots
+
+  public constructor(a: string, b: string, c: string) {
+    const FORMULA = expand(`${a} * x^2 + (${b}) * x + (${c})`),
+      ROOTS: any = findRoots(FORMULA),
       NUMBER_ROOTS: string[] = QuadraticFunction.numberFormatRoots(ROOTS),
       DELTA_FORMULA = `(${b})^2 - 4 * (${a}) * (${c})`,
-      DELTA = parseFloat(Algebrite.float(DELTA_FORMULA).toString()),
+      DELTA = parseFloat(float(DELTA_FORMULA).toString()),
       VERTEX_FORMULAS = [
         `-(${b})/(2 * (${a}))`,
         `-(${DELTA_FORMULA})/(4 * (${a}))`,
       ],
-      VERTEX = VERTEX_FORMULAS.map((str) => Algebrite.simplify(str)),
+      VERTEX: any[] = VERTEX_FORMULAS.map((str) => simplify(str)),
       X_1: number =
         DELTA >= 0
           ? parseFloat(NUMBER_ROOTS[0])
-          : parseFloat(Algebrite.float(VERTEX[0]).toString()),
+          : parseFloat(float(VERTEX[0]).toString()),
       X_2: number = DELTA > 0 ? parseFloat(NUMBER_ROOTS[1]) : null;
     this.formula = `y = ${FORMULA.toLatexString()}`;
     this.roots =
       DELTA >= 0
-        ? QuadraticFunction.formatRoots(ROOTS)
+        ? QuadraticFunction.formatRoots(ROOTS, NUMBER_ROOTS)
         : ["\\text{This quadratic function don't have any real zero.}"];
     this.vertex = `(${VERTEX.map((obj) => obj.toLatexString()).join(", ")})`;
-    this.plotPoits = QuadraticFunction.findPlotPoints(
+    this.plotPoits = QuadraticFunction.getPlotPoints(
       FORMULA.toString(),
       X_1,
       X_2
     );
   }
 
-  private static formatRoots(rootsObj: any): string[] {
-    let numbericRoots = QuadraticFunction.numberFormatRoots(rootsObj),
-      roots: string[] = rootsObj
-        .toLatexString()
-        .replace("\\begin{bmatrix} ", "")
-        .replace(" \\end{bmatrix}", "")
-        .split(" & ");
-    roots = roots.map((str, i) => {
-      let num = numbericRoots[i];
-      if (str.match("\\\\")) {
-        if (num.match("...")) return `${str} \\approx ${num}`;
-        else return `${str} = ${num}`;
-      }
-      return str;
-    });
-    if (roots.length === 2)
-      roots = roots.map((e, i) => `{x}_{${i + 1}} = ${e}`);
-    else if (roots.length === 1) roots = [`x = ${roots.pop()}`];
-    return roots;
+  //Format the roots found by Albebrite
+
+  private static formatRoots(rootsObj: any, numbericRoots: string[]): string[] {
+    const ROOTS: string[] = rootsObj
+      .toLatexString()
+      .replace("\\begin{bmatrix} ", "")
+      .replace(" \\end{bmatrix}", "")
+      .split(" & ")
+      .map((str: string, i: number) => {
+        const NUM = numbericRoots[i];
+        if (str.match(/\\/)) {
+          if (NUM.match(/\.\.\./)) return `${str} \\approx ${NUM}`;
+          else return `${str} = ${NUM}`;
+        }
+        return str;
+      });
+    if (ROOTS.length === 2) return ROOTS.map((e, i) => `{x}_{${i + 1}} = ${e}`);
+    else if (ROOTS.length === 1) return [`x = ${ROOTS.pop()}`];
   }
+
+  //Convert the roots found by Algebrite into an Array with theirs numeric values in string format
 
   private static numberFormatRoots(roots: any): string[] {
-    return Algebrite.float(roots)
-      .toString()
-      .replace("[", "")
-      .replace("]", "")
-      .split(",");
+    return float(roots).toString().replace("[", "").replace("]", "").split(",");
   }
 
-  private static findPlotPoints(
+  //Take the formula and the roots or x-coordinate of the vertex to get the graph points
+
+  private static getPlotPoints(
     formula: string,
     x1: number,
     x2: number
   ): IPlotPoints {
-    const expression = math.compile(formula);
-    let extraValue: number, xMinValue: number, xMaxValue: number, step: number;
-    if (!(x2 === null)) {
+    const Expression = compile(formula);
+    let xMinValue: number, xMaxValue: number;
+    if (x2 !== null) {
       if (x1 > x2) [x1, x2] = [x2, x1];
-      extraValue = math.max(
-        2,
-        math.abs(x2 - x1) / 5,
-        math.min(math.abs(x1), math.abs(x2))
-      );
-      xMinValue = x1 - extraValue;
-      xMaxValue = x2 + extraValue;
+      const EXTRA_VALUE = max(2, abs(x2 - x1) / 5, min(abs(x1), abs(x2)));
+      xMinValue = x1 - EXTRA_VALUE;
+      xMaxValue = x2 + EXTRA_VALUE;
     } else {
-      extraValue = math.max(2, math.abs(x1));
-      xMinValue = x1 - extraValue;
-      xMaxValue = x1 + extraValue;
+      const EXTRA_VALUE = max(2, abs(x1));
+      xMinValue = x1 - EXTRA_VALUE;
+      xMaxValue = x1 + EXTRA_VALUE;
     }
-    step = math.abs(xMaxValue - xMinValue) / 100;
-    let x: number[] = math.range(xMinValue, xMaxValue, step).toArray(),
-      y: number[] = x.map((x) => expression.evaluate({ x }));
+    const STEP = abs(xMaxValue - xMinValue) / 100,
+      x: number[] = range(xMinValue, xMaxValue, STEP).toArray(),
+      y: number[] = x.map((x) => Expression.evaluate({ x }));
     return { x, y };
   }
 }
