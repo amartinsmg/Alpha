@@ -1,46 +1,21 @@
-import Quadratic from "./qudratic";
+import Quadratic from "./quadratic";
+import Calculator from "./calculator";
 import "mathjax/es5/tex-svg.js";
 const Plotly = require("plotly.js/dist/plotly-basic.min.js");
 
 declare const MathJax: any;
 
-class QFCalculator {
+abstract class QFCalculator extends Calculator {
   //Call MathJax method that convert latex to an svg element and get its innerHTML
 
   private static convertTexToSvg(texStr: string): string {
     return MathJax.tex2svg(texStr).innerHTML;
   }
 
-  //Get the value of an input element
-
-  private static getInputValue(el: HTMLInputElement): string {
-    return el.value.trim().replace(",", ".");
-  }
-
   //Read an input element's value and check if it's valid
 
-  private static validateInputValue(els: HTMLInputElement[]): string {
-    for (let el of els) {
-      const VALUE: string = QFCalculator.getInputValue(el),
-        FractionRegEx = /^-?\d+[/]\d+$/,
-        DividedByZeroRegEx = /[/]0/,
-        FloatRegEx = /^-?\d*[.]\d{1,15}$/,
-        IntegerRegEx = /^-?\d+$/,
-        ZeroFractionRegEx = /^-?0+[/]/,
-        ZeroFloatRegEx = /^-?0*[.]0+$/,
-        ZeroIntegerRegEx = /^-?0+$/,
-        VALID_NUMBER =
-          (FractionRegEx.test(VALUE) && !DividedByZeroRegEx.test(VALUE)) ||
-          FloatRegEx.test(VALUE) ||
-          IntegerRegEx.test(VALUE),
-        ZERO_NUMBER =
-          ZeroFractionRegEx.test(VALUE) ||
-          ZeroFloatRegEx.test(VALUE) ||
-          ZeroIntegerRegEx.test(VALUE);
-      if (!VALID_NUMBER) return "Enter a integer, float or fractional number!";
-      if (el.name === "a" && ZERO_NUMBER) return "Enter a non-zero number!";
-    }
-    return "valid";
+  protected static validateInputValue(els: HTMLInputElement[]): string {
+    return Calculator.validateInputValue(els, true, "a");
   }
 
   //Format the data from an input element for use in Algebrite
@@ -55,42 +30,11 @@ class QFCalculator {
 
   //Show the errors found in user input
 
-  private static showFeedback(
+  protected static showFeedback(
     el: HTMLInputElement,
     parentForm: HTMLFormElement
   ): void {
-    const FEEDBACK = QFCalculator.validateInputValue([el]),
-      ParentEl = el.parentElement;
-    if (FEEDBACK !== "valid" && ParentEl.childElementCount === 2) {
-      const InvalidMessageDiv = document.createElement("div"),
-        removeInvalidMessage = () => {
-          el.classList.remove("invalid-input");
-          InvalidMessageDiv.remove();
-        },
-        once = true;
-      el.classList.add("invalid-input");
-      InvalidMessageDiv.classList.add("invalid-feedback");
-      InvalidMessageDiv.textContent = FEEDBACK;
-      ParentEl.appendChild(InvalidMessageDiv);
-      el.addEventListener("input", removeInvalidMessage, { once });
-      parentForm.addEventListener("reset", removeInvalidMessage, { once });
-    }
-  }
-
-  //Move focus to the next element or submit the form if there is none
-
-  private static whenKeyDown(
-    e: KeyboardEvent,
-    nextEl?: HTMLInputElement
-  ): void {
-    if (e.keyCode === 13) {
-      if (nextEl) {
-        nextEl.focus();
-        nextEl.value = "";
-        e.preventDefault();
-      }
-      return void 0;
-    }
+    Calculator.showFeedback(el, parentForm, QFCalculator);
   }
 
   public static main(): void {

@@ -1,14 +1,9 @@
 const { expand, float, roots: findRoots, simplify } = require("algebrite");
-const { abs, compile, max, min, range } = require("mathjs");
-
-interface IPlotPoints {
-  x: number[];
-  y: number[];
-}
+import PlotPoits from "./plotpoints";
 
 class QuadraticFunction {
   readonly formula: string;
-  readonly plotPoits: IPlotPoints;
+  readonly plotPoits: PlotPoits;
   readonly roots: string[];
   readonly vertex: string;
 
@@ -36,11 +31,7 @@ class QuadraticFunction {
         ? QuadraticFunction.formatRoots(ROOTS, NUMBER_ROOTS)
         : ["\\text{This quadratic function don't have any real zero.}"];
     this.vertex = `(${VERTEX.map((obj) => obj.toLatexString()).join(", ")})`;
-    this.plotPoits = QuadraticFunction.getPlotPoints(
-      FORMULA.toString(),
-      X_1,
-      X_2
-    );
+    this.plotPoits = new PlotPoits(FORMULA.toString(), X_1, X_2);
   }
 
   //Format the roots found by Albebrite
@@ -70,31 +61,6 @@ class QuadraticFunction {
     return float(roots)
       .toString()
       .match(/-?\d*\.?\d+(\.{3})?/g);
-  }
-
-  //Take the formula and the roots or x-coordinate of the vertex to get the graph points
-
-  private static getPlotPoints(
-    formula: string,
-    x1: number,
-    x2: number
-  ): IPlotPoints {
-    const Expression = compile(formula);
-    let xMinValue: number, xMaxValue: number;
-    if (x2 !== null) {
-      if (x1 > x2) [x1, x2] = [x2, x1];
-      const EXTRA_VALUE = max(2, abs(x2 - x1) / 5, min(abs(x1), abs(x2)));
-      xMinValue = x1 - EXTRA_VALUE;
-      xMaxValue = x2 + EXTRA_VALUE;
-    } else {
-      const EXTRA_VALUE = max(2, abs(x1));
-      xMinValue = x1 - EXTRA_VALUE;
-      xMaxValue = x1 + EXTRA_VALUE;
-    }
-    const STEP = abs(xMaxValue - xMinValue) / 100,
-      x: number[] = range(xMinValue, xMaxValue, STEP).toArray(),
-      y: number[] = x.map((x) => Expression.evaluate({ x }));
-    return { x, y };
   }
 }
 
