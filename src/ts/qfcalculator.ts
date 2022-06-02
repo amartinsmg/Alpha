@@ -1,5 +1,4 @@
 import Quadratic from "./qudratic";
-import "./css/main.css";
 import "mathjax/es5/tex-svg.js";
 const Plotly = require("plotly.js/dist/plotly-basic.min.js");
 
@@ -155,4 +154,4 @@ class QFCalculator {
   }
 }
 
-window.addEventListener("load", QFCalculator.main);
+export default QFCalculator.main
