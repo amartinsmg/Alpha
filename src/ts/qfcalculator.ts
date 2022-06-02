@@ -142,16 +142,16 @@ class QFCalculator {
       OutputElement.scrollIntoView();
     };
 
-    for (let [i, el] of InputsElements.entries()) {
+    InputsElements.forEach((el, i, arr) => {
       //Method that calls the validateAndGetInputValue method for their parent objects when its lose focus
 
       el.onblur = () => QFCalculator.showFeedback(el, Form);
 
       //Method that call the whenKeyDown method when a key is downed
 
-      el.onkeydown = (e) => QFCalculator.whenKeyDown(e, InputsElements[i + 1]);
-    }
+      el.onkeydown = (e) => QFCalculator.whenKeyDown(e, arr[i + 1]);
+    });
   }
 }
 
-export default QFCalculator.main
+export default QFCalculator.main;

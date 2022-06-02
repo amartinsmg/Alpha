@@ -48,8 +48,9 @@ class QuadraticFunction {
   private static formatRoots(rootsObj: any, numbericRoots: string[]): string[] {
     const ROOTS: string[] = rootsObj
       .toLatexString()
-      .replace(/\\(begin|end){bmatrix}\s?/g, "")
-      .split(" & ")
+      .replace(/\\(begin|end){bmatrix}/g, "")
+      .split("&")
+      .map((str: string) => str.trim())
       .map((str: string, i: number) => {
         const NUM = numbericRoots[i];
         if (str.match(/\\/)) {
@@ -60,6 +61,7 @@ class QuadraticFunction {
       });
     if (ROOTS.length === 2) return ROOTS.map((e, i) => `{x}_{${i + 1}} = ${e}`);
     else if (ROOTS.length === 1) return [`x = ${ROOTS.pop()}`];
+    else return null;
   }
 
   //Convert the roots found by Algebrite into an Array with theirs numeric values in string format
