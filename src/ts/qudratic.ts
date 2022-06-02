@@ -48,13 +48,12 @@ class QuadraticFunction {
   private static formatRoots(rootsObj: any, numbericRoots: string[]): string[] {
     const ROOTS: string[] = rootsObj
       .toLatexString()
-      .replace("\\begin{bmatrix} ", "")
-      .replace(" \\end{bmatrix}", "")
+      .replace(/\\(begin|end){bmatrix}\s?/g, "")
       .split(" & ")
       .map((str: string, i: number) => {
         const NUM = numbericRoots[i];
         if (str.match(/\\/)) {
-          if (NUM.match(/\.\.\./)) return `${str} \\approx ${NUM}`;
+          if (NUM.match(/\.{3}/)) return `${str} \\approx ${NUM}`;
           else return `${str} = ${NUM}`;
         }
         return str;
@@ -66,7 +65,9 @@ class QuadraticFunction {
   //Convert the roots found by Algebrite into an Array with theirs numeric values in string format
 
   private static numberFormatRoots(roots: any): string[] {
-    return float(roots).toString().replace("[", "").replace("]", "").split(",");
+    return float(roots)
+      .toString()
+      .match(/-?\d*\.?\d+(\.{3})?/g);
   }
 
   //Take the formula and the roots or x-coordinate of the vertex to get the graph points

@@ -12,21 +12,17 @@ class QFCalculator {
     return MathJax.tex2svg(texStr).innerHTML;
   }
 
-  //Get the value of an element and format it
+  //Get the value of an input element
 
-  private static getValue(el: HTMLInputElement): string {
+  private static getInputValue(el: HTMLInputElement): string {
     return el.value.trim().replace(",", ".");
   }
 
-  //Read an element's value and check if it's valid
+  //Read an input element's value and check if it's valid
 
-  private static testInputGetValue(
-    els: HTMLInputElement[],
-    catchError?: Function,
-    parentForm?: HTMLFormElement
-  ): string[] {
-    const VALUES: string[] = els.map((el) => {
-      const VALUE: string = QFCalculator.getValue(el),
+  private static validateInputValue(els: HTMLInputElement[]): string {
+    for (let el of els) {
+      const VALUE: string = QFCalculator.getInputValue(el),
         FractionRegEx = /^-?\d+[/]\d+$/,
         DividedByZeroRegEx = /[/]0/,
         FloatRegEx = /^-?\d*[.]\d{1,15}$/,
@@ -42,29 +38,31 @@ class QFCalculator {
           ZeroFractionRegEx.test(VALUE) ||
           ZeroFloatRegEx.test(VALUE) ||
           ZeroIntegerRegEx.test(VALUE);
-      try {
-        if (!VALID_NUMBER) throw "Enter a integer, float or fractional number!";
-        if (el.name === "a" && ZERO_NUMBER) throw "Enter a non-zero number!";
-      } catch (err) {
-        if (catchError) catchError(el, err, parentForm);
-        else throw "Invalid input!";
-      }
-      if (VALUE.match(FloatRegEx))
-        return `${parseFloat(VALUE) * 1e15}/${1e15}`;
+      if (!VALID_NUMBER) return "Enter a integer, float or fractional number!";
+      if (el.name === "a" && ZERO_NUMBER) return "Enter a non-zero number!";
+    }
+    return "valid";
+  }
+
+  //Format the data from an input element for use in Algebrite
+
+  private static formatInputsValues(els: HTMLInputElement[]): string[] {
+    return els.map((el) => {
+      const VALUE = QFCalculator.getInputValue(el);
+      if (VALUE.match(/\d*[.]\d/)) return `${parseFloat(VALUE) * 1e15}/${1e15}`;
       else return VALUE;
     });
-    return VALUES;
   }
 
   //Show the errors found in user input
 
   private static showFeedback(
-    el: HTMLElement,
-    message: string,
+    el: HTMLInputElement,
     parentForm: HTMLFormElement
   ): void {
-    const ParentEl = el.parentElement;
-    if (ParentEl.childElementCount === 2) {
+    const FEEDBACK = QFCalculator.validateInputValue([el]),
+      ParentEl = el.parentElement;
+    if (FEEDBACK !== "valid" && ParentEl.childElementCount === 2) {
       const InvalidMessageDiv = document.createElement("div"),
         removeInvalidMessage = () => {
           el.classList.remove("invalid-input");
@@ -73,7 +71,7 @@ class QFCalculator {
         once = true;
       el.classList.add("invalid-input");
       InvalidMessageDiv.classList.add("invalid-feedback");
-      InvalidMessageDiv.textContent = message;
+      InvalidMessageDiv.textContent = FEEDBACK;
       ParentEl.appendChild(InvalidMessageDiv);
       el.addEventListener("input", removeInvalidMessage, { once });
       parentForm.addEventListener("reset", removeInvalidMessage, { once });
@@ -117,8 +115,14 @@ class QFCalculator {
     Form.onsubmit = (e) => {
       e.preventDefault();
       try {
-        const [A, B, C] = QFCalculator.testInputGetValue(InputsElements),
-          { formula, plotPoits, roots, vertex } = new QuadraticFunction(A, B, C);
+        if (QFCalculator.validateInputValue(InputsElements) !== "valid")
+          throw "Invalid input";
+        const [A, B, C] = QFCalculator.formatInputsValues(InputsElements);
+        const { formula, plotPoits, roots, vertex } = new QuadraticFunction(
+          A,
+          B,
+          C
+        );
         OutputHeadings.forEach((el) => el.classList.remove("non-display"));
         FormulaDiv.innerHTML = QFCalculator.convertTexToSvg(formula);
         RootsDiv.innerHTML = roots
@@ -144,13 +148,9 @@ class QFCalculator {
     };
 
     for (let [i, el] of InputsElements.entries()) {
-      //Method that calls the testInputGetValue method for their parent objects when its lose focus
+      //Method that calls the validateAndGetInputValue method for their parent objects when its lose focus
 
-      el.onblur = () => void QFCalculator.testInputGetValue(
-        [el],
-        QFCalculator.showFeedback,
-        Form
-      );
+      el.onblur = () => QFCalculator.showFeedback(el, Form);
 
       //Method that call the whenKeyDown method when a key is downed
 
