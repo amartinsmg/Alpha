@@ -117,12 +117,8 @@ class QFCalculator {
       try {
         if (QFCalculator.validateInputValue(InputsElements) !== "valid")
           throw "Invalid input";
-        const [A, B, C] = QFCalculator.formatInputsValues(InputsElements);
-        const { formula, plotPoits, roots, vertex } = new QuadraticFunction(
-          A,
-          B,
-          C
-        );
+        const [A, B, C] = QFCalculator.formatInputsValues(InputsElements),
+          { formula, plotPoits, roots, vertex } = new QuadraticFunction(A, B, C);
         OutputHeadings.forEach((el) => el.classList.remove("non-display"));
         FormulaDiv.innerHTML = QFCalculator.convertTexToSvg(formula);
         RootsDiv.innerHTML = roots
