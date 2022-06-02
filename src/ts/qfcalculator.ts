@@ -23,7 +23,7 @@ abstract class QFCalculator extends Calculator {
   private static formatInputsValues(els: HTMLInputElement[]): string[] {
     return els.map((el) => {
       const VALUE = QFCalculator.getInputValue(el);
-      if (VALUE.match(/\d*[.]\d/)) return `${parseFloat(VALUE) * 1e15}/${1e15}`;
+      if (VALUE.match(/\d*[.]\d/)) return `${parseFloat(VALUE) * 1e17}/${1e17}`;
       else return VALUE;
     });
   }
