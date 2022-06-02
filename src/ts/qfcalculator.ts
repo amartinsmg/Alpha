@@ -87,7 +87,7 @@ abstract class QFCalculator extends Calculator {
     };
 
     InputsElements.forEach((el, i, arr) => {
-      //Method that calls the validateAndGetInputValue method for their parent objects when its lose focus
+      //Method that calls the showFeedback method for their parent objects when its lose focus
 
       el.onblur = () => QFCalculator.showFeedback(el, Form);
 
