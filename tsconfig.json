@@ -1,11 +1,11 @@
 {
   "compilerOptions": {
-    "target": "ESNext" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
-    "module": "commonjs",                                /* Specify what module code is generated. */    
-    "allowJs": true,                                  /* Allow JavaScript files to be a part of your program. Use the `checkJS` option to get errors from these files. */
-    "strict": true,                                      /* Enable all strict type-checking options. */
-    "strictNullChecks": false,                         /* When type checking, take into account `null` and `undefined`. */
-    "useUnknownInCatchVariables": false,               /* Type catch clause variables as 'unknown' instead of 'any'. */
+    "target": "ESNext",
+    "module": "commonjs",
+    "allowJs": true,
+    "strict": true,
+    "strictNullChecks": false,
+    "useUnknownInCatchVariables": false
   },
   "include": ["src/**/*.ts"]
 }
