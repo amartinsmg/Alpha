@@ -5,7 +5,7 @@ const Plotly = require("plotly.js/dist/plotly-basic.min.js");
 
 declare const MathJax: any;
 
-abstract class QFCalculator extends Calculator {
+class QFCalculator extends Calculator {
   //Call MathJax method that convert latex to an svg element and get its innerHTML
 
   private static convertTexToSvg(texStr: string): string {
@@ -37,21 +37,32 @@ abstract class QFCalculator extends Calculator {
     Calculator.showFeedback(el, parentForm, QFCalculator);
   }
 
-  public static main(): void {
+  public constructor(
+    formulaSelector: string,
+    inputsSelectors: string[],
+    formSelector: string,
+    outputSelector: string,
+    outputHsSelctor: string,
+    rootsDivSelector: string,
+    coordinatesDivSelector: string,
+    graphDivSelector: string,
+    errorFeedbackDivSelector: string
+  ) {
+    super();
+
     //Constatns that store elements that will be often read or changed
 
-    const FormulaDiv = document.querySelector("#formula"),
-      AInput: HTMLInputElement = document.querySelector("#a-input"),
-      BInput: HTMLInputElement = document.querySelector("#b-input"),
-      CInput: HTMLInputElement = document.querySelector("#c-input"),
-      InputsElements = [AInput, BInput, CInput],
-      Form: HTMLFormElement = document.querySelector("#coefficients-form"),
-      OutputElement = document.querySelector("#output-data"),
-      OutputHeadings = document.querySelectorAll(".output-heading"),
-      RootsDiv = document.querySelector("#roots"),
-      CoordinatesDiv = document.querySelector("#coordinates"),
-      GraphFig = document.querySelector("#graph"),
-      ErrorFeedbackDiv = document.querySelector("#error-feedback");
+    const FormulaDiv = document.querySelector(formulaSelector),
+      InputsElements = inputsSelectors.map((selector) =>
+        document.querySelector<HTMLInputElement>(selector)
+      ),
+      Form: HTMLFormElement = document.querySelector(formSelector),
+      OutputElement = document.querySelector(outputSelector),
+      OutputHeadings = document.querySelectorAll(outputHsSelctor),
+      RootsDiv = document.querySelector(rootsDivSelector),
+      CoordinatesDiv = document.querySelector(coordinatesDivSelector),
+      GraphDiv = document.querySelector(graphDivSelector),
+      ErrorFeedbackDiv = document.querySelector(errorFeedbackDivSelector);
 
     //Instantiate QuadraticFunction class, read its data and update the document when form is submitted
 
@@ -68,14 +79,14 @@ abstract class QFCalculator extends Calculator {
           .map((str) => QFCalculator.convertTexToSvg(str))
           .join("");
         CoordinatesDiv.innerHTML = QFCalculator.convertTexToSvg(vertex);
-        Plotly.newPlot(GraphFig, [{ ...plotPoits, mode: "line" }]);
+        Plotly.newPlot(GraphDiv, [{ ...plotPoits, mode: "line" }]);
       } catch (err) {
         FormulaDiv.innerHTML =
           QFCalculator.convertTexToSvg("y = ax^2 + bx + c");
         OutputHeadings.forEach((el) => el.classList.add("non-display"));
         RootsDiv.innerHTML = null;
         CoordinatesDiv.innerHTML = null;
-        GraphFig.innerHTML = null;
+        GraphDiv.innerHTML = null;
         ErrorFeedbackDiv.textContent = err instanceof Error ? err.message : err;
         Form.addEventListener(
           "submit",
@@ -98,4 +109,4 @@ abstract class QFCalculator extends Calculator {
   }
 }
 
-export default QFCalculator.main;
+export default QFCalculator;
