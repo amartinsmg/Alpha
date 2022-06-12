@@ -1,15 +1,13 @@
 import Quadratic from "./quadratic";
 import Calculator from "./calculator";
-import "mathjax/es5/tex-svg.js";
-const Plotly = require("plotly.js/dist/plotly-basic.min.js");
 
-declare const MathJax: any;
+declare const MathJax: any, Plotly: any;
 
 class QFCalculator extends Calculator {
   //Call MathJax method that convert latex to an svg element and get its innerHTML
 
-  private static convertTexToSvg(texStr: string): string {
-    return MathJax.tex2svg(texStr).innerHTML;
+  protected static convertTexToSvg(texStr: string): string {
+    return MathJax ? MathJax.tex2svg(texStr).innerHTML : texStr;
   }
 
   //Read an input element's value and check if it's valid
@@ -20,7 +18,7 @@ class QFCalculator extends Calculator {
 
   //Format the data from an input element for use in Algebrite
 
-  private static formatInputsValues(els: HTMLInputElement[]): string[] {
+  protected static formatInputsValues(els: HTMLInputElement[]): string[] {
     return els.map((el) => {
       const VALUE = QFCalculator.getInputValue(el);
       if (VALUE.match(/\d*[.]\d/)) return `${parseFloat(VALUE) * 1e17}/${1e17}`;
@@ -79,7 +77,7 @@ class QFCalculator extends Calculator {
           .map((str) => QFCalculator.convertTexToSvg(str))
           .join("");
         CoordinatesDiv.innerHTML = QFCalculator.convertTexToSvg(vertex);
-        Plotly.newPlot(GraphDiv, [{ ...plotPoits, mode: "line" }]);
+        if(Plotly) Plotly.newPlot(GraphDiv, [{ ...plotPoits, mode: "line" }]);
       } catch (err) {
         FormulaDiv.innerHTML =
           QFCalculator.convertTexToSvg("y = ax^2 + bx + c");
