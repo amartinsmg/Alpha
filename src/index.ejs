@@ -4,7 +4,6 @@
     <title>Quadratic Function Calculator</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="bundle.css" />
     <script
       type="text/javascript"
       id="MathJax-script"
@@ -12,56 +11,29 @@
       src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"
     ></script>
     <script src="https://cdn.plot.ly/plotly-2.12.1.min.js"></script>
-    <script src="bundle.js" defer></script>
   </head>
   <body>
-    <header id="page-header">
-      <h1 id="page-title">Quadratic Function Calculator</h1>
-    </header>
     <main>
-      <header>
-        <div id="formula" class="bold">$$y = ax^{2} + bx + c$$</div>
+      <header id="main-header">
+        <h1 id="main-title">Quadratic Function Calculator</h1>
       </header>
+      <div id="formula" class="bold">$$y = ax^{2} + bx + c$$</div>
       <form id="coefficients-form">
-        <div class="form-group">
-          <label for="a-input">\(a\) value:</label>
-          <input
-            class="data-inputs"
-            id="a-input"
-            name="a"
-            type="text"
-            placeholder="Enter a non-zero number!"
-            value="1"
-            inputmode="tel"
-            required
-          />
-        </div>
-        <div class="form-group">
-          <label for="b-input">\(b\) value:</label>
-          <input
-            class="data-inputs"
-            id="b-input"
-            name="b"
-            type="text"
-            placeholder="Enter a number!"
-            value="0"
-            inputmode="tel"
-            required
-          />
-        </div>
-        <div class="form-group">
-          <label for="c-input">\(c\) value:</label>
-          <input
-            class="data-inputs"
-            id="c-input"
-            name="c"
-            type="text"
-            placeholder="Enter a number!"
-            value="0"
-            inputmode="tel"
-            required
-          />
-        </div>
+        <% for (let [c, n] of [["a", 1], ["b", 0], ["c", 0]]) { %> 
+          <div class="form-group">
+            <label for="<%= c %>-input">\(<%= c %>\) value:</label>
+            <input
+              class="data-inputs"
+              id="<%= c %>-input"
+              name="<%= c %>"
+              type="text"
+              placeholder="Enter a non-zero number!"
+              value=<%= n %> 
+              inputmode="tel"
+              required
+            />
+          </div>
+        <% } %> 
         <div class="form-group">
           <button class="data-inputs btn" id="reset-btn" type="reset">
             Reset

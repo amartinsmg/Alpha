@@ -1,5 +1,5 @@
-const CopyPlugin = require("copy-webpack-plugin"),
-  CssMinimizerWebpack = require("css-minimizer-webpack-plugin"),
+const CssMinimizerWebpack = require("css-minimizer-webpack-plugin"),
+  HtmlWebpackPlugin = require("html-webpack-plugin"),
   MiniCssExtractPlugin = require("mini-css-extract-plugin"),
   path = require("path"),
   TerserPlugin = require("terser-webpack-plugin");
@@ -7,7 +7,7 @@ const CopyPlugin = require("copy-webpack-plugin"),
 module.exports = {
   entry: "./src/main.ts",
   output: {
-    filename: "bundle.js",
+    filename: "assets/bundle.js",
     path: path.resolve(__dirname, "dist"),
   },
   mode: "production",
@@ -15,7 +15,7 @@ module.exports = {
     static: {
       directory: path.resolve(__dirname, "dist"),
     },
-    port: 8000,
+    port: 8080,
     open: true,
   },
   module: {
@@ -43,11 +43,9 @@ module.exports = {
     minimizer: [new TerserPlugin(), new CssMinimizerWebpack()],
   },
   plugins: [
-    new CopyPlugin({
-      patterns: [{ from: "**/*.html", context: "src/" }],
-    }),
+    new HtmlWebpackPlugin({ filename: "index.html" }),
     new MiniCssExtractPlugin({
-      filename: "bundle.css",
+      filename: "assets/bundle.css",
     }),
   ],
 };

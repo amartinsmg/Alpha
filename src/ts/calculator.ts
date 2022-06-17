@@ -14,14 +14,12 @@ abstract class Calculator {
   ): string {
     for (let el of els) {
       const VALUE: string = Calculator.getInputValue(el),
-        FractionRegEx = /^-?\d+[/]\d+$/,
-        DividedByZeroRegEx = /[/]0/,
+        FractionRegEx = /^-?\d+[/][1-9]\d+$/,
         NumberRegEx = /^-?\d*[.]?\d+$/,
         ZeroFractionRegEx = /^-?0+[/]/,
         ZeroNumberRegEx = /^-?0*[.]?0+$/,
         VALID_VALUE = fraction
-          ? (FractionRegEx.test(VALUE) && !DividedByZeroRegEx.test(VALUE)) ||
-            NumberRegEx.test(VALUE)
+          ? FractionRegEx.test(VALUE) || NumberRegEx.test(VALUE)
           : NumberRegEx.test(VALUE),
         ZERO_NUMBER =
           ZeroFractionRegEx.test(VALUE) || ZeroNumberRegEx.test(VALUE);

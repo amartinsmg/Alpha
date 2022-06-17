@@ -1,18 +1,18 @@
-/* page header */
+/* main header */
 
-#page-header {
+#main-header {
   margin: 1.5rem 0;
   text-align: center;
 }
 
-#page-title {
+#main-title {
   font-size: 1.5em;
   font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
   font-weight: 800;
   color: #3f88c5;
 }
 
-/* main header */
+/* formula div */
 
 #formula {
   margin: 1.75rem 0;
