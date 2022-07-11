@@ -1,6 +1,6 @@
 {
   "name": "qfcalculator",
-  "version": "0.9.9",
+  "version": "1.0.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/amartinsmg/QuadraticFCalculator.git"
@@ -37,5 +37,5 @@
   "bugs": {
     "url": "https://github.com/amartinsmg/QuadraticFCalculator/issues"
   },
-  "homepage": "https://github.com/amartinsmg/QuadraticFCalculator#readme"
+  "homepage": "/QuadraticFCalculator"
 }
