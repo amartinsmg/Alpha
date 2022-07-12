@@ -1,0 +1,21 @@
+footer {
+  text-align: center;
+  padding: 1.5rem 0 0.5rem 0;
+  font-size: 0.7rem;
+}
+
+footer a:link {
+  color: inherit;
+}
+
+footer a:visited {
+  color: inherit;
+}
+
+footer a:hover {
+  color: inherit;
+}
+
+footer a:active {
+  color: inherit;
+}
