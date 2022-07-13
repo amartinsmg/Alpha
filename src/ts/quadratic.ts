@@ -24,7 +24,7 @@ class QuadraticFunction {
         DELTA >= 0
           ? parseFloat(NUMBER_ROOTS[0])
           : parseFloat(float(VERTEX[0]).toString()),
-      X_2: number = DELTA > 0 ? parseFloat(NUMBER_ROOTS[1]) : null;
+      X_2: number | null = DELTA > 0 ? parseFloat(NUMBER_ROOTS[1]) : null;
     this.formula = `y = ${FORMULA.toLatexString()}`;
     this.roots =
       DELTA >= 0
@@ -52,7 +52,7 @@ class QuadraticFunction {
       });
     if (ROOTS.length === 2) return ROOTS.map((e, i) => `{x}_{${i + 1}} = ${e}`);
     else if (ROOTS.length === 1) return [`x = ${ROOTS.pop()}`];
-    else return null;
+    else return [];
   }
 
   //Convert the roots found by Algebrite into an Array with theirs numeric values in string format

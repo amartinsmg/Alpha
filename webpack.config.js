@@ -31,14 +31,22 @@ module.exports = {
         exclude: /node_modules/,
       },
       {
+        test: /\.ejs$/,
+        use: ["html-loader", "template-ejs-loader"],
+      },
+      {
         test: /\.css$/,
         use: [MiniCssExtractPlugin.loader, "css-loader"],
+      },
+      {
+        test: /\.(png|svg|jpg|jpeg|gif)$/,
+        type: "asset/resource",
       },
     ],
   },
   resolve: {
     extensions: [".ts", ".js", ".css"],
-  },
+  }, 
   optimization: {
     minimizer: [new TerserPlugin(), new CssMinimizerWebpack()],
   },

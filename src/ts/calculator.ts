@@ -38,7 +38,7 @@ abstract class Calculator {
     parentClass: any
   ): void {
     const FEEDBACK = parentClass.validateInputValue([el]),
-      ParentEl = el.parentElement;
+      ParentEl = el.parentElement as HTMLElement;
     if (FEEDBACK !== "valid" && ParentEl.childElementCount === 2) {
       const InvalidMessageDiv = document.createElement("div"),
         removeInvalidMessage = () => {

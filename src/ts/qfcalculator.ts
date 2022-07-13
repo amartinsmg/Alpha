@@ -50,17 +50,23 @@ class QFCalculator extends Calculator {
 
     //Constatns that store elements that will be often read or changed
 
-    const FormulaDiv = document.querySelector(formulaSelector),
-      InputsElements = inputsSelectors.map((selector) =>
-        document.querySelector<HTMLInputElement>(selector)
+    const FormulaDiv = document.querySelector(formulaSelector) as HTMLElement,
+      InputsElements = inputsSelectors.map(
+        (selector) => document.querySelector(selector) as HTMLInputElement
       ),
-      Form: HTMLFormElement = document.querySelector(formSelector),
-      OutputElement = document.querySelector(outputSelector),
-      OutputHeadings = document.querySelectorAll(outputHsSelctor),
-      RootsDiv = document.querySelector(rootsDivSelector),
-      CoordinatesDiv = document.querySelector(coordinatesDivSelector),
-      GraphDiv = document.querySelector(graphDivSelector),
-      ErrorFeedbackDiv = document.querySelector(errorFeedbackDivSelector);
+      Form = document.querySelector(formSelector) as HTMLFormElement,
+      OutputElement = document.querySelector(outputSelector) as HTMLElement,
+      OutputHeadings = document.querySelectorAll(
+        outputHsSelctor
+      ) as NodeListOf<HTMLElement>,
+      RootsDiv = document.querySelector(rootsDivSelector) as HTMLElement,
+      CoordinatesDiv = document.querySelector(
+        coordinatesDivSelector
+      ) as HTMLElement,
+      GraphDiv = document.querySelector(graphDivSelector) as HTMLElement,
+      ErrorFeedbackDiv = document.querySelector(
+        errorFeedbackDivSelector
+      ) as HTMLElement;
 
     //Instantiate QuadraticFunction class, read its data and update the document when form is submitted
 
@@ -77,15 +83,37 @@ class QFCalculator extends Calculator {
           .map((str) => QFCalculator.convertTexToSvg(str))
           .join("");
         CoordinatesDiv.innerHTML = QFCalculator.convertTexToSvg(vertex);
-        if(Plotly) Plotly.newPlot(GraphDiv, [{ ...plotPoits, mode: "line" }]);
+        if (Plotly)
+          Plotly.newPlot(
+            GraphDiv,
+            [
+              {
+                ...plotPoits,
+                mode: "line",
+              },
+            ],
+            {
+              margin: {
+                l: 60,
+                r: 5,
+                b: 20,
+                t: 5,
+              },
+            }
+          );
       } catch (err) {
         FormulaDiv.innerHTML =
           QFCalculator.convertTexToSvg("y = ax^2 + bx + c");
         OutputHeadings.forEach((el) => el.classList.add("non-display"));
-        RootsDiv.innerHTML = null;
-        CoordinatesDiv.innerHTML = null;
-        GraphDiv.innerHTML = null;
-        ErrorFeedbackDiv.textContent = err instanceof Error ? err.message : err;
+        RootsDiv.innerHTML = "";
+        CoordinatesDiv.innerHTML = "";
+        GraphDiv.innerHTML = "";
+        ErrorFeedbackDiv.textContent =
+          err instanceof Error
+            ? err.message
+            : typeof err === "string"
+            ? err
+            : "Error";
         Form.addEventListener(
           "submit",
           () => (ErrorFeedbackDiv.textContent = null)
