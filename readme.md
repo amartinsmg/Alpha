@@ -1,7 +1,7 @@
 # Quadratic Function Calculator
 
-This is a personal project for a web quadratic function calculator, that takes input data and shows output data.
+This is a personal project for a web quadratic function calculator. It can take data from user input and calculates and displays the result. and the graph
 
-The page gets the coefficients from the input data and instantiates the QuadraticFunction class. Its constructor uses Algebrite, a javascript library for symbolic computation, to calculate the function's roots and vertex coordinates. The class uses mathjs, a extensive math library, to calculate the plot points witch are used by Plotly, a data visualization library, to get the plot.
+The page gets the coefficients from the input elements and instantiates the QuadraticFunction class. Its constructor uses Algebrite, a Javascript library for symbolic computation, to calculate the function's roots and vertex coordinates and MathJs, a math library, to calculate the plot points.
 
-The other data is formatted using MathJax, a Javascript library for converting Latex to svg and other formats, and displayed to the user.
+Plotly, a library for data visualization, uses the plot points to plot the function. The other data is formatted using MathJax, a Javascript library for converting Latex to SVG and other formats, and displayed to the user.

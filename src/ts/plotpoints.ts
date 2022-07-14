@@ -4,7 +4,7 @@ class PlotPoits {
   x: number[];
   y: number[];
 
-  //Take the formula and the roots or x-coordinate to get the graph points
+  // This constructor takes the formula and the roots or x-coordinate to return the graph points
 
   public constructor(formula: string, ...xValues: (number | null)[]) {
     const Expression: any = compile(formula),

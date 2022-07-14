@@ -4,19 +4,19 @@ import Calculator from "./calculator";
 declare const MathJax: any, Plotly: any;
 
 class QFCalculator extends Calculator {
-  //Call MathJax method that convert latex to an svg element and get its innerHTML
+  // This method calls the MathJax tex2svg method to convert latex to an SVG element and get its innerHTML
 
   protected static convertTexToSvg(texStr: string): string {
     return MathJax ? MathJax.tex2svg(texStr).innerHTML : texStr;
   }
 
-  //Read an input element's value and check if it's valid
+  // This method reads the value of an input element and checks if it's valid
 
   protected static validateInputValue(els: HTMLInputElement[]): string {
     return Calculator.validateInputValue(els, true, "a");
   }
 
-  //Format the data from an input element for use in Algebrite
+  // This method  formats the data from an input element to be used in Algebrite
 
   protected static formatInputsValues(els: HTMLInputElement[]): string[] {
     return els.map((el) => {
@@ -26,7 +26,7 @@ class QFCalculator extends Calculator {
     });
   }
 
-  //Show the errors found in user input
+  // This method displays the errors found in user input above the input element
 
   protected static showFeedback(
     el: HTMLInputElement,
@@ -48,7 +48,7 @@ class QFCalculator extends Calculator {
   ) {
     super();
 
-    //Constatns that store elements that will be often read or changed
+    // Constants that store elements that are to be read or changed
 
     const FormulaDiv = document.querySelector(formulaSelector) as HTMLElement,
       InputsElements = inputsSelectors.map(
@@ -68,9 +68,11 @@ class QFCalculator extends Calculator {
         errorFeedbackDivSelector
       ) as HTMLElement;
 
-    //Instantiate QuadraticFunction class, read its data and update the document when form is submitted
+    // This function gets the data from user input when the form is submitted and uses it to
+    // instantiate QuadraticFunction class. Then it reads the returned data and updates the document
 
-    Form.onsubmit = (e) => {
+
+    Form.addEventListener("submit", (e) => {
       e.preventDefault();
       try {
         if (QFCalculator.validateInputValue(InputsElements) !== "valid")
@@ -121,16 +123,16 @@ class QFCalculator extends Calculator {
         throw err;
       }
       OutputElement.scrollIntoView();
-    };
+    });
 
     InputsElements.forEach((el, i, arr) => {
-      //Method that calls the showFeedback method for their parent objects when its lose focus
+      // This method calls the showFeedback method for its parent object when it loses focus
 
-      el.onblur = () => QFCalculator.showFeedback(el, Form);
+      el.addEventListener("blur", () => QFCalculator.showFeedback(el, Form));
 
-      //Method that call the whenKeyDown method when a key is downed
+      // This method calls the whenKeyDown method when a key is downed
 
-      el.onkeydown = (e) => QFCalculator.whenKeyDown(e, arr[i + 1]);
+      el.addEventListener("keydown", (e) => QFCalculator.whenKeyDown(e, arr[i + 1]));
     });
   }
 }

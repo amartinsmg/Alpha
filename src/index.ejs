@@ -22,13 +22,13 @@
       <form id="coefficients-form">
         <% for (let [c, n] of [["a", 1], ["b", 0], ["c", 0]]) { %> 
           <div class="form-group">
-            <label for="<%= c %>-input">\(<%= c %>\) value:</label>
+            <label for="<%= c %>-input">\(<%= c %>\):</label>
             <input
               class="data-inputs"
               id="<%= c %>-input"
               name="<%= c %>"
               type="text"
-              placeholder="Enter a non-zero number!"
+              placeholder="Enter a number"
               value=<%= n %> 
               inputmode="tel"
               required
@@ -65,9 +65,11 @@
       </output>
     </main>
     <footer>
-      Made by <a href="https://amartinsmg.github.io">amartinsmg</a>.
-      <a href="https://www.flaticon.com/free-icons/function" title="function icons">
-      Function icons created by Vitaly Gorbachev - Flaticon</a>
+      <p>Visit this project's <a href="https://github.com/amartinsmg/QuadraticFCalculator">repository</a>.<br>
+        Made by <a href="https://amartinsmg.github.io">amartinsmg</a>.
+        <a href="https://www.flaticon.com/free-icons/function" title="function icons">
+          Function icons created by Vitaly Gorbachev - Flaticon</a>
+      </p>
     </footer>
   </body>
 </html>

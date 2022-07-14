@@ -7,7 +7,7 @@ class QuadraticFunction {
   readonly roots: string[];
   readonly vertex: string;
 
-  //Gets the coefficient's values and uses Algebrite to calculate the roots
+  // This constructor gets the coefficient's values and uses Algebrite to calculate the roots
 
   public constructor(a: string, b: string, c: string) {
     const FORMULA = expand(`${a} * x^2 + (${b}) * x + (${c})`),
@@ -34,7 +34,7 @@ class QuadraticFunction {
     this.plotPoits = new PlotPoits(FORMULA.toString(), X_1, X_2);
   }
 
-  //Format the roots found by Albebrite
+  // This method formats the roots found by Albebrite
 
   private static formatRoots(rootsObj: any, numbericRoots: string[]): string[] {
     const ROOTS: string[] = rootsObj
@@ -55,7 +55,7 @@ class QuadraticFunction {
     else return [];
   }
 
-  //Convert the roots found by Algebrite into an Array with theirs numeric values in string format
+  // This method converts the roots found by Algebrite to an Array with numeric values in string format
 
   private static numberFormatRoots(roots: any): string[] {
     return float(roots)

@@ -1,11 +1,11 @@
 abstract class Calculator {
-  //Get the value of an input element
+  // This method that gets the value of an input element
 
   protected static getInputValue(el: HTMLInputElement): string {
     return el.value.trim().replace(",", ".");
   }
 
-  //Read an input element's value and check if it's valid
+  // This method that reads the value of an input element and checks if it's valid
 
   protected static validateInputValue(
     els: HTMLInputElement[],
@@ -30,7 +30,7 @@ abstract class Calculator {
     return "valid";
   }
 
-  //Show the errors found in user input
+  // This method displays the errors found in user input above the input element
 
   protected static showFeedback(
     el: HTMLInputElement,
@@ -55,13 +55,13 @@ abstract class Calculator {
     }
   }
 
-  //Move focus to the next element or submit the form if there is none
+  // This method moves focus to the next element or submits the form if there is none
 
   protected static whenKeyDown(
     e: KeyboardEvent,
     nextEl?: HTMLInputElement
   ): void {
-    if (e.keyCode === 13) {
+    if (e.key === "Enter") {
       if (nextEl) {
         nextEl.focus();
         nextEl.value = "";
