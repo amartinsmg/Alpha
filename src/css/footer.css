@@ -5,17 +5,13 @@ footer {
 }
 
 footer a:link {
-  color: inherit;
+  color: #3f88c5;
 }
 
 footer a:visited {
-  color: inherit;
+  color: #3f88c5;
 }
 
 footer a:hover {
-  color: inherit;
-}
-
-footer a:active {
-  color: inherit;
+  text-decoration: underline;
 }

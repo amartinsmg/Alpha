@@ -24,8 +24,8 @@ main {
   text-align: center;
 }
 
-@import url("generics.css");
-@import url("headers.css");
+@import url("elements.css");
+@import url("header.css");
 @import url("inputs.css");
 @import url("outputs.css");
 @import url("footer.css");

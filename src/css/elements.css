@@ -14,3 +14,7 @@
   border: solid 0.1rem transparent;
   cursor: pointer;
 }
+
+#formula {
+  margin: 1.75rem 0;
+}
