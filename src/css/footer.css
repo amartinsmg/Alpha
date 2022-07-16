@@ -4,11 +4,7 @@ footer {
   font-size: 0.7rem;
 }
 
-footer a:link {
-  color: #3f88c5;
-}
-
-footer a:visited {
+footer a:link, footer a:visited {
   color: #3f88c5;
 }
 
