@@ -9,6 +9,7 @@ module.exports = {
   output: {
     filename: "assets/bundle.js",
     path: path.resolve(__dirname, "dist"),
+    assetModuleFilename: 'assets/[hash][ext]',
   },
   mode: "production",
   devServer: {
@@ -21,31 +22,27 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.ts$/,
+        test: /\.ts$/i,
         use: ["babel-loader", "ts-loader"],
         exclude: /node_modules/,
       },
       {
-        test: /\.js$/,
+        test: /\.js$/i,
         use: "babel-loader",
         exclude: /node_modules/,
       },
       {
-        test: /\.ejs$/,
+        test: /\.ejs$/i,
         use: ["html-loader", "template-ejs-loader"],
       },
       {
-        test: /\.css$/,
+        test: /\.css$/i,
         use: [MiniCssExtractPlugin.loader, "css-loader"],
-      },
-      {
-        test: /\.(png|svg|jpg|jpeg|gif)$/,
-        type: "asset/resource",
       },
     ],
   },
   resolve: {
-    extensions: [".ts", ".js", ".css"],
+    extensions: [".ts", ".js", ".ejs", ".css"],
   }, 
   optimization: {
     minimizer: [new TerserPlugin(), new CssMinimizerWebpack()],
