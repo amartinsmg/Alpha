@@ -45,7 +45,8 @@ class QuadraticFunction {
       .map((str: string, i: number) => {
         const NUM = numbericRoots[i];
         if (str.match(/\\/)) {
-          if (NUM.match(/\.{3}/)) return `${str} \\approx ${NUM}`;
+          if (NUM.match(/\.{3}/))
+            return `${str} \\approx ${NUM.replace("...", "")}`;
           else return `${str} = ${NUM}`;
         }
         return str;
