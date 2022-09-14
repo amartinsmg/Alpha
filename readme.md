@@ -6,7 +6,7 @@ The page gets the coefficients from the input elements and instantiates the Quad
 
 Plotly, a library for data visualization, uses the plot points to plot the function. The other data is formatted using MathJax, a Javascript library for converting Latex to SVG and other formats, and displayed to the user.
 
-To build this project, clone this repository and run this commands:
+To build this project, clone this repository and run these commands:
 
 ```sh
 npm install
