@@ -14,7 +14,7 @@ abstract class Calculator {
   ): string {
     for (let el of els) {
       const VALUE: string = Calculator.getInputValue(el),
-        FractionRegEx = /^-?\d+[/][1-9]\d+$/,
+        FractionRegEx = /^-?\d+[/][1-9]\d*$/,
         NumberRegEx = /^-?\d*[.]?\d+$/,
         ZeroFractionRegEx = /^-?0+[/]/,
         ZeroNumberRegEx = /^-?0*[.]?0+$/,
