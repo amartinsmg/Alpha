@@ -1,14 +1,17 @@
 # Quadratic Function Calculator
 
-This is a personal project for a web quadratic function calculator. It can take data from user input and calculates and displays the result. and the graph
+This is a personal project for a quadratic function calculator that can take user input and calculate and display the results and graph.
 
-The page gets the coefficients from the input elements and instantiates the QuadraticFunction class. Its constructor uses Algebrite, a Javascript library for symbolic computation, to calculate the function's roots and vertex coordinates and MathJs, a math library, to calculate the plot points.
+## How it works
+The calculator gets the coefficients from input elements and instantiates the QuadraticFunction class. The constructor of this class uses Algebrite, a Javascript library for symbolic computation, to calculate the function's roots and vertex coordinates. MathJs, a math library, is used to calculate the plot points.
 
 Plotly, a library for data visualization, uses the plot points to plot the function. The other data is formatted using MathJax, a Javascript library for converting Latex to SVG and other formats, and displayed to the user.
 
-To build this project, clone this repository and run these commands:
+## How to run the project
+To build and run the project, follow these steps:
 
-```sh
-npm install
-npm run build
-```
+1. Clone this repository.
+2. Install the dependencies by running `npm install`.
+3. Build the project by running `npm run build`.
+
+After the build process is complete, you can open the index.html file located in the 'dist' directory in your web browser to use the calculator.
