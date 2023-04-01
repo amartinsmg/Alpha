@@ -4,19 +4,37 @@ import Calculator from "./calculator";
 declare const MathJax: any, Plotly: any;
 
 class QFCalculator extends Calculator {
-  // This method calls the MathJax tex2svg method to convert latex to an SVG element and get its innerHTML
+  /**
+    Converts the input text in TeX format to an SVG element with its mathematical representation
+    and returns its innerHTML.
+    @param texStr - The input text in TeX format to be converted.
+    @return - A string representing the innerHTML of the resulting SVG element.
+  */
 
   protected static convertTexToSvg(texStr: string): string {
     return MathJax ? MathJax.tex2svg(texStr).innerHTML : texStr;
   }
 
-  // This method reads the value of an input element and checks if it's valid
+  /**
+    Receives an array of HTML input elements in the els parameter and validates if the input
+    data is a valid integer, decimal, or fractional number. It also checks if the value of
+    the input element with the name a is different than zero.
+    @param els - An array of HTML input elements.
+    @returns - Returns the string 'valid' if the input data is valid. Otherwise, returns an
+               error message.
+  */
 
   protected static validateInputValue(els: HTMLInputElement[]): string {
     return Calculator.validateInputValue(els, true, "a");
   }
 
-  // This method  formats the data from an input element to be used in Algebrite
+  /**
+    Formats the data entered in the html inputs contained in the els argument and
+    returns an array of strings with the formatted data to be manipulated by the
+    Algebrite library
+    @param els - Array of HTML input elements to be formatted
+    @return - Array of strings with the formatted data
+  */
 
   protected static formatInputsValues(els: HTMLInputElement[]): string[] {
     return els.map((el) => {
@@ -26,14 +44,28 @@ class QFCalculator extends Calculator {
     });
   }
 
-  // This method displays the errors found in user input above the input element
-
-  protected static showFeedback(
-    el: HTMLInputElement,
-    parentForm: HTMLFormElement
-  ): void {
-    Calculator.showFeedback(el, parentForm, QFCalculator);
-  }
+  /**
+    This constructor creates a quadratic function calculator from the following arguments:
+      @param formulaSelector - a string containing the CSS selector for the input field where will
+                               be displayed the calculated quadratic function formula
+      @param inputsSelectors - an array of strings containing the CSS selectors for the input fields
+                               where the user inputs the coefficients of the quadratic function
+      @param formSelector - a string containing the CSS selector for the form element that contains
+                            the input fields and submit button
+      @param outputSelector - a string containing the CSS selector for the element where the
+                               calculated function roots, vertex and plot are displayed
+      @param outputHsSelctor - a string containing the CSS selectors for the heading elements for
+                               the displayed data
+      @param rootsDivSelector - a string containing the CSS selector for the div element that will
+                                display the roots of the quadratic function
+      @param coordinatesDivSelector - a string containing the CSS selector for the div element
+                                      where the coordinates of the quadratic function's vertex will
+                                      be displayed
+      @param graphDivSelector - a string containing the CSS selector for the div element that will
+                                display the plot of the quadratic function
+      @param errorFeedbackDivSelector - a string containing the CSS selector for the div element
+                                        that will display any error feedback messages. 
+  */
 
   public constructor(
     formulaSelector: string,
@@ -48,7 +80,7 @@ class QFCalculator extends Calculator {
   ) {
     super();
 
-    // Constants that store elements that are to be read or changed
+    // Constants that hold references to HTML elements that are intended to be accessed or modified
 
     const FormulaDiv = document.querySelector(formulaSelector) as HTMLElement,
       InputsElements = inputsSelectors.map(
@@ -68,9 +100,11 @@ class QFCalculator extends Calculator {
         errorFeedbackDivSelector
       ) as HTMLElement;
 
-    // This function gets the data from user input when the form is submitted and uses it to
-    // instantiate QuadraticFunction class. Then it reads the returned data and updates the document
-
+    /**
+      Collects user data when the form is submitted and instantiates the QuadraticFunction
+      class based on the obtained coefficients. It then uses the data obtained from the instance
+      to display the results and plot the graph of the function.
+    */
 
     Form.addEventListener("submit", (e) => {
       e.preventDefault();
@@ -126,13 +160,17 @@ class QFCalculator extends Calculator {
     });
 
     InputsElements.forEach((el, i, arr) => {
-      // This method calls the showFeedback method for its parent object when it loses focus
+      // Triggers the showFeedback method on the parent object when this element loses focus
 
-      el.addEventListener("blur", () => QFCalculator.showFeedback(el, Form));
+      el.addEventListener("blur", () =>
+        Calculator.showFeedback(el, QFCalculator.validateInputValue([el]), Form)
+      );
 
-      // This method calls the whenKeyDown method when a key is downed
+      // Triggers the whenKeyDown method when a key is pressed down while the parent object has focus
 
-      el.addEventListener("keydown", (e) => QFCalculator.whenKeyDown(e, arr[i + 1]));
+      el.addEventListener("keydown", (e) =>
+        Calculator.whenKeyDown(e, arr[i + 1])
+      );
     });
   }
 }
