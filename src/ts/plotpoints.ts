@@ -4,13 +4,20 @@ class PlotPoits {
   x: number[];
   y: number[];
 
-  // This constructor takes the formula and the roots or x-coordinate to return the graph points
+  /**
+    Creates an object with x and y values, both arrays of numbers, where each common index
+    brings a coordinate to be plotted.
+    @param formula - A string with a mathematical formula.
+    @param xValues - Numerical values of x that must be present in the returned coordinates.
+    @returns - An object with the properties x and y, both being arrays of numbers where each
+               common index brings a coordinate to draw a graph.
+  */
 
   public constructor(formula: string, ...xValues: (number | null)[]) {
     const Expression: any = compile(formula),
       FilteredXValues = xValues
         .filter((x) => typeof x === "number" && !isNaN(x))
-        .sort(),
+        .sort((a, b) => (a as number) - (b as number)),
       X_1 = FilteredXValues[0] ?? 0,
       X_2 = FilteredXValues[FilteredXValues.length - 1] ?? X_1,
       EXTRA_VALUE: number = max(2, abs(X_2 - X_1) / 5, min(abs(X_1), abs(X_2))),
