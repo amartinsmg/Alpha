@@ -101,9 +101,11 @@ class QFCalculator extends Calculator {
       ) as HTMLElement;
 
     /**
-      Collects user data when the form is submitted and instantiates the QuadraticFunction
-      class based on the obtained coefficients. It then uses the data obtained from the instance
-      to display the results and plot the graph of the function.
+      Collects user data when the form is submitted, validates the input data, and
+      instantiates the QuadraticFunction class based on the obtained coefficients.
+      It then uses the data obtained from the instance to display the results and plot
+      the graph of the function. The function handles errors that may occur during the
+      validation or instantiation process and provides feedback to the user.
     */
 
     Form.addEventListener("submit", (e) => {
