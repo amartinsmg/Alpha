@@ -70,7 +70,7 @@ abstract class Calculator {
     parentForm: HTMLFormElement
   ): void {
     const ParentEl = el.parentElement as HTMLElement;
-    if (feedbackMessage !== "valid" && ParentEl.childElementCount === 2) {
+    if (feedbackMessage !== "valid" && !el.classList.contains("invalid-input")) {
       const InvalidMessageDiv = document.createElement("div"),
         removeInvalidMessage = () => {
           el.classList.remove("invalid-input");
