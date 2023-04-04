@@ -162,7 +162,7 @@ class QFCalculator extends Calculator {
     });
 
     InputsElements.forEach((el, i, arr) => {
-      // Triggers the showFeedback method on the parent object when this element loses focus
+      // Triggers the showFeedback method on the object when this element loses focus
 
       el.addEventListener("blur", () =>
         Calculator.showFeedback(el, QFCalculator.validateInputValue([el]), Form)
