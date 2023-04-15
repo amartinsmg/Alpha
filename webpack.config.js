@@ -32,8 +32,8 @@ module.exports = {
         exclude: /node_modules/,
       },
       {
-        test: /\.ejs$/i,
-        use: ["html-loader", "template-ejs-loader"],
+        test: /\.html$/i,
+        use: "html-loader",
       },
       {
         test: /\.css$/i,
@@ -42,13 +42,16 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: [".ts", ".js", ".ejs", ".css"],
-  }, 
+    extensions: [".ts", ".js", ".html", ".css"],
+  },
   optimization: {
     minimizer: [new TerserPlugin(), new CssMinimizerWebpack()],
   },
   plugins: [
-    new HtmlWebpackPlugin({ filename: "index.html" }),
+    new HtmlWebpackPlugin({
+      template: "./src/index.html",
+      filename: "index.html",
+    }),
     new MiniCssExtractPlugin({
       filename: "assets/bundle.css",
     }),
