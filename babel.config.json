@@ -1,3 +1,21 @@
+/**
+  Configuration object for Babel transpiler.
+  @typedef BabelConfig
+  @property presets - List of preset configurations to apply during transpilation.
+*/
+
+/**
+  Preset configuration for transpiling code to target specific environments.
+  @typedef PresetConfig
+  @property name - Name of preset package.
+  @property options - Options object for preset configuration.
+  @property options.targets - Targets object specifying browser versions to target.
+*/
+
+/**
+  Babel configuration object with preset targeting Chrome 58.
+*/
+
 {
   "presets": [
     [
