@@ -1,7 +1,5 @@
 /**
-  @file webpack.config.json
-  @description Configuration file for Webpack bundling tool.
-  @module webpack.config.json
+  Configuration file for Webpack bundling tool.
 */
 
 const CssMinimizerWebpack = require("css-minimizer-webpack-plugin"),
