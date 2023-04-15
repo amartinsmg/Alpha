@@ -1,3 +1,12 @@
+/**
+  This is the tsconfig.json file which specifies the TypeScript compiler options for a project.
+  @target ESNext - Specifies the version of ECMAScript that the generated JavaScript should be compatible with. Here, we are using ESNext.
+  @module commonjs - Specifies the module system for the generated JavaScript. Here, we are using commonjs.
+  @allowJs - Allows JavaScript files to be compiled along with TypeScript files. Here, it's set to true.
+  @strict - Enables all strict type-checking options. Here, it's set to true.
+  @include - Specifies an array of file or directory paths to include in the compilation. Here, we are including all the .ts files under the src directory and its subdirectories.
+*/
+
 {
   "compilerOptions": {
     "target": "ESNext",
