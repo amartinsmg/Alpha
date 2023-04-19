@@ -58,21 +58,21 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /.ts$/i,
+        test: /\.ts$/i,
         use: ["babel-loader", "ts-loader"],
         exclude: /node_modules/,
       },
       {
-        test: /.js$/i,
+        test: /\.js$/i,
         use: "babel-loader",
         exclude: /node_modules/,
       },
       {
-        test: /.html$/i,
+        test: /\.html$/i,
         use: "html-loader",
       },
       {
-        test: /.css$/i,
+        test: /\.css$/i,
         use: [MiniCssExtractPlugin.loader, "css-loader"],
       },
     ],
@@ -84,7 +84,7 @@ module.exports = {
   */
 
   resolve: {
-    extensions: [".ts", ".js", ".html", ".css"],
+    extensions: [".ts", ".js", ".css"],
   },
 
   /**
@@ -103,7 +103,6 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: "./src/index.html",
-      filename: "index.html",
     }),
     new MiniCssExtractPlugin({
       filename: "assets/bundle.css",
