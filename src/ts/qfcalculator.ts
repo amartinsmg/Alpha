@@ -5,10 +5,9 @@ declare const MathJax: any, Plotly: any;
 
 class QFCalculator extends Calculator {
   /**
-    Converts the input text in TeX format to an SVG element with its mathematical representation
-    and returns its innerHTML.
-    @param texStr - The input text in TeX format to be converted.
-    @return - A string representing the innerHTML of the resulting SVG element.
+    Converts the input text in TeX format to an SVG element with its mathematical representation.
+      @param texStr - The input text in TeX format to be converted.
+      @return - A string representing the innerHTML of the resulting SVG element.
   */
 
   protected static convertTexToSvg(texStr: string): string {
@@ -16,12 +15,10 @@ class QFCalculator extends Calculator {
   }
 
   /**
-    Receives an array of HTML input elements in the els parameter and validates if the input
-    data is a valid integer, decimal, or fractional number. It also checks if the value of
-    the input element with the name a is different than zero.
-    @param els - An array of HTML input elements.
-    @returns - Returns the string 'valid' if the input data is valid. Otherwise, returns an
-               error message.
+    Receives an array of HTML input elements in the els parameter and validates if the input data is a valid integer,
+    decimal, or fractional number. It also checks if the value of the input element with the name a is different than zero.
+      @param els - An array of HTML input elements.
+      @returns - Returns the string 'valid' if the input data is valid. Otherwise, returns an error message.
   */
 
   protected static validateInputValue(els: HTMLInputElement[]): string {
@@ -29,11 +26,10 @@ class QFCalculator extends Calculator {
   }
 
   /**
-    Formats the data entered in the html inputs contained in the els argument and
-    returns an array of strings with the formatted data to be manipulated by the
-    Algebrite library
-    @param els - Array of HTML input elements to be formatted
-    @return - Array of strings with the formatted data
+    Formats the data entered in the html inputs contained in the els argument and returns an array of strings with the
+    formatted data to be manipulated by the Algebrite library
+      @param els - Array of HTML input elements to be formatted
+      @return - Array of strings with the formatted data
   */
 
   protected static formatInputsValues(els: HTMLInputElement[]): string[] {
@@ -46,25 +42,17 @@ class QFCalculator extends Calculator {
 
   /**
     This constructor creates a quadratic function calculator from the following arguments:
-      @param formulaSelector - a string containing the CSS selector for the input field where will
-                               be displayed the calculated quadratic function formula
-      @param inputsSelectors - an array of strings containing the CSS selectors for the input fields
-                               where the user inputs the coefficients of the quadratic function
-      @param formSelector - a string containing the CSS selector for the form element that contains
-                            the input fields and submit button
-      @param outputSelector - a string containing the CSS selector for the element where the
-                               calculated function roots, vertex and plot are displayed
-      @param outputHsSelctor - a string containing the CSS selectors for the heading elements for
-                               the displayed data
-      @param rootsDivSelector - a string containing the CSS selector for the div element that will
-                                display the roots of the quadratic function
-      @param coordinatesDivSelector - a string containing the CSS selector for the div element
-                                      where the coordinates of the quadratic function's vertex will
-                                      be displayed
-      @param graphDivSelector - a string containing the CSS selector for the div element that will
-                                display the plot of the quadratic function
-      @param errorFeedbackDivSelector - a string containing the CSS selector for the div element
-                                        that will display any error feedback messages. 
+      @param formulaSelector - a string containing the CSS selector for the field where will be displayed the calculated quadratic function formula
+      @param inputsSelectors - an array of strings containing the CSS selectors for the input fields where the user inputs the coefficients of the
+                               quadratic function
+      @param formSelector - a string containing the CSS selector for the form element that contains the input fields and submit button
+      @param outputSelector - a string containing the CSS selector for the element where the calculated function roots, vertex and plot are displayed
+      @param outputHsSelctor - a string containing the CSS selectors for the heading elements for the displayed data
+      @param rootsDivSelector - a string containing the CSS selector for the div element that will display the roots of the quadratic function
+      @param coordinatesDivSelector - a string containing the CSS selector for the div element where the coordinates of the quadratic function's
+                                      vertex will be displayed
+      @param graphDivSelector - a string containing the CSS selector for the div element that will display the plot of the quadratic function
+      @param errorFeedbackDivSelector - a string containing the CSS selector for the div element that will display any error feedback messages. 
   */
 
   public constructor(
@@ -79,9 +67,6 @@ class QFCalculator extends Calculator {
     errorFeedbackDivSelector: string
   ) {
     super();
-
-    // Constants that hold references to HTML elements that are intended to be accessed or modified
-
     const FormulaDiv = document.querySelector(formulaSelector) as HTMLElement,
       InputsElements = inputsSelectors.map(
         (selector) => document.querySelector(selector) as HTMLInputElement
@@ -101,11 +86,9 @@ class QFCalculator extends Calculator {
       ) as HTMLElement;
 
     /**
-      Collects user data when the form is submitted, validates the input data, and
-      instantiates the QuadraticFunction class based on the obtained coefficients.
-      It then uses the data obtained from the instance to display the results and plot
-      the graph of the function. The function handles errors that may occur during the
-      validation or instantiation process and provides feedback to the user.
+      Collects user data when the form is submitted, validates the input data, and instantiates the QuadraticFunction class based on the obtained
+      coefficients. It then uses the data obtained from the instance to display the results and plot the graph of the function. The function
+      handles errors that may occur during the validation or instantiation process and provides feedback to the user.
     */
 
     Form.addEventListener("submit", (e) => {
