@@ -4,14 +4,12 @@ class PlotPoits {
   x: number[];
   y: number[];
 
-  /**
-    Creates an object with x and y values, both arrays of numbers, where each common index
-    brings a coordinate to be plotted.
+/**
+  Creates an object with x and y values, both arrays of numbers, where each common index brings a coordinate to be plotted.
     @param formula - A string with a mathematical formula.
     @param xValues - Numerical values of x that must be present in the returned coordinates.
-    @returns - An object with the properties x and y, both being arrays of numbers where each
-               common index brings a coordinate to draw a graph.
-  */
+    @returns - An object with the properties x and y, both being arrays of numbers where each common index brings a coordinate to draw a graph.
+*/
 
   public constructor(formula: string, ...xValues: (number | null)[]) {
     const Expression: any = compile(formula),
