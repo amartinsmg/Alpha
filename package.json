@@ -1,10 +1,7 @@
 {
   "name": "qfcalculator",
   "version": "1.0.0",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/amartinsmg/QuadraticFCalculator.git"
-  },
+  "repository": "https://github.com/amartinsmg/QuadraticFCalculator.git",
   "main": "./src/main.ts",
   "scripts": {
     "build": "webpack",
@@ -28,9 +25,5 @@
     "webpack-dev-server": "^4.8.1"
   },
   "author": "amartinsmg",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/amartinsmg/QuadraticFCalculator/issues"
-  },
-  "homepage": "/QuadraticFCalculator"
+  "license": "MIT"
 }
